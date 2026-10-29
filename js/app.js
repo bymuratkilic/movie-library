@@ -445,6 +445,20 @@
             }
         }
 
+        // Ana sayfa bölüm bağlantıları: ilgili listenin tamamını kütüphanede aç.
+        function openHomeCollection(collection) {
+            const search = document.getElementById('search-input');
+            const type = document.getElementById('filter-type');
+            const status = document.getElementById('filter-status');
+            const sort = document.getElementById('filter-sort');
+            if (search) search.value = '';
+            if (type) type.value = 'all';
+            if (status) status.value = collection === 'watchlist' ? 'watch_later' : 'all';
+            if (sort) sort.value = collection === 'editor' ? 'imdb_desc' : 'newest';
+            switchTab('library');
+            applyFilters();
+        }
+
         // Dashboard & Liste Görünümleri Render
         function renderDashboard() {
             renderFeaturedHero();
@@ -455,9 +469,9 @@
             document.getElementById('watchlist-badge').textContent = watchLaterCount + ' yapım';
             document.getElementById('stat-favorite-count').textContent = movies.filter(m => m.favorite).length;
             const picks = [...movies].sort((a,b) => (Number(b.imdb)||0)-(Number(a.imdb)||0) || Number(Boolean(b.favorite))-Number(Boolean(a.favorite))).slice(0,12);
-            renderRow('editor-picks-grid', picks);
-            renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later'));
-            renderRow('recent-row', movies.slice(0,18));
+            renderRow('editor-picks-grid', picks.slice(0, 6));
+            renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later').slice(0, 6));
+            renderRow('recent-row', movies.slice(0, 6));
         }
 
         let featuredHeroIndex = 0;
