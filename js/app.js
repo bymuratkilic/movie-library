@@ -460,28 +460,67 @@
             renderRow('recent-row', movies.slice(0,18));
         }
 
+        let featuredHeroIndex = 0;
+        let featuredHeroTimer = null;
+
         function renderFeaturedHero() {
             const container = document.getElementById('ml-featured-hero');
             if (!container) return;
             const safe = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-            const featured = [...movies].sort((a,b) => (Number(b.imdb)||0)-(Number(a.imdb)||0) || Number(Boolean(b.favorite))-Number(Boolean(a.favorite)))[0]
-                || onlineCatalog.find(m => m.id === 'tmdb-batman-1')
-                || onlineCatalog[0];
-            if (!featured) {
+            const rankedArchive = [...movies].sort((a,b) => (Number(b.imdb)||0)-(Number(a.imdb)||0) || Number(Boolean(b.favorite))-Number(Boolean(a.favorite)));
+            const slides = rankedArchive.slice(0, 5);
+            if (slides.length < 3) {
+                for (const item of [...onlineCatalog].sort((a,b) => (Number(b.imdb)||0)-(Number(a.imdb)||0))) {
+                    if (slides.length >= 5) break;
+                    if (!slides.some(existing => String(existing.id) === String(item.id))) slides.push(item);
+                }
+            }
+            if (featuredHeroIndex >= slides.length) featuredHeroIndex = 0;
+            if (featuredHeroTimer) { clearInterval(featuredHeroTimer); featuredHeroTimer = null; }
+            if (!slides.length) {
                 container.innerHTML = '<div class="ml-featured-empty"><span>MY LIBRARY</span><h2>Bir sonraki favorin burada.</h2><p>Arşivine yapım eklediğinde manşet alanı otomatik olarak güncellenir.</p><button type="button" onclick="openAddMovieModal()">İlk yapımını ekle <i class="fa-solid fa-arrow-right"></i></button></div>';
                 return;
             }
-            const id = safe(featured.id);
-            const title = safe(featured.title || 'Öne çıkan yapım');
-            const overview = safe(featured.overview || 'Kişisel arşivinden öne çıkan yapım. Detayları açarak oyuncu kadrosunu, puanını ve diğer bilgileri incele.');
-            const poster = safe(featured.backdrop || featured.poster || '');
-            const type = featured.type === 'tv' ? 'DİZİ' : featured.type === 'doc' ? 'BELGESEL' : 'FİLM';
-            const genres = Array.isArray(featured.genres) ? featured.genres.slice(0, 3).join(' · ') : '';
-            container.innerHTML = '<div class="ml-featured-backdrop"><img src="' + poster + '" alt="" loading="eager" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=85\'"></div>' +
-                '<div class="ml-featured-shade"></div><div class="ml-featured-copy"><span class="ml-featured-eyebrow"><i class="fa-solid fa-clapperboard"></i> MY LIBRARY SEÇKİSİ <span>·</span> ' + type + '</span>' +
-                '<h2>' + title + '</h2><div class="ml-featured-meta">' + (featured.year ? '<span>' + safe(featured.year) + '</span>' : '') + (featured.imdb ? '<span class="ml-featured-imdb"><i class="fa-solid fa-star"></i> ' + safe(featured.imdb) + ' IMDb</span>' : '') + (genres ? '<span>' + safe(genres) + '</span>' : '') + '</div>' +
-                '<p>' + overview + '</p><div class="ml-featured-actions"><button type="button" onclick="openDetailModal(\'' + id + '\')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button><button type="button" class="ml-featured-secondary" onclick="switchTab(\'library\')"><i class="fa-solid fa-film"></i> Arşive Git</button></div></div>' +
-                '<div class="ml-featured-side-label">ÖNE ÇIKAN YAPIM</div>';
+            const slideMarkup = slides.map((item, index) => {
+                const id = safe(item.id);
+                const title = safe(item.title || 'Öne çıkan yapım');
+                const overview = safe(item.overview || 'Koleksiyonundan öne çıkan yapım. Detayları açarak oyuncu kadrosunu, puanını ve diğer bilgileri incele.');
+                const image = safe(item.backdrop || item.poster || '');
+                const type = item.type === 'tv' ? 'DİZİ' : item.type === 'doc' ? 'BELGESEL' : 'FİLM';
+                const genres = Array.isArray(item.genres) ? item.genres.slice(0, 3).join(' · ') : '';
+                return '<article class="ml-featured-slide' + (index === featuredHeroIndex ? ' is-active' : '') + '" data-slide="' + index + '" aria-hidden="' + (index === featuredHeroIndex ? 'false' : 'true') + '">' +
+                    '<div class="ml-featured-backdrop"><img src="' + image + '" alt="" loading="' + (index === featuredHeroIndex ? 'eager' : 'lazy') + '" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=85\'"></div><div class="ml-featured-shade"></div>' +
+                    '<div class="ml-featured-copy"><span class="ml-featured-eyebrow"><i class="fa-solid fa-clapperboard"></i> MY LIBRARY SEÇKİSİ <span>·</span> ' + type + '</span>' +
+                    '<h2>' + title + '</h2><div class="ml-featured-meta">' + (item.year ? '<span>' + safe(item.year) + '</span>' : '') + (item.imdb ? '<span class="ml-featured-imdb"><i class="fa-solid fa-star"></i> ' + safe(item.imdb) + ' IMDb</span>' : '') + (genres ? '<span>' + safe(genres) + '</span>' : '') + '</div>' +
+                    '<p>' + overview + '</p><div class="ml-featured-actions"><button type="button" onclick="openDetailModal(\'' + id + '\')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button><button type="button" class="ml-featured-secondary" onclick="switchTab(\'library\')"><i class="fa-solid fa-film"></i> Arşive Git</button></div></div></article>';
+            }).join('');
+            const dots = slides.map((item,index) => '<button type="button" class="ml-featured-dot' + (index === featuredHeroIndex ? ' is-active' : '') + '" onclick="changeFeaturedHero(' + index + ')" aria-label="' + (index+1) + '. manşeti göster" aria-current="' + (index === featuredHeroIndex ? 'true' : 'false') + '"></button>').join('');
+            container.innerHTML = '<div class="ml-featured-track">' + slideMarkup + '</div><div class="ml-featured-controls"><button type="button" class="ml-featured-arrow" onclick="changeFeaturedHero(featuredHeroIndex - 1)" aria-label="Önceki manşet"><i class="fa-solid fa-chevron-left"></i></button><div class="ml-featured-dots">' + dots + '</div><button type="button" class="ml-featured-arrow" onclick="changeFeaturedHero(featuredHeroIndex + 1)" aria-label="Sonraki manşet"><i class="fa-solid fa-chevron-right"></i></button><span class="ml-featured-counter">' + String(featuredHeroIndex+1).padStart(2,'0') + ' / ' + String(slides.length).padStart(2,'0') + '</span></div>';
+            if (slides.length > 1) featuredHeroTimer = setInterval(() => changeFeaturedHero(featuredHeroIndex + 1, false), 6000);
+        }
+
+        function changeFeaturedHero(nextIndex, restartTimer = true) {
+            const container = document.getElementById('ml-featured-hero');
+            if (!container) return;
+            const slides = container.querySelectorAll('.ml-featured-slide');
+            if (!slides.length) return;
+            featuredHeroIndex = (nextIndex + slides.length) % slides.length;
+            slides.forEach((slide,index) => {
+                const active = index === featuredHeroIndex;
+                slide.classList.toggle('is-active', active);
+                slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+            });
+            container.querySelectorAll('.ml-featured-dot').forEach((dot,index) => {
+                const active = index === featuredHeroIndex;
+                dot.classList.toggle('is-active', active);
+                dot.setAttribute('aria-current', active ? 'true' : 'false');
+            });
+            const counter = container.querySelector('.ml-featured-counter');
+            if (counter) counter.textContent = String(featuredHeroIndex+1).padStart(2,'0') + ' / ' + String(slides.length).padStart(2,'0');
+            if (restartTimer && featuredHeroTimer) {
+                clearInterval(featuredHeroTimer);
+                featuredHeroTimer = setInterval(() => changeFeaturedHero(featuredHeroIndex + 1, false), 6000);
+            }
         }
 
         function renderRow(containerId, list) {
