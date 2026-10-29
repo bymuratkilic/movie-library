@@ -1,0 +1,1799 @@
+* { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+        
+        /* Dark Theme Baseline */
+        html.dark body { background-color: #0B0F17; color: #F8FAFC; }
+        html.dark .glass-panel { background: rgba(19, 25, 36, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        html.dark .glass-header { background: rgba(11, 15, 23, 0.9); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+        html.dark .input-field { background-color: #0B0F17; border-color: rgba(255, 255, 255, 0.12); color: #FFFFFF; }
+        html.dark .input-field::placeholder { color: #64748B; }
+
+        /* Light Theme Baseline */
+        html.light body { background-color: #F8FAFC; color: #0F172A; }
+        html.light .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(15, 23, 42, 0.08); box-shadow: 0 4px 20px -2px rgba(0,0,0,0.03); }
+        html.light .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(15, 23, 42, 0.08); }
+        html.light .input-field { background-color: #FFFFFF; border-color: rgba(15, 23, 42, 0.15); color: #0F172A; }
+        html.light .input-field::placeholder { color: #94A3B8; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        html.dark ::-webkit-scrollbar-track { background: #0B0F17; }
+        html.dark ::-webkit-scrollbar-thumb { background: #1B2434; border-radius: 99px; }
+        html.light ::-webkit-scrollbar-track { background: #F8FAFC; }
+        html.light ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 99px; }
+
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+
+        /* PERDE Premium Cinema Design System */
+        :root {
+            --perde-wine: #76283f;
+            --perde-wine-bright: #963b56;
+            --perde-gold: #d4b47a;
+            --perde-dark: #121114;
+            --perde-card: #1b191e;
+        }
+        html.dark body { background-color:#121114; color:#f6f1f2; }
+        html.dark .glass-panel { background:rgba(29,25,30,.88); border:1px solid rgba(255,255,255,.075); box-shadow:0 14px 38px rgba(0,0,0,.12); }
+        html.dark .glass-header { background:rgba(18,17,20,.88); border-bottom:1px solid rgba(255,255,255,.075); }
+        html.dark .input-field { background:#171519; border-color:rgba(255,255,255,.12); }
+        html.light body { background:#f4f1ee; color:#292329; }
+        html.light .glass-panel { background:rgba(255,253,250,.94); border:1px solid rgba(55,35,42,.09); box-shadow:0 12px 34px rgba(52,34,40,.055); }
+        html.light .glass-header { background:rgba(250,247,244,.93); border-bottom:1px solid rgba(55,35,42,.09); }
+        html.light .input-field { background:#fffdfa; border-color:rgba(55,35,42,.16); }
+        html.dark ::-webkit-scrollbar-track { background:#121114; }
+        html.dark ::-webkit-scrollbar-thumb { background:#45323a; }
+        html.light ::-webkit-scrollbar-track { background:#f4f1ee; }
+        html.light ::-webkit-scrollbar-thumb { background:#cfc4c4; }
+
+        /* Re-map the existing blue utility accents to PERDE burgundy without changing app logic */
+        .bg-blue-600 { background-color:var(--perde-wine)!important; }
+        .hover\\:bg-blue-500:hover { background-color:var(--perde-wine-bright)!important; }
+        .text-blue-500, .text-blue-400 { color:var(--perde-wine-bright)!important; }
+        .border-blue-500, .border-blue-500\\/20 { border-color:rgba(150,59,86,.45)!important; }
+        .ring-blue-500\\/50 { --tw-ring-color:rgba(150,59,86,.35)!important; }
+        .shadow-blue-600\\/25, .shadow-blue-600\\/30 { --tw-shadow-color:rgba(118,40,63,.24)!important; }
+        .from-blue-600 { --tw-gradient-from:var(--perde-wine) var(--tw-gradient-from-position)!important; --tw-gradient-to:rgb(118 40 63 / 0%) var(--tw-gradient-to-position)!important; }
+        .to-indigo-500 { --tw-gradient-to:#a54c65 var(--tw-gradient-to-position)!important; }
+        .bg-amber-500\\/10 { background-color:rgba(212,180,122,.12)!important; }
+        .text-amber-400, .text-amber-500 { color:var(--perde-gold)!important; }
+
+        header .max-w-7xl { max-width:1440px; }
+        header .h-16 { height:76px; }
+        header .w-9.h-9 { border-radius:14px; box-shadow:0 8px 24px rgba(118,40,63,.25); }
+        header nav { backdrop-filter:blur(18px); }
+        header .nav-btn { letter-spacing:.01em; }
+        main.max-w-7xl { max-width:1440px; padding-top:30px; padding-bottom:56px; }
+        #tab-dashboard { gap:2.2rem; }
+        #hero-banner { border-radius:26px; border-color:rgba(212,180,122,.19); box-shadow:0 24px 70px rgba(0,0,0,.18); }
+        #hero-banner > div { min-height:390px; padding:clamp(24px,4vw,48px); }
+        #hero-banner img { opacity:.48!important; object-position:center 35%; transform:scale(1.015); }
+        #hero-banner .bg-gradient-to-t { background:linear-gradient(90deg,rgba(18,17,20,.96) 0%,rgba(18,17,20,.78) 43%,rgba(18,17,20,.14) 100%),linear-gradient(0deg,rgba(18,17,20,.45),transparent 70%)!important; }
+        #hero-banner h1 { font-size:clamp(2rem,4.2vw,3.6rem); line-height:1.06; letter-spacing:-.045em; max-width:760px; text-wrap:balance; }
+        #hero-banner p { font-size:clamp(.82rem,1.2vw,.96rem); max-width:620px; line-height:1.85; color:#e5dfe1; }
+        #hero-banner .bg-blue-600 { background:rgba(118,40,63,.92)!important; border:1px solid rgba(255,255,255,.14); letter-spacing:.12em; }
+        #hero-banner button { min-height:44px; border-radius:13px; padding:12px 17px; }
+        #hero-banner button:first-child { box-shadow:0 10px 26px rgba(118,40,63,.25); }
+        #tab-dashboard .grid.grid-cols-2.md\\:grid-cols-4 > div { border-radius:20px; padding:20px; min-height:112px; }
+        #tab-dashboard .grid.grid-cols-2.md\\:grid-cols-4 h3 { font-size:1.8rem; letter-spacing:-.04em; }
+        #watchlist-row, #recent-row, #library-grid { gap:clamp(12px,1.5vw,22px); }
+        #watchlist-row > div, #recent-row > div, #library-grid > div { border-radius:16px; border-color:rgba(140,110,120,.16); box-shadow:0 5px 18px rgba(0,0,0,.055); }
+        #watchlist-row > div:hover, #recent-row > div:hover, #library-grid > div:hover { transform:translateY(-5px); box-shadow:0 18px 36px rgba(0,0,0,.18); border-color:rgba(150,59,86,.4); }
+        #watchlist-row img, #recent-row img, #library-grid img { transition:transform .5s cubic-bezier(.2,.75,.25,1),filter .35s ease; }
+        #watchlist-row > div:hover img, #recent-row > div:hover img, #library-grid > div:hover img { filter:saturate(1.08); }
+        #watchlist-row h4, #recent-row h4, #library-grid h4 { font-size:.78rem; line-height:1.45; }
+        #watchlist-row > div > div:last-child, #recent-row > div > div:last-child, #library-grid > div > div:last-child { padding:12px 13px 14px; }
+        #tab-library .glass-panel { border-radius:20px; padding:20px; }
+        #tab-library input, #tab-library select, .input-field { min-height:42px; border-radius:12px; }
+        #tab-library .grid.grid-cols-2 { gap:16px; }
+        #detail-modal > div, #add-modal > div, #actor-modal > div, #admin-auth-modal > div { border-radius:24px; overflow:hidden; box-shadow:0 28px 90px rgba(0,0,0,.3); }
+        #detail-modal-content > div > div.p-6 { padding:clamp(20px,4vw,36px); }
+        #detail-modal-content h2 { letter-spacing:-.035em; text-wrap:balance; }
+        #detail-modal-content h4 { letter-spacing:.11em; }
+        #add-search-results > div { border-radius:14px; padding:12px; }
+        button { -webkit-tap-highlight-color:transparent; }
+        button:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid var(--perde-wine-bright); outline-offset:3px; }
+        ::selection { background:var(--perde-wine); color:#fff; }
+        footer { margin-top:20px; background:rgba(120,90,100,.025); }
+        @media (min-width:1280px) {
+            #watchlist-row, #recent-row { grid-template-columns:repeat(6,minmax(0,1fr)); }
+            #library-grid { grid-template-columns:repeat(6,minmax(0,1fr)); }
+        }
+        @media (max-width:767px) {
+            header .h-16 { height:66px; }
+            header .flex.items-center.space-x-3 { gap:8px; }
+            header .w-9.h-9 { width:36px; height:36px; }
+            header .text-base.font-bold { font-size:14px; }
+            header .text-\\[10px\\].block { font-size:9px; }
+            header .flex.items-center.space-x-3 > button:last-child { padding:9px 11px; border-radius:11px; }
+            header .flex.items-center.space-x-3 > button:last-child span { font-size:11px; }
+            main.max-w-7xl { padding-top:20px; padding-bottom:36px; }
+            #hero-banner { border-radius:20px; }
+            #hero-banner > div { min-height:360px; padding:22px; }
+            #hero-banner .bg-gradient-to-t { background:linear-gradient(0deg,rgba(18,17,20,.98) 0%,rgba(18,17,20,.78) 54%,rgba(18,17,20,.18) 100%)!important; }
+            #hero-banner h1 { font-size:2rem; }
+            #hero-banner p { font-size:.82rem; }
+            #tab-dashboard .grid.grid-cols-2.md\\:grid-cols-4 { gap:10px; }
+            #tab-dashboard .grid.grid-cols-2.md\\:grid-cols-4 > div { padding:14px; min-height:94px; border-radius:16px; }
+            #tab-dashboard .grid.grid-cols-2.md\\:grid-cols-4 h3 { font-size:1.5rem; }
+            #watchlist-row, #recent-row, #library-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+            #watchlist-row > div, #recent-row > div, #library-grid > div { border-radius:13px; }
+            #watchlist-row > div > div:last-child, #recent-row > div > div:last-child, #library-grid > div > div:last-child { padding:10px; }
+            #tab-library .glass-panel { padding:13px; }
+            #detail-modal-content .h-64 { height:280px; }
+            #detail-modal-content .absolute.bottom-4 { left:16px; right:16px; bottom:16px; }
+            #detail-modal-content h2 { font-size:1.65rem; }
+            #toast-container { left:12px; right:12px; bottom:14px; }
+        }
+        @media (prefers-reduced-motion:reduce) {
+            *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
+        }
+
+    
+        /* PERDE 2.0 — Premium streaming experience */
+        :root {
+            --perde-wine-deep: #401522;
+            --perde-wine: #76283f;
+            --perde-wine-bright: #a64a63;
+            --perde-gold: #d4b47a;
+            --perde-gold-soft: #f0dfb8;
+            --perde-ink: #100e12;
+            --perde-surface: #1a171c;
+            --perde-line: rgba(212,180,122,.18);
+        }
+        html.dark body {
+            background:
+                radial-gradient(ellipse at 50% -20%, rgba(118,40,63,.18), transparent 45%),
+                #100e12 !important;
+        }
+        html.light body {
+            background:
+                radial-gradient(ellipse at 50% -20%, rgba(118,40,63,.07), transparent 45%),
+                #f4f0ed !important;
+        }
+        header.glass-header {
+            backdrop-filter: blur(22px) saturate(140%);
+            -webkit-backdrop-filter: blur(22px) saturate(140%);
+            box-shadow: 0 8px 35px rgba(0,0,0,.08);
+        }
+        header .max-w-7xl { max-width: 1500px; }
+        header nav {
+            border-color: var(--perde-line) !important;
+            border-radius: 999px !important;
+            padding: 5px !important;
+        }
+        header nav .nav-btn {
+            border-radius: 999px !important;
+            padding: 10px 13px !important;
+            white-space: nowrap;
+            transition: background .2s ease, color .2s ease, transform .2s ease;
+        }
+        header nav .nav-btn:hover { background: rgba(212,180,122,.09); }
+        header nav #nav-dashboard {
+            background: linear-gradient(135deg, #76283f, #4a1929) !important;
+            color: #fff !important;
+            box-shadow: inset 0 0 0 1px rgba(212,180,122,.23), 0 5px 16px rgba(70,18,37,.24);
+        }
+        header .w-9.h-9 {
+            background: linear-gradient(145deg, #a64a63, #4b1729) !important;
+            border: 1px solid rgba(212,180,122,.42);
+            color: var(--perde-gold-soft);
+        }
+        header button[onclick="openAddMovieModal()"] {
+            background: linear-gradient(135deg, #8b304a, #5b1c31) !important;
+            border: 1px solid rgba(212,180,122,.25);
+            box-shadow: 0 8px 24px rgba(91,28,49,.25) !important;
+        }
+        header button[onclick="openAddMovieModal()"]:hover { transform: translateY(-1px); }
+        main.max-w-7xl { max-width: 1500px; }
+        main > section:first-child { margin-bottom: 28px; }
+        main > section:first-child .cat-btn {
+            border-radius: 999px !important;
+            padding: 10px 16px !important;
+            white-space: nowrap;
+        }
+        main > section:first-child .cat-btn.bg-blue-600 {
+            background: linear-gradient(135deg, #8b304a, #5b1c31) !important;
+            box-shadow: 0 5px 18px rgba(91,28,49,.24);
+        }
+        #hero-banner {
+            isolation: isolate;
+            border: 1px solid rgba(212,180,122,.22) !important;
+            background: #171218 !important;
+            box-shadow: 0 28px 90px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.025);
+        }
+        #hero-banner > div { min-height: clamp(390px, 42vw, 560px); }
+        #hero-banner img { filter: saturate(.82) contrast(1.06); }
+        #hero-banner .bg-gradient-to-t {
+            background:
+                linear-gradient(90deg, rgba(16,10,14,.98) 0%, rgba(25,12,18,.83) 38%, rgba(25,12,18,.25) 76%, rgba(25,12,18,.08) 100%),
+                linear-gradient(0deg, rgba(16,10,14,.68), transparent 60%) !important;
+        }
+        #hero-banner h1 { text-shadow: 0 4px 25px rgba(0,0,0,.42); }
+        #hero-banner .text-amber-400, #hero-banner .text-amber-500 { color: var(--perde-gold-soft) !important; }
+        #hero-banner button {
+            min-height: 48px;
+            border-radius: 999px !important;
+            font-weight: 700;
+            letter-spacing: .01em;
+        }
+        #hero-banner button:first-child {
+            background: linear-gradient(135deg, #f1e7d5, #d4b47a) !important;
+            color: #24151a !important;
+            border: 1px solid rgba(255,255,255,.35);
+            box-shadow: 0 9px 28px rgba(0,0,0,.2);
+        }
+        #hero-banner button:not(:first-child) {
+            background: rgba(255,255,255,.1) !important;
+            border: 1px solid rgba(255,255,255,.24);
+            backdrop-filter: blur(12px);
+        }
+        #tab-dashboard > .grid.grid-cols-2[class~="md:grid-cols-4"] > div {
+            background: linear-gradient(145deg, rgba(35,28,34,.92), rgba(24,20,26,.88)) !important;
+            border: 1px solid rgba(212,180,122,.12);
+            box-shadow: 0 12px 32px rgba(0,0,0,.10);
+            transition: transform .2s ease, border-color .2s ease;
+        }
+        html.light #tab-dashboard > .grid.grid-cols-2[class~="md:grid-cols-4"] > div {
+            background: linear-gradient(145deg, #fffdfa, #f4ebe6) !important;
+            border-color: rgba(118,40,63,.12);
+        }
+        #tab-dashboard > .grid.grid-cols-2[class~="md:grid-cols-4"] > div:hover {
+            transform: translateY(-3px);
+            border-color: rgba(212,180,122,.35);
+        }
+        #tab-dashboard h2 {
+            font-size: clamp(1rem, 1.4vw, 1.2rem) !important;
+            letter-spacing: -.025em;
+        }
+        #tab-dashboard h2 i { color: var(--perde-gold) !important; }
+        #tab-dashboard h2::after {
+            content: "";
+            display: inline-block;
+            width: 22px;
+            height: 1px;
+            margin-left: 7px;
+            vertical-align: middle;
+            background: linear-gradient(90deg, var(--perde-gold), transparent);
+            opacity: .8;
+        }
+        #watchlist-row, #recent-row {
+            display: flex !important;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x proximity;
+            scrollbar-width: thin;
+            padding: 4px 2px 16px;
+            gap: 16px !important;
+            grid-template-columns: none !important;
+        }
+        #watchlist-row > div, #recent-row > div {
+            flex: 0 0 clamp(148px, 15vw, 205px);
+            min-width: 0;
+            scroll-snap-align: start;
+            overflow: hidden;
+            background: #1a171c;
+            border: 1px solid rgba(212,180,122,.12) !important;
+            border-radius: 13px !important;
+        }
+        html.light #watchlist-row > div, html.light #recent-row > div {
+            background: #fffdfa;
+            border-color: rgba(118,40,63,.13) !important;
+        }
+        #watchlist-row > div:hover, #recent-row > div:hover {
+            transform: translateY(-4px) scale(1.012) !important;
+            border-color: rgba(212,180,122,.48) !important;
+            box-shadow: 0 18px 35px rgba(0,0,0,.24) !important;
+        }
+        #watchlist-row img, #recent-row img {
+            aspect-ratio: 2/3;
+            object-fit: cover;
+        }
+        #watchlist-row h4, #recent-row h4 { font-size: .8rem !important; }
+        #watchlist-row .text-amber-400, #recent-row .text-amber-400 { color: var(--perde-gold) !important; }
+        #tab-library > .glass-panel {
+            background: linear-gradient(145deg, rgba(32,26,32,.94), rgba(23,20,25,.94)) !important;
+            border-color: rgba(212,180,122,.15) !important;
+        }
+        html.light #tab-library > .glass-panel {
+            background: linear-gradient(145deg, #fffdfa, #f4ebe6) !important;
+        }
+        #tab-library input, #tab-library select {
+            min-height: 46px;
+            border-radius: 13px !important;
+        }
+        #search-input:focus, #add-search-input:focus {
+            border-color: rgba(212,180,122,.65) !important;
+            box-shadow: 0 0 0 3px rgba(212,180,122,.10) !important;
+        }
+        #library-grid { gap: clamp(12px, 1.5vw, 22px) !important; }
+        #library-grid > div {
+            background: #1a171c;
+            border: 1px solid rgba(212,180,122,.12) !important;
+            border-radius: 13px !important;
+            overflow: hidden;
+        }
+        html.light #library-grid > div { background: #fffdfa; }
+        #library-grid > div:hover {
+            transform: translateY(-5px) !important;
+            border-color: rgba(212,180,122,.48) !important;
+            box-shadow: 0 18px 38px rgba(0,0,0,.2) !important;
+        }
+        #library-grid > div > div:first-child { background: #21191f; }
+        #library-grid img { aspect-ratio: 2/3; object-fit: cover; }
+        #library-grid h4 { font-size: .82rem !important; }
+        #library-grid .text-amber-400 { color: var(--perde-gold) !important; }
+        #tab-stats .glass-panel, #tab-admin .glass-panel {
+            border-color: rgba(212,180,122,.13) !important;
+            border-radius: 18px !important;
+        }
+        #tab-stats h2, #tab-admin h2 { letter-spacing: -.03em; }
+        #detail-modal, #add-modal, #actor-modal, #admin-auth-modal { padding: 12px; }
+        #detail-modal > div, #add-modal > div, #actor-modal > div, #admin-auth-modal > div {
+            border: 1px solid rgba(212,180,122,.2);
+            border-radius: 22px !important;
+            background: #171419;
+        }
+        html.light #detail-modal > div, html.light #add-modal > div, html.light #actor-modal > div, html.light #admin-auth-modal > div {
+            background: #fffdfa;
+        }
+        #detail-modal-content .bg-gradient-to-t {
+            background: linear-gradient(0deg, rgba(16,12,15,.98), rgba(16,12,15,.18) 74%, rgba(16,12,15,.08)) !important;
+        }
+        #detail-modal-content h2 { font-size: clamp(1.6rem, 3vw, 2.6rem) !important; }
+        #detail-modal-content .p-6 { line-height: 1.7; }
+        #detail-modal-content button, #detail-modal-content a {
+            border-radius: 999px;
+        }
+        #add-search-results > div {
+            border: 1px solid rgba(212,180,122,.12);
+            background: rgba(255,255,255,.025);
+        }
+        html.light #add-search-results > div { background: rgba(118,40,63,.025); }
+        #toast-container > div {
+            border-color: rgba(212,180,122,.24) !important;
+            background: #241820 !important;
+            border-radius: 14px !important;
+        }
+        #mobile-bottom-nav {
+            background: rgba(17,14,18,.94);
+            border-top: 1px solid rgba(212,180,122,.18);
+            box-shadow: 0 -10px 35px rgba(0,0,0,.2);
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            backdrop-filter: blur(22px) saturate(150%);
+            -webkit-backdrop-filter: blur(22px) saturate(150%);
+        }
+        html.light #mobile-bottom-nav {
+            background: rgba(255,250,247,.96);
+            border-top-color: rgba(118,40,63,.13);
+        }
+        #mobile-bottom-nav button {
+            min-width: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 9px 2px 7px;
+            color: #a99da4;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        #mobile-bottom-nav button i { font-size: 17px; }
+        #mobile-bottom-nav button:active { color: var(--perde-gold); transform: scale(.96); }
+        @media (max-width: 767px) {
+            body { padding-bottom: 74px; }
+            header .max-w-7xl { padding-left: 14px; padding-right: 14px; }
+            header .h-16 { height: 66px !important; }
+            header .flex.items-center.space-x-3 { gap: 8px; }
+            header button[onclick="openAddMovieModal()"] { padding: 10px 12px !important; }
+            header button[onclick="openAddMovieModal()"] span { font-size: 11px; }
+            main.max-w-7xl { padding: 18px 14px 30px !important; }
+            main > section:first-child { margin-bottom: 20px; }
+            main > section:first-child .cat-btn { padding: 9px 12px !important; font-size: 11px; }
+            #hero-banner { border-radius: 18px; }
+            #hero-banner > div { min-height: 390px; padding: 22px !important; align-items: flex-end; }
+            #hero-banner img { object-position: 58% center; opacity: .56 !important; }
+            #hero-banner .bg-gradient-to-t {
+                background: linear-gradient(0deg, rgba(16,10,14,.98) 0%, rgba(16,10,14,.82) 48%, rgba(16,10,14,.18) 100%) !important;
+            }
+            #hero-banner h1 { font-size: clamp(1.8rem, 8vw, 2.5rem) !important; }
+            #hero-banner p { font-size: .82rem; line-height: 1.7; }
+            #hero-banner button { min-height: 43px; padding: 10px 13px !important; font-size: 12px; }
+            #tab-dashboard { gap: 26px !important; }
+            #tab-dashboard > .grid.grid-cols-2[class~="md:grid-cols-4"] { gap: 9px !important; }
+            #tab-dashboard > .grid.grid-cols-2[class~="md:grid-cols-4"] > div { min-height: 90px; padding: 12px !important; border-radius: 14px !important; }
+            #tab-dashboard > .grid.grid-cols-2[class~="md:grid-cols-4"] h3 { font-size: 1.45rem !important; }
+            #watchlist-row, #recent-row { gap: 11px !important; margin-right: -14px; padding-right: 14px; }
+            #watchlist-row > div, #recent-row > div { flex-basis: 142px; border-radius: 11px !important; }
+            #watchlist-row > div > div:last-child, #recent-row > div > div:last-child { padding: 10px !important; }
+            #library-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 11px !important; }
+            #library-grid > div { border-radius: 11px !important; }
+            #library-grid > div > div:last-child { padding: 10px !important; }
+            #tab-library > .glass-panel { padding: 13px !important; }
+            #tab-library input, #tab-library select { min-height: 43px; font-size: 11px; }
+            #detail-modal, #add-modal, #actor-modal, #admin-auth-modal { padding: 7px; }
+            #detail-modal > div, #add-modal > div, #actor-modal > div, #admin-auth-modal > div { max-height: 94dvh; border-radius: 17px !important; }
+            #detail-modal-content .h-64 { height: 290px; }
+            #detail-modal-content .p-6 { padding: 18px !important; }
+            #mobile-bottom-nav { display: flex !important; }
+        }
+        @media (min-width: 768px) {
+            #mobile-bottom-nav { display: none !important; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #watchlist-row, #recent-row { scroll-behavior: auto; }
+        }
+
+    
+        /* PERDE Prestige Archive — editorial compact list */
+        :root {
+            --perde-wine-deep: #35131f;
+            --perde-wine: #70263f;
+            --perde-wine-bright: #93435b;
+            --perde-gold: #b99a63;
+            --perde-gold-soft: #e7d5ae;
+            --perde-paper: #f7f2eb;
+            --perde-ink: #2a2024;
+            --perde-line: rgba(128, 83, 91, .18);
+        }
+        html.dark body {
+            background:
+              radial-gradient(ellipse at 85% 0%, rgba(112,38,63,.13), transparent 34%),
+              #141115 !important;
+            color: #f5eff0;
+        }
+        html.light body {
+            background:
+              radial-gradient(ellipse at 85% 0%, rgba(112,38,63,.07), transparent 34%),
+              #f7f3ed !important;
+            color: #2a2024;
+        }
+        header.glass-header { border-bottom-color: var(--perde-line) !important; }
+        header nav { border-radius: 14px !important; padding: 4px !important; }
+        header nav .nav-btn { border-radius: 10px !important; }
+        header nav #nav-dashboard { background: var(--perde-wine) !important; box-shadow: none !important; }
+        header .w-9.h-9 { border-radius: 12px !important; }
+        header button[onclick="openAddMovieModal()"] {
+            background: var(--perde-wine) !important;
+            box-shadow: 0 6px 18px rgba(112,38,63,.17) !important;
+        }
+        main.max-w-7xl { max-width: 1320px; }
+        main > section:first-child { margin-bottom: 24px; }
+        #hero-banner { border-radius: 20px !important; box-shadow: 0 20px 55px rgba(38,22,28,.12) !important; }
+        #hero-banner > div { min-height: clamp(330px, 35vw, 455px) !important; }
+        #hero-banner h1 { max-width: 650px; letter-spacing: -.045em; }
+        #hero-banner .bg-gradient-to-t {
+            background: linear-gradient(90deg,rgba(20,12,16,.95) 0%,rgba(20,12,16,.68) 52%,rgba(20,12,16,.12) 100%),
+                        linear-gradient(0deg,rgba(20,12,16,.45),transparent 70%) !important;
+        }
+        #tab-library > .glass-panel {
+            border-radius: 17px !important;
+            box-shadow: 0 8px 28px rgba(55,32,39,.045) !important;
+        }
+        #library-grid {
+            display: flex !important;
+            flex-direction: column;
+            gap: 9px !important;
+            grid-template-columns: none !important;
+        }
+        #library-grid > .perde-list-row {
+            display: flex;
+            align-items: stretch;
+            min-height: 116px;
+            border-radius: 13px !important;
+            border-color: var(--perde-line) !important;
+            background: rgba(255,253,250,.72);
+            box-shadow: 0 2px 8px rgba(40,22,28,.025);
+            transform: none !important;
+        }
+        html.dark #library-grid > .perde-list-row {
+            background: rgba(30,24,30,.82);
+            border-color: rgba(231,213,174,.12) !important;
+        }
+        #library-grid > .perde-list-row:hover {
+            border-color: rgba(147,67,91,.48) !important;
+            box-shadow: 0 9px 24px rgba(35,20,27,.09) !important;
+            transform: translateX(3px) !important;
+        }
+        #library-grid .perde-list-poster {
+            flex: 0 0 82px;
+            width: 82px;
+            min-height: 116px;
+            aspect-ratio: auto !important;
+            border-right: 1px solid var(--perde-line);
+        }
+        #library-grid .perde-list-poster img {
+            width: 100%;
+            height: 100%;
+            min-height: 116px;
+            aspect-ratio: auto !important;
+            object-fit: cover;
+        }
+        #library-grid .perde-list-rating { top: 6px; right: 5px; font-size: 9px; padding: 3px 5px; }
+        #library-grid .perde-list-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            flex: 1;
+            padding: 13px 17px !important;
+        }
+        #library-grid .perde-list-kicker {
+            font-size: 9px;
+            line-height: 1.5;
+            letter-spacing: .16em;
+            font-weight: 800;
+            color: var(--perde-wine-bright);
+        }
+        html.dark #library-grid .perde-list-kicker { color: var(--perde-gold); }
+        #library-grid .perde-list-year {
+            font-size: 10px;
+            color: #897a7e;
+            border-left: 1px solid var(--perde-line);
+            padding-left: 8px;
+        }
+        #library-grid .perde-list-title {
+            font-size: 15px !important;
+            line-height: 1.35;
+            letter-spacing: -.02em;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+        }
+        #library-grid .perde-list-director {
+            color: #897a7e;
+            font-size: 11px;
+            line-height: 1.6;
+            margin-top: 3px;
+        }
+        html.dark #library-grid .perde-list-director { color: #b4a8ad; }
+        #library-grid .perde-list-bottom { gap: 12px; margin-top: 7px !important; }
+        #library-grid .perde-list-genres {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 10px;
+            color: #8f7f84;
+        }
+        html.dark #library-grid .perde-list-genres { color: #b4a8ad; }
+        #library-grid .perde-list-status { flex: 0 0 auto; white-space: nowrap; }
+        #library-grid .perde-list-open {
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 9px;
+            color: var(--perde-wine-bright);
+            letter-spacing: .02em;
+            opacity: .85;
+        }
+        html.dark #library-grid .perde-list-open { color: var(--perde-gold); }
+        #library-grid .perde-list-open i { margin-left: 3px; font-size: 8px; }
+        #tab-library input, #tab-library select { border-radius: 10px !important; }
+        #tab-stats .glass-panel, #tab-admin .glass-panel { border-radius: 16px !important; }
+        #detail-modal > div, #add-modal > div, #actor-modal > div, #admin-auth-modal > div { border-radius: 18px !important; }
+        #mobile-bottom-nav { border-radius: 16px 16px 0 0; }
+        @media (max-width: 767px) {
+            #library-grid { gap: 8px !important; }
+            #library-grid > .perde-list-row { min-height: 102px; border-radius: 11px !important; }
+            #library-grid .perde-list-poster { flex-basis: 69px; width: 69px; min-height: 102px; }
+            #library-grid .perde-list-poster img { min-height: 102px; }
+            #library-grid .perde-list-content { padding: 9px 11px !important; }
+            #library-grid .perde-list-title { font-size: 13px !important; }
+            #library-grid .perde-list-director { font-size: 10px; }
+            #library-grid .perde-list-bottom { margin-top: 5px !important; gap: 6px; }
+            #library-grid .perde-list-genres { max-width: 58%; font-size: 9px; }
+            #library-grid .perde-list-open { margin-top: 3px; font-size: 8px; }
+            #hero-banner > div { min-height: 350px !important; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #library-grid > .perde-list-row:hover { transform: none !important; }
+        }
+
+    
+        /* PERDE Modern Light — large poster collection */
+        html.light body {
+            background: #f6f4f0 !important;
+            color: #282426;
+        }
+        html.light .glass-header {
+            background: rgba(250,248,244,.88) !important;
+            border-color: rgba(74,50,57,.12) !important;
+            backdrop-filter: blur(18px);
+        }
+        html.light .glass-panel,
+        html.light #tab-library > .glass-panel {
+            background: rgba(255,255,255,.88) !important;
+            border-color: rgba(74,50,57,.12) !important;
+        }
+        html.light header nav #nav-dashboard {
+            background: #fff !important;
+            color: #572c3b !important;
+            box-shadow: 0 2px 8px rgba(46,30,35,.06) !important;
+        }
+        html.light header button[onclick="openAddMovieModal()"] {
+            background: #6f3047 !important;
+            color: white !important;
+        }
+        html.light #hero-banner {
+            box-shadow: 0 18px 48px rgba(54,34,39,.12) !important;
+        }
+        html.light #hero-banner .bg-gradient-to-t {
+            background: linear-gradient(90deg,rgba(22,17,19,.88) 0%,rgba(22,17,19,.52) 55%,rgba(22,17,19,.08) 100%),
+                        linear-gradient(0deg,rgba(22,17,19,.45),transparent 72%) !important;
+        }
+        #library-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+            gap: 16px !important;
+        }
+        #library-grid > .perde-poster-card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            border-radius: 16px !important;
+            border-color: rgba(104,72,82,.15) !important;
+            box-shadow: 0 3px 12px rgba(43,29,33,.045);
+            transform: none !important;
+        }
+        #library-grid > .perde-poster-card:hover {
+            border-color: rgba(111,48,71,.42) !important;
+            box-shadow: 0 12px 32px rgba(43,29,33,.12) !important;
+            transform: translateY(-3px) !important;
+        }
+        #library-grid .perde-poster-art { background: #241c20; }
+        #library-grid .perde-poster-shade {
+            background: linear-gradient(180deg,rgba(12,8,10,.22),transparent 24%,transparent 60%,rgba(12,8,10,.64));
+            pointer-events: none;
+        }
+        #library-grid .perde-poster-rating { background: rgba(17,13,15,.78); }
+        #library-grid .perde-poster-hover {
+            color: #fff;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity .22s ease,transform .22s ease;
+        }
+        #library-grid .perde-poster-card:hover .perde-poster-hover { opacity: 1; transform: translateY(0); }
+        #library-grid .perde-poster-info {
+            flex: 1;
+            background: rgba(255,255,255,.8);
+        }
+        html.dark #library-grid .perde-poster-info { background: rgba(30,24,30,.94); }
+        #library-grid .perde-poster-type {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            color: #7b3a51;
+        }
+        html.dark #library-grid .perde-poster-type { color: #d1a6b3; }
+        #library-grid .perde-poster-year {
+            font-size: 10px;
+            color: #91868a;
+            border-left: 1px solid rgba(104,72,82,.22);
+            padding-left: 8px;
+        }
+        #library-grid .perde-poster-title {
+            font-size: 14px !important;
+            color: #292226;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.65em;
+        }
+        html.dark #library-grid .perde-poster-title { color: #f5eff0; }
+        #library-grid .perde-poster-director { font-size: 10px; color: #8b7d82; line-height: 1.5; }
+        html.dark #library-grid .perde-poster-director { color: #b9adb2; }
+        #library-grid .perde-poster-footer { border-top: 1px solid rgba(104,72,82,.12); }
+        #library-grid .perde-poster-genres { font-size: 9px; color: #8b7d82; }
+        html.dark #library-grid .perde-poster-genres { color: #b9adb2; }
+        #library-grid .perde-poster-status {
+            flex: 0 0 auto;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 4px 6px;
+            white-space: nowrap;
+        }
+        #library-grid .perde-poster-status.is-watched { color: #24734d; background: rgba(42,157,99,.10); }
+        #library-grid .perde-poster-status.is-watch-later { color: #946522; background: rgba(208,157,63,.13); }
+        html.dark #library-grid .perde-poster-status.is-watched { color: #78d6a4; background: rgba(42,157,99,.15); }
+        html.dark #library-grid .perde-poster-status.is-watch-later { color: #e6c17a; background: rgba(208,157,63,.15); }
+        @media (min-width: 520px) {
+            #library-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; gap: 18px !important; }
+        }
+        @media (min-width: 768px) {
+            #library-grid { grid-template-columns: repeat(4,minmax(0,1fr)) !important; gap: 20px !important; }
+            #library-grid .perde-poster-title { font-size: 15px !important; }
+            #library-grid .perde-poster-info { padding: 16px !important; }
+        }
+        @media (min-width: 1100px) {
+            #library-grid { grid-template-columns: repeat(5,minmax(0,1fr)) !important; gap: 22px !important; }
+        }
+        @media (min-width: 1400px) {
+            #library-grid { grid-template-columns: repeat(6,minmax(0,1fr)) !important; }
+        }
+        @media (max-width: 420px) {
+            #library-grid { gap: 10px !important; }
+            #library-grid .perde-poster-info { padding: 10px !important; }
+            #library-grid .perde-poster-title { font-size: 12px !important; }
+            #library-grid .perde-poster-director { font-size: 9px; }
+            #library-grid .perde-poster-footer { align-items: flex-start; flex-direction: column; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #library-grid > .perde-poster-card,
+            #library-grid .perde-poster-hover { transition: none !important; }
+        }
+
+
+        /* PERDE Streaming Edition — reference-inspired dark cinema UI + custom logo */
+        .perde-brand-mark{width:42px;height:42px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 5px 14px rgba(109,70,255,.3));flex:none}
+        .perde-brand-mark svg{width:100%;height:100%}
+        .perde-brand-copy{display:flex;flex-direction:column;line-height:1}
+        .perde-brand-name{font-size:23px;font-weight:900;letter-spacing:.12em;color:#f8fafc}
+        .perde-brand-tagline{font-size:8px;font-weight:800;letter-spacing:.34em;color:#a5a3ff;margin-top:5px}
+        html.dark body{background:#080b13!important;color:#f5f6ff!important}
+        html.dark .glass-header{background:rgba(7,10,19,.94)!important;border-bottom:1px solid rgba(139,92,246,.18)!important;backdrop-filter:blur(20px)}
+        html.dark .glass-panel{background:rgba(15,19,32,.92)!important;border-color:rgba(148,163,184,.12)!important}
+        html.dark .input-field{background:#111626!important;border-color:rgba(148,163,184,.2)!important;color:#f8fafc!important}
+        html.dark .perde-poster-card{background:#0e1320!important;border-color:rgba(148,163,184,.14)!important;box-shadow:0 10px 28px rgba(0,0,0,.18)}
+        html.dark .perde-poster-card:hover{border-color:rgba(124,92,255,.65)!important;box-shadow:0 18px 40px rgba(70,50,180,.18);transform:translateY(-4px)}
+        html.dark .perde-poster-info{background:linear-gradient(180deg,#111624,#0b0f19)!important}
+        html.dark .perde-poster-title{color:#f3f4ff!important}
+        html.dark .perde-poster-director,html.dark .perde-poster-genres{color:#929bb0!important}
+        html.dark .perde-poster-type{color:#a5a3ff!important}
+        .bg-blue-600{background-color:#6254f6!important}
+        .hover\\:bg-blue-500:hover{background-color:#7668ff!important}
+        .text-blue-500{color:#8b83ff!important}
+        .shadow-blue-600\\/30{--tw-shadow-color:rgba(98,84,246,.3)!important}
+        #hero-banner{border:1px solid rgba(139,92,246,.2)!important;border-radius:20px!important;overflow:hidden}
+        #hero-banner>div{min-height:390px!important}
+        #library-grid{gap:18px!important}
+        @media(max-width:767px){.perde-brand-mark{width:35px;height:35px}.perde-brand-name{font-size:19px}#hero-banner>div{min-height:340px!important}#library-grid{gap:10px!important}}
+        @media(prefers-reduced-motion:reduce){.perde-brand-mark{transition:none!important}}
+
+        /* PERDE IMDb-inspired title detail page */
+        #detail-modal{background:rgba(5,7,12,.88)!important;backdrop-filter:blur(8px)!important;padding:18px!important}
+        #detail-modal>div{max-width:1120px!important;max-height:94vh!important;border-radius:5px!important;border:1px solid rgba(0,0,0,.12)!important;background:#fff!important;color:#202124!important}
+        #detail-modal>div>button{background:rgba(0,0,0,.72)!important;top:12px!important;right:12px!important}
+        #detail-modal-content{background:#fff!important;color:#202124!important}
+        .perde-imdb-detail{background:#fff;color:#202124;font-family:Arial,Helvetica,sans-serif}
+        .perde-imdb-hero{height:clamp(300px,40vw,455px);position:relative;overflow:hidden;background:#10141c}
+        .perde-imdb-backdrop{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;filter:saturate(.88)}
+        .perde-imdb-hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,8,14,.88),rgba(4,8,14,.45) 48%,rgba(4,8,14,.08)),linear-gradient(0deg,rgba(4,8,14,.8),transparent 62%)}
+        .perde-imdb-hero-top{position:absolute;left:clamp(20px,4vw,48px);right:65px;top:20px;display:flex;align-items:center;justify-content:space-between;color:white}
+        .perde-imdb-brand{font-size:22px;font-weight:900;letter-spacing:.04em}.perde-imdb-brand span{font-size:10px;color:#171717;background:#f5c518;border-radius:3px;padding:4px 5px;margin-left:8px;letter-spacing:0}
+        .perde-imdb-type{font-size:10px;letter-spacing:.15em;font-weight:800;color:#f5c518}
+        .perde-imdb-play{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);width:78px;height:78px;border:4px solid #fff;border-radius:50%;color:#fff;background:rgba(0,0,0,.18);font-size:27px;padding-left:5px;box-shadow:0 2px 20px #0005}
+        .perde-imdb-hero-copy{position:absolute;left:clamp(20px,4vw,48px);right:25px;bottom:26px;color:white}
+        .perde-imdb-kicker{font-size:12px;color:#e5e7eb;display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:9px}
+        .perde-imdb-hero-copy h2{font-size:clamp(27px,4vw,42px);font-weight:800;letter-spacing:-.025em;line-height:1.1;margin:0 0 13px}
+        .perde-imdb-genres{display:flex;gap:8px;flex-wrap:wrap}.perde-imdb-genres span{font-size:10px;color:#f5c518;text-transform:uppercase;letter-spacing:.08em}
+        .perde-imdb-content{display:grid;grid-template-columns:245px minmax(0,1fr);gap:24px;padding:0 clamp(20px,4vw,48px) 32px;background:#fff}
+        .perde-imdb-poster-wrap{position:relative;margin-top:-115px;z-index:2}
+        .perde-imdb-poster{display:block;width:100%;aspect-ratio:2/3;object-fit:cover;box-shadow:0 7px 22px #0003;background:#eee}
+        .perde-imdb-trailer-btn{width:100%;margin-top:10px;padding:11px 12px;background:#f5c518;color:#171717;border-radius:3px;font-size:12px;font-weight:800}
+        .perde-imdb-main{min-width:0;padding-top:18px}
+        .perde-imdb-rating-row{display:flex;align-items:center;gap:16px;padding-bottom:18px;border-bottom:1px solid #e5e7eb;flex-wrap:wrap}
+        .perde-imdb-score{background:#f5c518;color:#171717;min-width:83px;padding:12px 13px;text-align:center;border-radius:3px;display:flex;flex-direction:column}
+        .perde-imdb-score strong{font-size:32px;line-height:1.1}.perde-imdb-score span{font-size:8px;font-weight:800;letter-spacing:.06em;margin-top:5px}
+        .perde-imdb-rating-copy{display:flex;flex-direction:column;gap:6px}.perde-imdb-stars{display:flex;gap:4px;color:#f5c518;font-size:13px}.perde-imdb-rating-copy>span{font-size:10px;color:#71717a}
+        .perde-imdb-fav{margin-left:auto;padding:10px 12px;border:1px solid #d4d4d8;border-radius:3px;font-size:11px;font-weight:700;color:#333}.perde-imdb-fav.is-favorite{color:#be123c;border-color:#fda4af}
+        .perde-imdb-overview{font-size:13px;line-height:1.7;color:#444;padding:18px 0;margin:0;border-bottom:1px solid #e5e7eb}
+        .perde-imdb-credits{padding:15px 0;border-bottom:1px solid #e5e7eb;display:grid;gap:10px}
+        .perde-imdb-credits>div{display:grid;grid-template-columns:95px minmax(0,1fr);gap:12px;font-size:12px}
+        .perde-imdb-credits b{font-size:10px;letter-spacing:.06em;color:#777}.perde-imdb-credits span{color:#c49b00;font-weight:700}
+        .perde-imdb-actions{display:flex;align-items:end;gap:8px;flex-wrap:wrap;padding:16px 0;border-bottom:1px solid #e5e7eb}
+        .perde-imdb-watch-label{display:flex;flex-direction:column;gap:5px;font-size:9px;font-weight:800;color:#71717a;letter-spacing:.04em}
+        .perde-imdb-watch-label select{min-width:145px;border:1px solid #d4d4d8;border-radius:3px;background:#fff;color:#222;padding:9px;font-size:11px}
+        .perde-imdb-action-btn,.perde-imdb-delete{padding:10px 11px;border:1px solid #d4d4d8;border-radius:3px;font-size:10px;font-weight:700;color:#333;background:#fff}
+        .perde-imdb-action-btn:hover{background:#f5c518;border-color:#f5c518}.perde-imdb-delete{color:#be123c;margin-left:auto}
+        .perde-imdb-cast{padding-top:17px}.perde-imdb-cast h3{font-size:14px;font-weight:800;margin:0 0 12px;color:#222}
+        .perde-imdb-cast-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+        .perde-imdb-cast-card{display:flex;align-items:center;gap:9px;min-width:0;text-align:left;padding:8px;border:1px solid #e5e7eb;border-radius:3px;background:#fafafa}
+        .perde-imdb-cast-card img{width:38px;height:38px;flex:none;border-radius:50%;object-fit:cover;background:#e5e7eb}
+        .perde-imdb-cast-card span{display:flex;flex-direction:column;min-width:0}.perde-imdb-cast-card b{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.perde-imdb-cast-card small{font-size:9px;color:#777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .perde-imdb-no-cast{font-size:11px;color:#777}
+        @media(max-width:680px){#detail-modal{padding:0!important}#detail-modal>div{max-height:100vh!important;border-radius:0!important}.perde-imdb-hero{height:340px}.perde-imdb-play{width:58px;height:58px;font-size:20px}.perde-imdb-content{grid-template-columns:100px minmax(0,1fr);gap:14px;padding:0 14px 22px}.perde-imdb-poster-wrap{margin-top:-58px}.perde-imdb-main{padding-top:12px}.perde-imdb-score{min-width:64px;padding:8px}.perde-imdb-score strong{font-size:24px}.perde-imdb-rating-row{gap:9px}.perde-imdb-stars{font-size:9px}.perde-imdb-fav{margin-left:0}.perde-imdb-overview{font-size:11px}.perde-imdb-credits>div{grid-template-columns:70px minmax(0,1fr);gap:6px;font-size:10px}.perde-imdb-actions{align-items:stretch}.perde-imdb-watch-label{width:100%}.perde-imdb-watch-label select{width:100%}.perde-imdb-delete{margin-left:0}.perde-imdb-cast-grid{grid-template-columns:1fr}.perde-imdb-cast-card img{width:32px;height:32px}}
+
+        /* PERDE IMDb-inspired site-wide visual system */
+        :root{--perde-yellow:#f5c518;--perde-yellow-deep:#d9a900;--perde-ink:#171717;--perde-muted:#6b7280;--perde-line:#e5e7eb;--perde-paper:#ffffff;--perde-canvas:#f4f4f5}
+        html:not(.dark) body{background:var(--perde-canvas)!important;color:#202124!important}
+        html:not(.dark) .glass-header{background:rgba(23,23,23,.97)!important;border-color:#303030!important;color:#fff!important;backdrop-filter:blur(18px)}
+        html:not(.dark) .glass-header *{--tw-text-opacity:1}
+        html:not(.dark) .glass-header .text-slate-900,html:not(.dark) .glass-header .text-gray-900{color:#fff!important}
+        html:not(.dark) .glass-panel{background:#fff!important;border-color:var(--perde-line)!important;box-shadow:0 4px 18px rgba(0,0,0,.045)!important}
+        html:not(.dark) .perde-poster-card{background:#fff!important;border:1px solid #e5e7eb!important;border-radius:5px!important;overflow:hidden!important;box-shadow:0 3px 12px rgba(0,0,0,.055)!important;transform:translateY(0);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+        html:not(.dark) .perde-poster-card:hover{transform:translateY(-4px);border-color:#f5c518!important;box-shadow:0 12px 26px rgba(0,0,0,.12)!important}
+        html:not(.dark) .perde-poster-info{background:#fff!important}
+        html:not(.dark) .perde-poster-title{color:#202124!important;font-weight:800!important}
+        html:not(.dark) .perde-poster-director,html:not(.dark) .perde-poster-genres{color:#71717a!important}
+        html:not(.dark) .perde-poster-type{color:#a17b00!important}
+        html:not(.dark) .input-field{background:#fff!important;border-color:#d4d4d8!important;color:#202124!important;border-radius:4px!important}
+        html:not(.dark) .input-field:focus{border-color:#e0b400!important;box-shadow:0 0 0 3px rgba(245,197,24,.18)!important;outline:none}
+        html:not(.dark) button.bg-blue-600,html:not(.dark) .bg-blue-600{background:#f5c518!important;color:#171717!important;box-shadow:none!important}
+        html:not(.dark) button.bg-blue-600:hover,html:not(.dark) .bg-blue-600:hover{background:#e6b800!important}
+        html:not(.dark) .text-blue-500,html:not(.dark) .text-indigo-500{color:#a17b00!important}
+        html:not(.dark) .border-blue-500,html:not(.dark) .hover\\:border-blue-500:hover{border-color:#f5c518!important}
+        html:not(.dark) .shadow-blue-600\\/30{--tw-shadow:0 4px 12px rgba(0,0,0,.08)!important}
+        html:not(.dark) #hero-banner{border:1px solid rgba(245,197,24,.45)!important;border-radius:5px!important;overflow:hidden!important;box-shadow:0 6px 20px rgba(0,0,0,.07)!important}
+        html:not(.dark) #hero-banner .bg-blue-600{background:#f5c518!important;color:#171717!important}
+        html:not(.dark) #library-grid{gap:16px!important}
+        html:not(.dark) .perde-brand-name{color:#fff!important}
+        html:not(.dark) .perde-brand-tagline{color:#f5c518!important}
+        html:not(.dark) .perde-brand-mark{filter:drop-shadow(0 4px 10px rgba(245,197,24,.22))!important}
+        html:not(.dark) .perde-brand-mark svg defs linearGradient stop:first-child{stop-color:#f5c518}
+        html:not(.dark) .perde-brand-mark svg defs linearGradient stop:last-child{stop-color:#b88900}
+        html:not(.dark) .perde-imdb-brand span{background:#f5c518}
+        html.dark body{background:#101114!important;color:#f4f4f5!important}
+        html.dark .glass-header{background:rgba(17,17,19,.97)!important;border-color:rgba(245,197,24,.18)!important}
+        html.dark .glass-panel{background:#1b1b1e!important;border-color:#303036!important;box-shadow:0 5px 18px rgba(0,0,0,.16)!important}
+        html.dark .perde-poster-card{background:#1b1b1e!important;border:1px solid #303036!important;border-radius:5px!important;overflow:hidden!important;box-shadow:0 5px 16px rgba(0,0,0,.2)!important}
+        html.dark .perde-poster-card:hover{border-color:#f5c518!important;box-shadow:0 12px 28px rgba(0,0,0,.3)!important;transform:translateY(-4px)}
+        html.dark .perde-poster-info{background:#1b1b1e!important}
+        html.dark .perde-poster-title{color:#f4f4f5!important}
+        html.dark .perde-poster-director,html.dark .perde-poster-genres{color:#a1a1aa!important}
+        html.dark .perde-poster-type{color:#f5c518!important}
+        html.dark .input-field{background:#202024!important;border-color:#414149!important;color:#f4f4f5!important;border-radius:4px!important}
+        html.dark .input-field:focus{border-color:#f5c518!important;box-shadow:0 0 0 3px rgba(245,197,24,.16)!important}
+        html.dark button.bg-blue-600,html.dark .bg-blue-600{background:#f5c518!important;color:#171717!important;box-shadow:none!important}
+        html.dark button.bg-blue-600:hover,html.dark .bg-blue-600:hover{background:#e6b800!important}
+        html.dark .text-blue-500,html.dark .text-indigo-500{color:#f5c518!important}
+        html.dark .border-blue-500,html.dark .hover\\:border-blue-500:hover{border-color:#f5c518!important}
+        html.dark #hero-banner{border:1px solid rgba(245,197,24,.3)!important;border-radius:5px!important;overflow:hidden!important}
+        html.dark #hero-banner .bg-blue-600{background:#f5c518!important;color:#171717!important}
+        html.dark .perde-brand-tagline{color:#f5c518!important}
+        html.dark .perde-brand-mark svg defs linearGradient stop:first-child{stop-color:#f5c518}
+        html.dark .perde-brand-mark svg defs linearGradient stop:last-child{stop-color:#b88900}
+        /* Buttons, controls and focus states share the same IMDb yellow accent */
+        button{transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+        button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #f5c518!important;outline-offset:2px}
+        .perde-imdb-fav,.perde-imdb-action-btn,.perde-imdb-delete,.perde-imdb-watch-label select{border-radius:4px!important}
+        @media(max-width:767px){html:not(.dark) #library-grid,html.dark #library-grid{gap:10px!important}.perde-brand-tagline{letter-spacing:.24em}}
+\n
+        /* Mobile-first layout and mixed featured/square cards */
+        html,body{max-width:100%;overflow-x:hidden}
+        body{min-width:0!important}
+        main.max-w-7xl{width:100%;max-width:1280px;min-width:0;padding-left:clamp(12px,3.5vw,32px)!important;padding-right:clamp(12px,3.5vw,32px)!important}
+        #tab-dashboard,#tab-library,#tab-stats,#tab-admin{min-width:0;max-width:100%}
+        #tab-dashboard .grid,#tab-library .grid{min-width:0}
+        #watchlist-row,#recent-row,#library-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:100%;min-width:0}
+        #watchlist-row>.perde-featured-card,#recent-row>.perde-featured-card{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);grid-template-rows:auto auto;align-items:stretch;border-radius:6px!important;min-width:0;min-height:0}
+        .perde-featured-card .perde-featured-art{grid-column:1;grid-row:1/3;aspect-ratio:4/3!important;min-height:100%;height:100%;position:relative}
+        .perde-featured-card .perde-poster-info{grid-column:2;grid-row:1;padding:clamp(12px,2vw,22px)!important;align-self:end}
+        .perde-featured-card .perde-featured-overview{grid-column:2;grid-row:2;margin:0;padding:0 clamp(12px,2vw,22px) clamp(12px,2vw,22px);font-size:clamp(11px,.95vw,14px);line-height:1.65;color:#666;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;align-self:start}
+        html.dark .perde-featured-card .perde-featured-overview{color:#c4c4c8}
+        .perde-square-card .perde-square-art{aspect-ratio:1/1!important}
+        .perde-square-card .perde-square-art>img{object-fit:cover}
+        .perde-square-card .perde-poster-info{padding:10px!important}
+        .perde-square-card .perde-poster-title{font-size:clamp(11px,1vw,14px);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .perde-square-card .perde-poster-director{font-size:10px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+        .perde-square-card .perde-poster-footer{margin-top:8px;padding-top:8px}
+        .perde-poster-card{min-width:0!important;border-radius:6px!important}
+        .perde-poster-art img{max-width:100%}
+        #hero-banner{width:100%;min-width:0}
+        #hero-banner>div{min-height:clamp(300px,38vw,470px)!important}
+        @media(max-width:520px){
+            main.max-w-7xl{padding-top:14px!important;padding-bottom:24px!important}
+            #tab-dashboard{gap:20px!important}
+            #hero-banner>div{min-height:310px!important;padding:18px!important}
+            #hero-banner h1{font-size:clamp(24px,7vw,32px)!important}
+            #hero-banner p{font-size:12px!important;line-height:1.55!important;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+            #watchlist-row,#recent-row,#library-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+            #watchlist-row>.perde-featured-card,#recent-row>.perde-featured-card{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+            .perde-featured-card .perde-featured-art{aspect-ratio:3/4!important}
+            .perde-featured-card .perde-poster-info{padding:10px!important}
+            .perde-featured-card .perde-poster-title{font-size:13px!important}
+            .perde-featured-card .perde-featured-overview{padding:0 10px 10px;font-size:10px;line-height:1.45;-webkit-line-clamp:4}
+            .perde-featured-card .perde-poster-director{font-size:10px}
+            .perde-square-card .perde-poster-info{padding:8px!important}
+            .perde-square-card .perde-poster-title{font-size:11px!important}
+            .perde-square-card .perde-poster-status{font-size:8px}
+            #tab-library .glass-panel{padding:12px!important}
+            #tab-library input,#tab-library select,.input-field{min-width:0;max-width:100%}
+            .overflow-x-auto{max-width:100%}
+            header{max-width:100vw;overflow:visible}
+        }
+        @media(min-width:768px){
+            #watchlist-row,#recent-row{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+            #library-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+        }
+        @media(min-width:1100px){
+            #watchlist-row,#recent-row{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+            #library-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+        }
+        @media(min-width:1450px){
+            #watchlist-row,#recent-row,#library-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+        }
+\n
+        /* PERDE cinema-home redesign inspired by the supplied multiplex reference */
+        #tab-dashboard{background:#151619!important;color:#f5f5f5!important;padding:clamp(10px,2vw,24px)!important;border-radius:8px;gap:26px!important;max-width:100%;min-width:0}
+        #tab-dashboard>section{min-width:0}
+        #hero-banner{border:1px solid #35363a!important;border-radius:8px!important;overflow:hidden!important;background:#17181b!important;box-shadow:0 16px 42px rgba(0,0,0,.22)!important}
+        .perde-home-hero{position:relative;isolation:isolate;min-height:clamp(340px,36vw,470px);padding:clamp(16px,2.4vw,32px);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;background:#1b1c20;color:#fff}
+        .perde-home-backdrop{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:.46;z-index:-2;filter:saturate(.8)}
+        .perde-home-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(12,13,16,.96) 0%,rgba(12,13,16,.77) 45%,rgba(12,13,16,.3) 100%),linear-gradient(0deg,rgba(12,13,16,.95),transparent 70%)}
+        .perde-home-topline{display:flex;align-items:center;justify-content:space-between;gap:10px}
+        .perde-home-logo{display:inline-flex;align-items:center;gap:8px;font-size:clamp(16px,2vw,22px);font-weight:900;letter-spacing:-.04em;color:#fff}
+        .perde-home-logo>i{color:#f5222d}.perde-home-logo>span{color:#f5222d}
+        .perde-home-topnote{font-size:9px;letter-spacing:.22em;color:#d4d4d8}
+        .perde-home-feature{display:grid;grid-template-columns:minmax(100px,24%) minmax(0,1fr);align-items:center;gap:clamp(16px,3vw,34px);margin-top:24px}
+        .perde-home-poster{width:100%;max-width:230px;aspect-ratio:2/3;object-fit:cover;border-radius:4px;box-shadow:0 12px 30px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.14)}
+        .perde-home-feature-copy{min-width:0;max-width:760px}
+        .perde-home-meta{display:flex;gap:12px;flex-wrap:wrap;color:#e4e4e7;font-size:11px;margin-bottom:12px}
+        .perde-home-meta span+span:before{content:'•';color:#f5222d;margin-right:12px}
+        .perde-home-kicker{font-size:9px;letter-spacing:.2em;color:#ff4b54;font-weight:800}
+        .perde-home-feature h1{font-size:clamp(24px,4vw,46px);line-height:1.05;font-weight:900;letter-spacing:-.035em;margin:8px 0 10px;overflow-wrap:anywhere}
+        .perde-home-genres{font-size:12px;color:#e4e4e7;margin-bottom:12px}
+        .perde-home-feature-copy p{font-size:clamp(11px,1.05vw,13px);line-height:1.65;color:#d4d4d8;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;max-width:650px;margin:0}
+        .perde-home-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+        .perde-home-actions button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:4px;padding:10px 14px;font-size:11px;font-weight:800}
+        .perde-home-primary{background:#f5222d;color:#fff;box-shadow:0 5px 18px rgba(245,34,45,.2)}
+        .perde-home-primary:hover{background:#d91520;transform:translateY(-1px)}
+        .perde-home-secondary{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff}
+        .perde-home-secondary:hover{background:rgba(255,255,255,.18)}
+        #tab-dashboard h2,#tab-dashboard h3{color:#f4f4f5!important}
+        #tab-dashboard .glass-panel{background:#1b1c20!important;border-color:#33343a!important;color:#f4f4f5!important}
+        #tab-dashboard #watchlist-row,#tab-dashboard #recent-row{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important}
+        #tab-dashboard #watchlist-row>.perde-featured-card,#tab-dashboard #recent-row>.perde-featured-card{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);grid-template-rows:auto auto;align-items:stretch;background:#202125!important;border-color:#393a40!important;border-radius:6px!important}
+        #tab-dashboard .perde-featured-card .perde-featured-art{grid-column:1;grid-row:1/3;aspect-ratio:16/9!important;min-height:100%;height:100%}
+        #tab-dashboard .perde-featured-card .perde-poster-info{grid-column:2;grid-row:1;padding:clamp(14px,2vw,24px)!important;align-self:end;background:#202125!important}
+        #tab-dashboard .perde-featured-card .perde-featured-overview{grid-column:2;grid-row:2;padding:0 clamp(14px,2vw,24px) 18px!important;font-size:12px;line-height:1.65;-webkit-line-clamp:5;color:#c4c4c8!important}
+        #tab-dashboard .perde-square-card{background:#202125!important;border-color:#34353a!important;border-radius:5px!important}
+        #tab-dashboard .perde-square-card:hover{border-color:#f5222d!important;box-shadow:0 10px 25px rgba(0,0,0,.28)!important;transform:translateY(-3px)}
+        #tab-dashboard .perde-square-card .perde-square-art{aspect-ratio:2/3!important}
+        #tab-dashboard .perde-square-card .perde-poster-info{background:#202125!important;padding:10px!important}
+        #tab-dashboard .perde-square-card .perde-poster-title{color:#f4f4f5!important}
+        #tab-dashboard .perde-square-card .perde-poster-director,#tab-dashboard .perde-square-card .perde-poster-genres{color:#a1a1aa!important}
+        #tab-dashboard .perde-square-card .perde-poster-type{color:#ff4b54!important}
+        #tab-dashboard .perde-square-card .perde-poster-footer{border-color:#38393f!important}
+        #tab-dashboard .perde-square-card .perde-poster-status{color:#d4d4d8!important}
+        @media(max-width:767px){
+            #tab-dashboard{padding:10px!important;gap:20px!important;border-radius:0!important}
+            .perde-home-hero{padding:14px;min-height:0}
+            .perde-home-topnote{font-size:7px;letter-spacing:.12em}
+            .perde-home-feature{grid-template-columns:minmax(88px,34%) minmax(0,1fr);gap:12px;margin-top:20px;align-items:start}
+            .perde-home-poster{max-width:none}
+            .perde-home-meta{gap:5px;font-size:9px;margin-bottom:8px}
+            .perde-home-meta span+span:before{margin-right:5px}
+            .perde-home-feature h1{font-size:clamp(19px,5.7vw,27px);margin:7px 0}
+            .perde-home-genres{font-size:10px;margin-bottom:7px}
+            .perde-home-feature-copy p{-webkit-line-clamp:5;font-size:10px;line-height:1.5}
+            .perde-home-actions{gap:6px;margin-top:10px}
+            .perde-home-actions button{padding:8px;font-size:9px}
+            #tab-dashboard #watchlist-row,#tab-dashboard #recent-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+            #tab-dashboard #watchlist-row>.perde-featured-card,#tab-dashboard #recent-row>.perde-featured-card{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+            #tab-dashboard .perde-featured-card .perde-featured-art{aspect-ratio:3/4!important}
+            #tab-dashboard .perde-featured-card .perde-poster-info{padding:10px!important}
+            #tab-dashboard .perde-featured-card .perde-poster-title{font-size:13px!important}
+            #tab-dashboard .perde-featured-card .perde-featured-overview{padding:0 10px 10px!important;font-size:10px;line-height:1.45;-webkit-line-clamp:4}
+            #tab-dashboard .perde-square-card .perde-poster-info{padding:8px!important}
+            #tab-dashboard .perde-square-card .perde-poster-title{font-size:11px!important}
+        }
+        @media(min-width:768px) and (max-width:1099px){#tab-dashboard #watchlist-row,#tab-dashboard #recent-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+
+
+        /* PERDE responsive hardening — portrait phones and small tablets */
+        *,*::before,*::after{box-sizing:border-box}
+        html{width:100%;max-width:100%;overflow-x:clip;scroll-padding-top:76px}
+        body{width:100%;max-width:100%;min-width:0;overflow-x:clip}
+        img,video,canvas,svg{max-width:100%}
+        button,input,select,textarea{font:inherit;max-width:100%}
+        main.max-w-7xl{min-width:0;width:100%;max-width:1280px}
+        #tab-dashboard,#tab-library,#tab-stats,#tab-admin{width:100%;min-width:0;overflow-wrap:anywhere}
+        #tab-dashboard>*,#tab-library>*,#tab-stats>*,#tab-admin>*{min-width:0;max-width:100%}
+        #library-grid>*{min-width:0}
+        #library-grid img,#watchlist-row img,#recent-row img{display:block;width:100%}
+        .perde-poster-title,.perde-poster-director,.perde-poster-genres{overflow-wrap:anywhere}
+        .modal,.modal-content,[role="dialog"]{max-width:calc(100vw - 20px)}
+        #toast-container{right:12px!important;bottom:calc(76px + env(safe-area-inset-bottom,0px))!important;max-width:calc(100vw - 24px)}
+        #mobile-bottom-nav{padding-bottom:env(safe-area-inset-bottom,0px)}
+        @media(max-width:767px){
+            html{scroll-padding-top:64px}
+            header>.max-w-7xl,header>div{width:100%;max-width:100%;padding-left:12px!important;padding-right:12px!important}
+            header .h-16{height:60px!important;gap:8px}
+            header .perde-brand-mark{width:34px;height:34px;flex:0 0 34px}
+            header .perde-brand-mark svg{width:34px;height:34px}
+            header .perde-brand-copy{line-height:1.05}
+            header .perde-brand-name{font-size:17px}
+            header .perde-brand-tagline{font-size:8px;letter-spacing:.12em}
+            header .flex.items-center.space-x-3{gap:7px!important}
+            header button[onclick="openAddMovieModal()"]{padding:9px 10px!important;font-size:11px!important;white-space:nowrap}
+            header button[onclick="toggleTheme()"]{width:34px!important;height:34px!important;flex:0 0 34px}
+            main.max-w-7xl{padding:12px!important;padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))!important}
+            #tab-dashboard{padding:10px!important;gap:20px!important}
+            #tab-library,#tab-stats,#tab-admin{gap:16px!important}
+            #tab-library .glass-panel,#tab-stats .glass-panel,#tab-admin .glass-panel{padding:12px!important}
+            #tab-library input,#tab-library select,#tab-library button{min-width:0}
+            #tab-library .flex{flex-wrap:wrap}
+            #tab-library .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+            #library-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+            #mobile-bottom-nav:not(.hidden){display:flex!important;min-height:62px;background:rgba(20,20,23,.97);border-top:1px solid #36363b;backdrop-filter:blur(16px)}
+            #mobile-bottom-nav button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:9px 2px;color:#d4d4d8;font-size:10px}
+            #mobile-bottom-nav button i{font-size:16px;color:#f5222d}
+            .perde-home-topline{align-items:flex-start}
+            .perde-home-feature{min-width:0}
+            .perde-home-feature-copy{overflow:hidden}
+            .perde-home-actions button{min-width:0;white-space:normal}
+            .perde-imdb-content{grid-template-columns:minmax(0,1fr)!important}
+            .perde-imdb-main,.perde-imdb-rating-row,.perde-imdb-credits,.perde-imdb-actions{min-width:0;max-width:100%}
+            .perde-imdb-credits{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+            .perde-imdb-cast-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+            .perde-imdb-rating-row{flex-wrap:wrap;gap:10px}
+            .perde-imdb-actions{display:flex;flex-wrap:wrap}
+            .perde-imdb-actions>*{max-width:100%}
+            input,select,textarea{font-size:16px!important}
+        }
+        @media(max-width:360px){
+            header .perde-brand-tagline{display:none}
+            header .perde-brand-name{font-size:15px}
+            header button[onclick="openAddMovieModal()"]{padding:8px!important}
+            .perde-home-feature{grid-template-columns:minmax(72px,31%) minmax(0,1fr)!important;gap:9px!important}
+            .perde-home-feature h1{font-size:19px!important}
+            .perde-home-actions{flex-direction:column;align-items:stretch}
+            #tab-dashboard #watchlist-row,#tab-dashboard #recent-row,#library-grid{gap:8px!important}
+        }
+        @media(prefers-reduced-motion:reduce){
+            *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+        }
+
+
+        /* PERDE homepage polish phase 2 */
+        .perde-home-welcome{padding:2px 2px 0;min-width:0}
+        .perde-home-welcome-kicker{font-size:9px;letter-spacing:.24em;font-weight:800;color:#ff4b54}
+        .perde-home-welcome h2{margin:6px 0 4px;font-size:clamp(20px,2.5vw,28px);font-weight:850;letter-spacing:-.035em;color:#f5f5f5}
+        .perde-home-welcome p{margin:0;color:#a1a1aa;font-size:12px;line-height:1.6}
+        #tab-dashboard .glass-panel{border-radius:7px!important}
+        #tab-dashboard .glass-panel h3{font-variant-numeric:tabular-nums}
+        #tab-dashboard #watchlist-row,#tab-dashboard #recent-row{align-items:stretch}
+        #tab-dashboard #watchlist-row>.perde-poster-card,#tab-dashboard #recent-row>.perde-poster-card{height:100%}
+        #tab-dashboard .perde-poster-rating{background:rgba(15,15,17,.82);border:1px solid rgba(255,255,255,.14);border-radius:4px!important}
+        #tab-dashboard .perde-poster-shade{pointer-events:none}
+        #tab-dashboard .perde-featured-card .perde-poster-art img{object-position:center}
+        #tab-dashboard .perde-square-card .perde-square-art{background:#292a2e}
+        #tab-dashboard .perde-square-card .perde-square-art img{aspect-ratio:2/3;object-fit:cover}
+        #tab-dashboard .perde-square-card .perde-poster-title{line-height:1.35}
+        #tab-dashboard .perde-square-card .perde-poster-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}
+        #tab-dashboard .perde-featured-card .perde-poster-info{min-width:0}
+        #tab-dashboard .perde-featured-card .perde-poster-title{font-size:clamp(15px,1.6vw,22px);line-height:1.2}
+        #tab-dashboard .perde-home-actions button{min-height:38px}
+        @media(max-width:767px){
+            .perde-home-welcome{padding:0 2px}
+            .perde-home-welcome-kicker{font-size:8px;letter-spacing:.18em}
+            .perde-home-welcome h2{font-size:21px}
+            .perde-home-welcome p{font-size:11px}
+            #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4{gap:9px!important}
+            #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4>.glass-panel{padding:11px!important;min-width:0}
+            #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4>.glass-panel .w-10{width:30px!important;height:30px!important;flex:0 0 30px}
+            #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4>.glass-panel h3{font-size:21px!important}
+            #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4>.glass-panel p{font-size:9px!important}
+        }
+
+/* ===== CSS bölüm ayrımı ===== */
+
+html, body { max-width: 100%; }
+        body { overflow-x: clip; }
+        main.max-w-7xl { width: 100%; min-width: 0; }
+        #tab-dashboard, #tab-library { min-width: 0; }
+        #watchlist-row, #recent-row, #library-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 12px !important;
+            width: 100%;
+            min-width: 0;
+            overflow: visible !important;
+            overflow-x: visible !important;
+            overflow-y: visible !important;
+            scroll-snap-type: none !important;
+            padding: 4px 0 12px !important;
+        }
+        #watchlist-row > div, #recent-row > div, #library-grid > div {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100%;
+            flex: initial !important;
+            scroll-snap-align: none !important;
+        }
+        #watchlist-row img, #recent-row img, #library-grid img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+        }
+        #hero-banner { width: 100%; min-width: 0; }
+        #hero-banner > div { min-height: clamp(330px, 43vw, 540px); }
+        #hero-banner h1 { overflow-wrap: anywhere; }
+        header nav { max-width: 100%; }
+        @media (min-width: 560px) {
+            #watchlist-row, #recent-row, #library-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 14px !important;
+            }
+        }
+        @media (min-width: 768px) {
+            #watchlist-row, #recent-row, #library-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+                gap: 16px !important;
+            }
+            #hero-banner > div { min-height: clamp(400px, 40vw, 560px); }
+        }
+        @media (min-width: 1100px) {
+            #watchlist-row, #recent-row, #library-grid {
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+                gap: 18px !important;
+            }
+        }
+        @media (min-width: 1400px) {
+            #watchlist-row, #recent-row, #library-grid {
+                grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+            }
+        }
+        @media (max-width: 767px) {
+            main.max-w-7xl { padding-left: 14px !important; padding-right: 14px !important; }
+            #tab-dashboard { gap: 1.5rem !important; }
+            #hero-banner { border-radius: 18px !important; }
+            #hero-banner > div { min-height: 340px; padding: 20px !important; }
+            #hero-banner h1 { font-size: clamp(1.65rem, 7vw, 2.15rem) !important; line-height: 1.1; }
+            #hero-banner p { max-width: 100%; line-height: 1.65; }
+            #watchlist-row > div, #recent-row > div, #library-grid > div { border-radius: 12px !important; }
+            #watchlist-row h4, #recent-row h4, #library-grid h4 { font-size: .76rem !important; }
+        }
+
+/* ===== CSS bölüm ayrımı ===== */
+
+:root {
+            --perde-accent: #8b304a;
+            --perde-accent-strong: #a64a63;
+            --perde-gold: #d4b47a;
+            --perde-card-radius: 16px;
+        }
+        /* Brand: remove the leftover purple/blue appearance */
+        .perde-brand-mark { filter: drop-shadow(0 5px 14px rgba(118,40,63,.28)) !important; }
+        .perde-brand-mark svg { filter: hue-rotate(72deg) saturate(.88); }
+        .perde-brand-tagline { color: var(--perde-gold) !important; }
+        .perde-home-logo > i { color: var(--perde-gold) !important; }
+        .perde-home-logo > span { color: var(--perde-gold) !important; }
+        /* Hero: clearer hierarchy, controlled text width and premium actions */
+        #hero-banner { border-radius: 22px !important; }
+        .perde-home-hero { min-width: 0; }
+        .perde-home-topnote { font-size: 9px; letter-spacing: .19em; color: #e8d8dc; text-align: right; }
+        .perde-home-feature { grid-template-columns: minmax(112px, 23%) minmax(0, 1fr); }
+        .perde-home-poster { border-radius: 8px !important; }
+        .perde-home-feature h1 { max-width: 18ch; }
+        .perde-home-feature-copy p { max-width: 66ch; }
+        .perde-home-kicker { color: #e9b7c4 !important; }
+        .perde-home-primary { background: linear-gradient(135deg, #a64a63, #76283f) !important; color: #fff !important; border: 1px solid rgba(212,180,122,.28); }
+        .perde-home-secondary { border-radius: 999px !important; }
+        /* Dashboard section cards */
+        #tab-dashboard .glass-panel { border-radius: var(--perde-card-radius) !important; }
+        #tab-dashboard > .grid.grid-cols-2[class~="md:grid-cols-4"] > .glass-panel {
+            border-radius: 16px !important;
+            min-width: 0;
+            gap: 10px;
+        }
+        #tab-dashboard > .grid.grid-cols-2[class~="md:grid-cols-4"] > .glass-panel p {
+            line-height: 1.4;
+        }
+        #tab-dashboard h2::after { opacity: .65; }
+        /* Film cards: consistent image crop, type scale and hover */
+        #watchlist-row > div, #recent-row > div, #library-grid > div {
+            overflow: hidden;
+            border-radius: 14px !important;
+            border: 1px solid rgba(212,180,122,.14) !important;
+            box-shadow: 0 10px 28px rgba(0,0,0,.12);
+            min-width: 0;
+        }
+        #watchlist-row > div:hover, #recent-row > div:hover, #library-grid > div:hover {
+            border-color: rgba(212,180,122,.42) !important;
+            box-shadow: 0 16px 32px rgba(0,0,0,.18);
+        }
+        #watchlist-row .perde-poster-info, #recent-row .perde-poster-info, #library-grid .perde-poster-info {
+            padding: 12px !important;
+            min-width: 0;
+        }
+        #watchlist-row .perde-poster-title, #recent-row .perde-poster-title, #library-grid .perde-poster-title {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            overflow-wrap: anywhere;
+            min-height: 2.6em;
+        }
+        #watchlist-row .perde-poster-director, #recent-row .perde-poster-director, #library-grid .perde-poster-director {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        /* Light theme contrast fixes */
+        html.light .perde-home-welcome h2 { color: #292329 !important; }
+        html.light .perde-home-welcome p { color: #6b6268 !important; }
+        html.light #tab-dashboard h2, html.light #tab-dashboard h3 { color: #292329 !important; }
+        html.light #tab-dashboard .glass-panel { color: #292329 !important; }
+        html.light #tab-dashboard .glass-panel p { color: #6b6268 !important; }
+        html.light #tab-dashboard .glass-panel .text-white,
+        html.light #tab-dashboard .glass-panel .dark\\:text-white { color: #292329 !important; }
+        html.light .perde-poster-title { color: #292329 !important; }
+        html.light .perde-poster-director, html.light .perde-poster-genres { color: #6b6268 !important; }
+        html.light .perde-poster-type { color: #8b304a !important; }
+        html.light #mobile-bottom-nav:not(.hidden) { background: rgba(250,247,244,.97) !important; border-top-color: rgba(118,40,63,.14) !important; }
+        html.light #mobile-bottom-nav button { color: #5f5258 !important; }
+        /* Tablet widths: prevent the full desktop navigation from squeezing the header */
+        @media (min-width: 768px) and (max-width: 1120px) {
+            header nav { gap: 0 !important; }
+            header nav .nav-btn { padding: 8px 7px !important; font-size: 10px !important; }
+            header .perde-brand-tagline { letter-spacing: .18em; }
+            header .flex.items-center.space-x-3 { gap: 8px; }
+            header button[onclick="openAddMovieModal()"] { padding: 10px 11px !important; }
+            header button[onclick="openAddMovieModal()"] span { font-size: 10px; }
+        }
+        @media (max-width: 767px) {
+            #hero-banner { border-radius: 18px !important; }
+            .perde-home-hero { padding: 18px !important; }
+            .perde-home-topnote { max-width: 46%; font-size: 8px; line-height: 1.5; }
+            .perde-home-feature { grid-template-columns: minmax(82px, 29%) minmax(0, 1fr) !important; gap: 13px !important; margin-top: 18px; }
+            .perde-home-poster { max-width: 100%; }
+            .perde-home-meta { gap: 6px 9px; font-size: 9px; margin-bottom: 8px; }
+            .perde-home-meta span+span:before { margin-right: 8px; }
+            .perde-home-feature h1 { font-size: clamp(19px, 5.7vw, 27px) !important; margin: 6px 0 8px; }
+            .perde-home-genres { font-size: 10px; margin-bottom: 8px; }
+            .perde-home-feature-copy p { font-size: 11px; -webkit-line-clamp: 3; }
+            .perde-home-actions { gap: 7px; margin-top: 12px; }
+            .perde-home-actions button { padding: 9px 10px !important; font-size: 10px !important; }
+            #tab-dashboard > .grid.grid-cols-2[class~="md:grid-cols-4"] > .glass-panel { border-radius: 13px !important; }
+            #watchlist-row .perde-poster-info, #recent-row .perde-poster-info, #library-grid .perde-poster-info { padding: 10px !important; }
+        }
+        @media (max-width: 380px) {
+            .perde-home-feature { grid-template-columns: minmax(70px, 27%) minmax(0, 1fr) !important; gap: 10px !important; }
+            .perde-home-feature h1 { font-size: 18px !important; }
+            .perde-home-meta { font-size: 8px; }
+            .perde-home-actions { flex-direction: column; align-items: stretch; }
+            .perde-home-actions button { width: 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #watchlist-row > div, #recent-row > div, #library-grid > div { transition: none !important; }
+        }
+
+/* ===== CSS bölüm ayrımı ===== */
+
+:root {
+        --perde-bg: #090b18;
+        --perde-surface: #11152a;
+        --perde-line: rgba(173, 184, 255, .14);
+        --perde-text: #f5f5ff;
+        --perde-muted: #a4a8c7;
+        --perde-violet: #9b7bff;
+        --perde-pink: #ff6fb5;
+        --perde-cyan: #56d9f5;
+        --perde-lime: #b6f36b;
+      }
+      html.dark body {
+        background:
+          radial-gradient(ellipse at 8% 0%, rgba(104, 74, 224, .19), transparent 34rem),
+          radial-gradient(ellipse at 95% 16%, rgba(28, 184, 211, .10), transparent 30rem),
+          #090b18 !important;
+        color: var(--perde-text);
+      }
+      html.dark .glass-header {
+        background: rgba(9, 11, 24, .82) !important;
+        border-bottom: 1px solid var(--perde-line) !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,.16);
+      }
+      html.dark .glass-panel {
+        background: linear-gradient(145deg, rgba(22, 26, 51, .94), rgba(14, 17, 35, .96)) !important;
+        border: 1px solid var(--perde-line) !important;
+        box-shadow: 0 12px 34px rgba(0,0,0,.17);
+        border-radius: 20px !important;
+      }
+      html.light body {
+        background:
+          radial-gradient(ellipse at 0% 0%, rgba(155, 123, 255, .13), transparent 32rem),
+          radial-gradient(ellipse at 100% 12%, rgba(86, 217, 245, .13), transparent 30rem),
+          #f5f6ff !important;
+        color: #202344;
+      }
+      html.light .glass-header {
+        background: rgba(250, 250, 255, .86) !important;
+        border-bottom: 1px solid rgba(102, 91, 175, .14) !important;
+        box-shadow: 0 10px 36px rgba(53, 47, 112, .07);
+      }
+      html.light .glass-panel {
+        background: rgba(255,255,255,.88) !important;
+        border: 1px solid rgba(102, 91, 175, .15) !important;
+        box-shadow: 0 12px 34px rgba(53, 47, 112, .07) !important;
+        border-radius: 20px !important;
+      }
+      .perde-home-welcome {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(22px, 4vw, 38px);
+        border-radius: 26px;
+        border: 1px solid rgba(177, 157, 255, .26);
+        background:
+          radial-gradient(circle at 88% 0%, rgba(86,217,245,.22), transparent 15rem),
+          radial-gradient(circle at 72% 100%, rgba(255,111,181,.17), transparent 18rem),
+          linear-gradient(118deg, #201747 0%, #171a3b 52%, #102c40 100%);
+        box-shadow: 0 22px 55px rgba(37, 23, 95, .22);
+        isolation: isolate;
+      }
+      .perde-home-welcome:after {
+        content: "✦";
+        position: absolute;
+        right: clamp(20px, 6vw, 76px);
+        top: 50%;
+        transform: translateY(-50%) rotate(-12deg);
+        font-size: clamp(80px, 13vw, 170px);
+        line-height: 1;
+        color: rgba(255,255,255,.07);
+        pointer-events: none;
+      }
+      .perde-home-welcome-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #b8f3ff;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .19em;
+        text-transform: uppercase;
+      }
+      .perde-home-welcome-kicker:before {
+        content: "";
+        width: 22px;
+        height: 2px;
+        border-radius: 99px;
+        background: linear-gradient(90deg, #56d9f5, #b6f36b);
+      }
+      .perde-home-welcome h2 {
+        position: relative;
+        z-index: 1;
+        margin-top: 12px;
+        max-width: 700px;
+        color: #fff !important;
+        font-size: clamp(27px, 4.3vw, 48px) !important;
+        font-weight: 800 !important;
+        letter-spacing: -.045em;
+        line-height: 1.12;
+      }
+      .perde-home-welcome p {
+        position: relative;
+        z-index: 1;
+        margin-top: 12px;
+        max-width: 520px;
+        color: #c7c9e7 !important;
+        font-size: clamp(12px, 1.4vw, 14px);
+        line-height: 1.8;
+      }
+      #hero-banner {
+        border-radius: 26px !important;
+        border-color: rgba(155,123,255,.28) !important;
+        box-shadow: 0 24px 60px rgba(13, 8, 42, .28) !important;
+      }
+      #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4 > .glass-panel {
+        position: relative;
+        overflow: hidden;
+        min-height: 112px;
+        padding: 20px !important;
+        transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease !important;
+      }
+      #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4 > .glass-panel:after {
+        content: "";
+        position: absolute;
+        width: 78px;
+        height: 78px;
+        right: -28px;
+        top: -30px;
+        border-radius: 50%;
+        background: var(--stat-glow, rgba(155,123,255,.14));
+        filter: blur(2px);
+        pointer-events: none;
+      }
+      #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4 > .glass-panel:nth-child(1) { --stat-glow: rgba(155,123,255,.22); }
+      #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4 > .glass-panel:nth-child(2) { --stat-glow: rgba(73,226,177,.18); }
+      #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4 > .glass-panel:nth-child(3) { --stat-glow: rgba(255,195,87,.20); }
+      #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4 > .glass-panel:nth-child(4) { --stat-glow: rgba(255,111,181,.20); }
+      #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4 > .glass-panel:hover {
+        transform: translateY(-3px);
+        border-color: rgba(155,123,255,.42) !important;
+        box-shadow: 0 18px 40px rgba(62, 42, 135, .17) !important;
+      }
+      #tab-dashboard > .space-y-4 > .flex.items-center.justify-between h2 {
+        font-size: 15px !important;
+        font-weight: 800 !important;
+        letter-spacing: -.02em;
+      }
+      #tab-dashboard > .space-y-4 > .flex.items-center.justify-between h2 i {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        background: rgba(155,123,255,.13);
+        color: var(--perde-violet) !important;
+      }
+      #watchlist-row > *, #recent-row > *, #library-grid > * {
+        min-width: 0;
+        border-radius: 17px !important;
+        overflow: hidden;
+      }
+      #watchlist-row > * img, #recent-row > * img, #library-grid > * img {
+        transition: transform .35s ease, filter .35s ease !important;
+      }
+      #watchlist-row > *:hover img, #recent-row > *:hover img, #library-grid > *:hover img {
+        transform: scale(1.045);
+        filter: saturate(1.12);
+      }
+      button, a, input, select { -webkit-tap-highlight-color: transparent; }
+      button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+        outline: 2px solid #56d9f5 !important;
+        outline-offset: 3px;
+      }
+      html.dark .input-field {
+        background: rgba(8, 11, 26, .78) !important;
+        border-color: rgba(173,184,255,.18) !important;
+        border-radius: 13px !important;
+      }
+      html.light .input-field {
+        background: rgba(255,255,255,.94) !important;
+        border-color: rgba(102,91,175,.18) !important;
+        border-radius: 13px !important;
+      }
+      @media (max-width: 640px) {
+        #tab-dashboard { gap: 22px !important; }
+        .perde-home-welcome { border-radius: 22px; padding: 24px 20px; }
+        .perde-home-welcome:after { right: 10px; top: 18px; transform: none; font-size: 84px; }
+        #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4 > .glass-panel { min-height: 98px; padding: 13px !important; border-radius: 16px !important; }
+        #tab-dashboard .grid.grid-cols-2.md\:grid-cols-4 > .glass-panel h3 { font-size: 24px !important; }
+        #hero-banner { border-radius: 21px !important; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *:before, *:after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      }
+
+/* ===== CSS bölüm ayrımı ===== */
+
+/* Film kartları: daha dengeli afiş / bilgi oranı */
+      #watchlist-row .perde-poster-card,
+      #recent-row .perde-poster-card,
+      #library-grid .perde-poster-card {
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0;
+        border-radius: 16px !important;
+        background: var(--perde-surface, #11152a) !important;
+        border: 1px solid rgba(155,123,255,.17) !important;
+        box-shadow: 0 8px 24px rgba(8,10,28,.10) !important;
+        transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease !important;
+      }
+      #watchlist-row .perde-poster-card:hover,
+      #recent-row .perde-poster-card:hover,
+      #library-grid .perde-poster-card:hover {
+        transform: translateY(-3px) !important;
+        border-color: rgba(86,217,245,.42) !important;
+        box-shadow: 0 14px 30px rgba(36,26,92,.18) !important;
+      }
+      #watchlist-row .perde-poster-art,
+      #recent-row .perde-poster-art,
+      #library-grid .perde-poster-art {
+        position: relative;
+        width: 100%;
+        height: auto !important;
+        aspect-ratio: 5 / 5.8;
+        max-height: 235px;
+        flex: 0 0 auto;
+        background: linear-gradient(135deg, #25204c, #102b3b);
+      }
+      #watchlist-row .perde-poster-art img,
+      #recent-row .perde-poster-art img,
+      #library-grid .perde-poster-art img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 25%;
+      }
+      #watchlist-row .perde-poster-shade,
+      #recent-row .perde-poster-shade,
+      #library-grid .perde-poster-shade {
+        background: linear-gradient(180deg, rgba(6,8,22,.04) 35%, rgba(6,8,22,.72) 100%);
+        pointer-events: none;
+      }
+      #watchlist-row .perde-poster-rating,
+      #recent-row .perde-poster-rating,
+      #library-grid .perde-poster-rating {
+        top: 8px !important;
+        right: 8px !important;
+        padding: 5px 7px !important;
+        border-radius: 8px !important;
+        background: rgba(10,12,29,.78) !important;
+        border: 1px solid rgba(255,255,255,.14);
+        font-size: 10px !important;
+      }
+      #watchlist-row .perde-poster-hover,
+      #recent-row .perde-poster-hover,
+      #library-grid .perde-poster-hover {
+        padding: 10px 11px !important;
+      }
+      #watchlist-row .perde-poster-hover > div,
+      #recent-row .perde-poster-hover > div,
+      #library-grid .perde-poster-hover > div { font-size: 11px !important; }
+      #watchlist-row .perde-poster-info,
+      #recent-row .perde-poster-info,
+      #library-grid .perde-poster-info {
+        padding: 11px 12px 12px !important;
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+      #watchlist-row .perde-poster-type,
+      #recent-row .perde-poster-type,
+      #library-grid .perde-poster-type {
+        font-size: 8px !important;
+        letter-spacing: .09em;
+        padding: 3px 6px;
+        border-radius: 6px;
+        background: rgba(155,123,255,.13);
+        color: #b9a5ff;
+      }
+      #watchlist-row .perde-poster-year,
+      #recent-row .perde-poster-year,
+      #library-grid .perde-poster-year { font-size: 10px !important; }
+      #watchlist-row .perde-poster-title,
+      #recent-row .perde-poster-title,
+      #library-grid .perde-poster-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 2.65em;
+        font-size: 12px !important;
+        line-height: 1.35 !important;
+        overflow-wrap: anywhere;
+      }
+      #watchlist-row .perde-poster-director,
+      #recent-row .perde-poster-director,
+      #library-grid .perde-poster-director {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 10px !important;
+        opacity: .72;
+      }
+      #watchlist-row .perde-poster-footer,
+      #recent-row .perde-poster-footer,
+      #library-grid .perde-poster-footer {
+        margin-top: auto !important;
+        padding-top: 9px !important;
+        font-size: 9px !important;
+        border-top: 1px solid rgba(155,123,255,.13);
+      }
+      #watchlist-row .perde-featured-overview,
+      #recent-row .perde-featured-overview,
+      #library-grid .perde-featured-overview {
+        padding: 0 12px 12px;
+        font-size: 10px;
+        line-height: 1.55;
+        opacity: .72;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      /* Detay penceresi: premium panel ve sınırlı afiş yüksekliği */
+      #detail-modal {
+        padding: 12px !important;
+        background: rgba(5,7,20,.78) !important;
+        backdrop-filter: blur(16px) !important;
+      }
+      #detail-modal > div {
+        width: min(100%, 980px) !important;
+        max-height: min(90dvh, 900px) !important;
+        border-radius: 22px !important;
+        border: 1px solid rgba(155,123,255,.24) !important;
+        background: #101329 !important;
+        box-shadow: 0 30px 100px rgba(0,0,0,.48) !important;
+      }
+      html.light #detail-modal > div {
+        background: #fff !important;
+        border-color: rgba(102,91,175,.18) !important;
+        box-shadow: 0 30px 100px rgba(37,29,83,.22) !important;
+      }
+      #detail-modal > div > button[onclick*="closeModal"] {
+        top: 10px !important;
+        right: 10px !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 13px !important;
+        background: rgba(9,11,24,.78) !important;
+        backdrop-filter: blur(10px);
+      }
+      #detail-modal-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+      #detail-modal-content .perde-imdb-detail { background: transparent; }
+      #detail-modal-content .perde-imdb-hero {
+        min-height: 245px !important;
+        height: clamp(245px, 32vw, 360px) !important;
+        overflow: hidden;
+        isolation: isolate;
+      }
+      #detail-modal-content .perde-imdb-backdrop {
+        object-fit: cover !important;
+        object-position: center 30% !important;
+        filter: saturate(1.08);
+      }
+      #detail-modal-content .perde-imdb-hero-shade {
+        background: linear-gradient(90deg, rgba(10,11,30,.96) 0%, rgba(10,11,30,.74) 48%, rgba(10,11,30,.16) 100%), linear-gradient(0deg, rgba(10,11,30,.78), transparent 65%) !important;
+      }
+      #detail-modal-content .perde-imdb-hero-copy { max-width: 720px; padding: 22px clamp(18px,3.5vw,38px) !important; }
+      #detail-modal-content .perde-imdb-hero-copy h2 {
+        font-size: clamp(25px, 4vw, 42px) !important;
+        line-height: 1.08 !important;
+        max-width: 650px;
+        overflow-wrap: anywhere;
+      }
+      #detail-modal-content .perde-imdb-content {
+        display: grid !important;
+        grid-template-columns: minmax(125px, 175px) minmax(0,1fr) !important;
+        gap: clamp(16px, 3vw, 28px) !important;
+        padding: clamp(16px, 3vw, 28px) !important;
+      }
+      #detail-modal-content .perde-imdb-poster-wrap {
+        width: 100% !important;
+        max-width: 175px;
+        align-self: start;
+        gap: 10px !important;
+      }
+      #detail-modal-content .perde-imdb-poster {
+        display: block;
+        width: 100% !important;
+        height: auto !important;
+        max-height: 245px !important;
+        aspect-ratio: 2 / 3;
+        object-fit: cover !important;
+        border-radius: 13px !important;
+        box-shadow: 0 12px 28px rgba(0,0,0,.25);
+      }
+      #detail-modal-content .perde-imdb-trailer-btn {
+        width: 100%;
+        min-height: 40px;
+        border-radius: 11px !important;
+        font-size: 11px !important;
+      }
+      #detail-modal-content .perde-imdb-main { min-width: 0; }
+      #detail-modal-content .perde-imdb-rating-row {
+        flex-wrap: wrap;
+        gap: 12px !important;
+        padding-bottom: 15px !important;
+        margin-bottom: 16px !important;
+        border-bottom: 1px solid rgba(155,123,255,.16);
+      }
+      #detail-modal-content .perde-imdb-score {
+        border-radius: 12px;
+        padding: 10px 12px !important;
+        background: linear-gradient(135deg, rgba(155,123,255,.18), rgba(86,217,245,.09));
+      }
+      #detail-modal-content .perde-imdb-overview {
+        font-size: 13px !important;
+        line-height: 1.8 !important;
+        max-width: 780px;
+      }
+      #detail-modal-content .perde-imdb-credits {
+        display: grid !important;
+        grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+        gap: 9px !important;
+        margin-top: 18px !important;
+      }
+      #detail-modal-content .perde-imdb-credits > div {
+        min-width: 0;
+        padding: 11px 12px !important;
+        border: 1px solid rgba(155,123,255,.15);
+        border-radius: 12px;
+        background: rgba(155,123,255,.055);
+      }
+      #detail-modal-content .perde-imdb-credits span { overflow-wrap: anywhere; }
+      #detail-modal-content .perde-imdb-actions {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 9px !important;
+        margin-top: 18px !important;
+      }
+      #detail-modal-content .perde-imdb-action-btn,
+      #detail-modal-content .perde-imdb-fav,
+      #detail-modal-content .perde-imdb-delete {
+        min-height: 40px;
+        padding: 9px 12px !important;
+        border-radius: 11px !important;
+        font-size: 11px !important;
+      }
+      #detail-modal-content .perde-imdb-cast { margin-top: 24px !important; }
+      #detail-modal-content .perde-imdb-cast h3 { font-size: 15px !important; font-weight: 800 !important; margin-bottom: 12px; }
+      #detail-modal-content .perde-imdb-cast-card {
+        border-radius: 12px !important;
+        border: 1px solid rgba(155,123,255,.14) !important;
+        background: rgba(155,123,255,.055) !important;
+        padding: 8px !important;
+        min-width: 0;
+      }
+      @media (min-width: 900px) {
+        #watchlist-row .perde-poster-art,
+        #recent-row .perde-poster-art,
+        #library-grid .perde-poster-art { max-height: 210px; }
+      }
+      @media (max-width: 640px) {
+        #watchlist-row .perde-poster-art,
+        #recent-row .perde-poster-art,
+        #library-grid .perde-poster-art {
+          aspect-ratio: 5 / 5.5;
+          max-height: 170px;
+        }
+        #watchlist-row .perde-poster-info,
+        #recent-row .perde-poster-info,
+        #library-grid .perde-poster-info { padding: 10px !important; }
+        #watchlist-row .perde-poster-title,
+        #recent-row .perde-poster-title,
+        #library-grid .perde-poster-title { font-size: 11px !important; min-height: 2.6em; }
+        #watchlist-row .perde-poster-footer,
+        #recent-row .perde-poster-footer,
+        #library-grid .perde-poster-footer { gap: 5px !important; }
+        #detail-modal { padding: 7px !important; align-items: center !important; }
+        #detail-modal > div {
+          width: 100% !important;
+          max-height: 92dvh !important;
+          border-radius: 18px !important;
+        }
+        #detail-modal-content .perde-imdb-hero {
+          height: 215px !important;
+          min-height: 215px !important;
+        }
+        #detail-modal-content .perde-imdb-hero-top { padding: 14px !important; }
+        #detail-modal-content .perde-imdb-play { width: 42px !important; height: 42px !important; }
+        #detail-modal-content .perde-imdb-hero-copy { padding: 12px 15px 17px !important; }
+        #detail-modal-content .perde-imdb-hero-copy h2 { font-size: clamp(23px, 7vw, 30px) !important; max-width: 95%; }
+        #detail-modal-content .perde-imdb-kicker { font-size: 10px !important; flex-wrap: wrap; gap: 5px !important; }
+        #detail-modal-content .perde-imdb-content {
+          grid-template-columns: minmax(0,1fr) !important;
+          gap: 17px !important;
+          padding: 15px !important;
+        }
+        #detail-modal-content .perde-imdb-poster-wrap {
+          display: grid !important;
+          grid-template-columns: 92px minmax(0,1fr) !important;
+          align-items: center !important;
+          gap: 13px !important;
+          max-width: none !important;
+          width: 100% !important;
+        }
+        #detail-modal-content .perde-imdb-poster {
+          width: 92px !important;
+          height: 138px !important;
+          max-height: 138px !important;
+          aspect-ratio: auto !important;
+          border-radius: 10px !important;
+        }
+        #detail-modal-content .perde-imdb-trailer-btn {
+          width: 100% !important;
+          max-width: 220px;
+          justify-self: start;
+          padding: 11px !important;
+          white-space: normal;
+        }
+        #detail-modal-content .perde-imdb-rating-row { gap: 9px !important; }
+        #detail-modal-content .perde-imdb-rating-copy { min-width: 0; }
+        #detail-modal-content .perde-imdb-rating-copy span { font-size: 10px !important; }
+        #detail-modal-content .perde-imdb-overview { font-size: 12px !important; }
+        #detail-modal-content .perde-imdb-credits { gap: 7px !important; }
+        #detail-modal-content .perde-imdb-credits > div { padding: 10px !important; }
+        #detail-modal-content .perde-imdb-actions { display: grid !important; grid-template-columns: repeat(2,minmax(0,1fr)); }
+        #detail-modal-content .perde-imdb-actions > * { min-width: 0; }
+        #detail-modal-content .perde-imdb-watch-label { grid-column: 1 / -1; }
+        #detail-modal-content .perde-imdb-cast-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 8px !important; }
+        #detail-modal-content .perde-imdb-cast-card img { width: 34px !important; height: 34px !important; }
+      }
+      @media (max-width: 360px) {
+        #watchlist-row .perde-poster-art,
+        #recent-row .perde-poster-art,
+        #library-grid .perde-poster-art { max-height: 148px; }
+        #detail-modal-content .perde-imdb-poster-wrap { grid-template-columns: 78px minmax(0,1fr) !important; }
+        #detail-modal-content .perde-imdb-poster { width: 78px !important; height: 117px !important; max-height: 117px !important; }
+      }
