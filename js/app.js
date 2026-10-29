@@ -728,6 +728,13 @@
             movies = movies.filter(x => x.id !== id);
             saveToLocalStorage();
             closeModal('detail-modal');
+
+            // Detay sayfasından silme yapıldıysa artık silinmiş kaydı göstermemek için kütüphaneye dön.
+            const detailPage = document.getElementById('tab-detail');
+            if (detailPage && !detailPage.classList.contains('hidden')) {
+                switchTab('library');
+            }
+
             renderDashboard();
             renderLibrary();
             showToast('Yapım arşivden silindi.');
