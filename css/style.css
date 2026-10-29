@@ -650,3 +650,116 @@ header nav { flex:0 1 auto; }
   .ml-featured-artwork { height:200px; }
   .ml-featured-artwork img { max-height:200px; }
 }
+
+
+/* Header search layout correction: predictable two-row grid, never squeezed between nav items */
+header .max-w-7xl > .flex.items-center.justify-between {
+  display:grid !important;
+  grid-template-columns:minmax(220px,auto) minmax(260px,1fr) auto;
+  grid-template-areas:"brand search actions" "nav nav nav";
+  align-items:center; column-gap:22px; row-gap:10px;
+  height:auto !important; min-height:68px; padding-top:10px; padding-bottom:10px;
+}
+header .max-w-7xl > .flex.items-center.justify-between > .group { grid-area:brand; min-width:0; }
+header .max-w-7xl > .flex.items-center.justify-between > .ml-header-search { grid-area:search; }
+header .max-w-7xl > .flex.items-center.justify-between > nav { grid-area:nav; justify-self:start; }
+header .max-w-7xl > .flex.items-center.justify-between > .flex.items-center.space-x-3 { grid-area:actions; justify-self:end; }
+.ml-header-search {
+  width:100%; min-width:0; max-width:560px; height:44px; flex:none;
+  display:flex; align-items:center; gap:11px; padding:0 10px 0 14px;
+  border:1px solid var(--ml-border); border-radius:12px;
+  background:var(--ml-surface); color:var(--ml-muted);
+  box-shadow:0 3px 12px rgba(15,23,42,.06);
+}
+.ml-header-search:focus-within { border-color:var(--ml-accent); box-shadow:0 0 0 3px color-mix(in srgb,var(--ml-accent) 16%,transparent); }
+.ml-header-search>i { flex:0 0 auto; font-size:15px; color:var(--ml-accent); }
+.ml-header-search input { flex:1 1 auto; width:100%; min-width:0; height:100%; border:0!important; outline:0!important; box-shadow:none!important; background:transparent!important; color:var(--ml-text)!important; font:500 14px var(--ml-font-ui)!important; }
+.ml-header-search input::placeholder { color:var(--ml-muted); opacity:1; }
+.ml-header-search>button { display:grid; place-items:center; flex:0 0 32px; width:32px; height:32px; border:0; border-radius:9px; background:var(--ml-accent); color:#fff; cursor:pointer; }
+header nav { max-width:100%; }
+@media(max-width:1100px) and (min-width:768px) {
+  header .max-w-7xl > .flex.items-center.justify-between { grid-template-columns:minmax(185px,auto) minmax(210px,1fr) auto; column-gap:12px; }
+  header .perde-brand-name { font-size:11px; }
+  header nav .nav-btn { padding-left:9px!important; padding-right:9px!important; font-size:12px!important; }
+}
+@media(max-width:767px) {
+  header .max-w-7xl > .flex.items-center.justify-between {
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:"brand actions" "search search";
+    column-gap:8px; row-gap:10px; min-height:0; padding-top:9px; padding-bottom:10px;
+  }
+  header .max-w-7xl > .flex.items-center.justify-between > nav { display:none!important; }
+  header .perde-brand-copy { max-width:none!important; }
+  header .perde-brand-name { font-size:11px!important; }
+  header .perde-brand-tagline { font-size:10px!important; }
+  .ml-header-search { max-width:none; height:42px; }
+  .ml-header-search input { font-size:13px!important; }
+  header .flex.items-center.space-x-3 { gap:7px!important; }
+}
+@media(max-width:390px) {
+  header .perde-brand-name { font-size:9px!important; }
+  header .perde-brand-tagline { font-size:9px!important; }
+}
+
+/* Detail hero: prominent full poster with a clear play affordance */
+.perde-imdb-hero { min-height:390px; padding-right:clamp(220px,34%,390px); }
+.perde-imdb-backdrop { opacity:.34; filter:saturate(.8); object-position:center 35%; }
+.perde-imdb-hero-shade {
+  background:linear-gradient(90deg,var(--ml-surface) 0%,color-mix(in srgb,var(--ml-surface) 94%,transparent) 43%,color-mix(in srgb,var(--ml-surface) 64%,transparent) 72%,rgba(8,10,15,.18) 100%),
+             linear-gradient(0deg,color-mix(in srgb,var(--ml-surface) 92%,transparent),transparent 72%);
+}
+.perde-imdb-feature-art {
+  position:absolute; z-index:2; top:54px; right:clamp(22px,5vw,64px); bottom:24px;
+  width:clamp(175px,24%,280px); display:flex; align-items:center; justify-content:center;
+}
+.perde-imdb-feature-art>img {
+  display:block; width:100%; height:100%; max-height:340px; object-fit:contain;
+  border-radius:12px; box-shadow:0 16px 44px rgba(0,0,0,.38);
+}
+.perde-imdb-play {
+  top:50%; right:50%; transform:translate(50%,-50%);
+  width:auto; min-width:154px; height:52px; padding:0 18px;
+  display:flex; align-items:center; justify-content:center; gap:11px;
+  border:1px solid rgba(255,255,255,.75); border-radius:999px;
+  background:rgba(13,16,22,.78); color:#fff;
+  box-shadow:0 8px 28px rgba(0,0,0,.4); backdrop-filter:blur(10px);
+  cursor:pointer; transition:transform .2s ease,background .2s ease;
+}
+.perde-imdb-play i { font-size:16px; }
+.perde-imdb-play span { font-size:11px; font-weight:800; letter-spacing:.06em; white-space:nowrap; }
+.perde-imdb-play:hover { transform:translate(50%,-50%) scale(1.06); background:var(--ml-accent); }
+.perde-imdb-hero-copy { max-width:100%; padding-top:20px; }
+@media(max-width:767px) {
+  .perde-imdb-hero { min-height:470px; padding:245px 20px 26px; }
+  .perde-imdb-feature-art { top:56px; left:50%; right:auto; bottom:auto; transform:translateX(-50%); width:auto; height:175px; max-width:65%; }
+  .perde-imdb-feature-art>img { width:auto; height:175px; max-width:100%; }
+  .perde-imdb-play { min-width:130px; height:44px; padding:0 13px; gap:8px; }
+  .perde-imdb-play span { font-size:10px; }
+  .perde-imdb-hero-top { top:15px; left:17px; right:17px; }
+}
+
+/* Site-wide legibility: lift small utility/body copy while retaining heading scale */
+body { font-size:16px; }
+main p, main li, main label, main small, main .detail-page-label,
+main .perde-imdb-kicker, main .perde-imdb-genres span,
+main .perde-imdb-score span, main .perde-imdb-rating-copy span,
+main .perde-imdb-credits b, main .perde-imdb-credits span,
+main .perde-imdb-watch-label, main .perde-imdb-action-btn,
+main .perde-imdb-delete, main .perde-imdb-trailer-btn,
+main .ml-catalog-sub, main .ml-catalog-status,
+main .ml-catalog-section .ml-section-heading p {
+  font-size: max(13px, 1em);
+}
+main [class~="text-xs"] { font-size:13px!important; }
+main [class~="text-sm"] { font-size:14px!important; }
+main [class~="text-[11px]"] { font-size:12px!important; }
+main [class~="text-[10px]"] { font-size:11px!important; }
+main [class~="text-[9px]"] { font-size:10px!important; }
+main .perde-imdb-score strong { font-size:28px; }
+main .perde-imdb-brand { font-size:15px; }
+main .perde-imdb-hero-copy h2 { font-size:clamp(27px,4vw,43px)!important; }
+main h1, main h2, main h3, main h4 { line-height:1.2; }
+@media(max-width:767px) {
+  main [class~="text-xs"] { font-size:12px!important; }
+  main [class~="text-[10px]"] { font-size:10.5px!important; }
+}
