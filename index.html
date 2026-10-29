@@ -61,12 +61,6 @@
                     </div>
                 </div>
 
-                <div class="ml-header-search" role="search">
-                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                    <input type="search" id="header-search-input" placeholder="Film, dizi veya oyuncu ara..." autocomplete="off" oninput="syncHeaderSearch(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();openHeaderSearch()}">
-                    <button type="button" onclick="openHeaderSearch()" aria-label="Ara"><i class="fa-solid fa-arrow-right"></i></button>
-                </div>
-
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center space-x-1.5 bg-slate-500/5 dark:bg-white/5 p-1 rounded-xl border border-slate-500/10 dark:border-white/10">
                     <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold dark:text-white text-slate-900 dark:bg-clean-hover bg-white shadow-sm">
@@ -151,6 +145,12 @@
                     <button onclick="setCategoryFilter('doc')" id="cat-doc" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold dark:bg-clean-card bg-white dark:text-clean-muted text-light-muted border dark:border-clean-border border-light-border hover:border-blue-500 transition-all">
                         <i class="fa-solid fa-earth-americas text-emerald-500 mr-1.5"></i>Belgeseller
                     </button>
+                </div>
+
+                <div class="ml-category-search" role="search">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <input type="search" id="header-search-input" placeholder="Film, dizi veya oyuncu ara..." autocomplete="off" oninput="syncHeaderSearch(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();openHeaderSearch()}">
+                    <button type="button" onclick="openHeaderSearch()" aria-label="Ara"><i class="fa-solid fa-arrow-right"></i></button>
                 </div>
 
                 <!-- Sub-Menu: Top Rated (IMDb) -->
