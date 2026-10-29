@@ -500,7 +500,7 @@
             }
 
             renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later'));
-            renderRow('recent-row', [...movies].reverse());
+            renderRow('recent-row', movies);
         }
 
         function renderRow(containerId, list) {
