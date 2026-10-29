@@ -33,6 +33,7 @@ for (const fn of [
   'toggleFavorite',
   'updateMovieStatus',
   'deleteMovie',
+  'isValidArchive',
   'handleCatalogSearch',
   'exportArchiveJSON',
   'importArchiveJSON',
@@ -42,6 +43,8 @@ for (const fn of [
 }
 
 assert.match(app, /perde_movies_archive_v1/, 'The existing local archive storage key must remain compatible');
+assert.match(app, /item\.title\.trim\(\)\.length > 0/, 'Imported/local archive entries must include a non-empty title');
+assert.match(app, /renderLibrary\(\);\s*renderAdminTable\(\);/, 'Import must refresh the library and admin views');
 assert.match(app, /my_library_theme/ , 'The new theme preference must be saved');
 assert.match(app, /localStorage\.getItem\(['"]perde_theme['"]\)/, 'The old theme preference must still be read');
 assert.match(app, /\['dashboard',\s*'library',\s*'detail',\s*'stats',\s*'admin'\]/, 'The detail page must be registered as a tab');
