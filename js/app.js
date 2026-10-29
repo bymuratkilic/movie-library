@@ -454,72 +454,86 @@
             document.getElementById('watchlist-badge').textContent = `${watchLaterCount} yapım`;
             document.getElementById('stat-favorite-count').textContent = movies.filter(m => m.favorite).length;
 
-            const hero = movies[0] || onlineCatalog[0];
-            if (hero) {
-                document.getElementById('hero-banner').innerHTML = `
-                    <div class="perde-home-hero">
-                        <img src="${hero.backdrop || hero.poster || ''}" class="perde-home-backdrop" alt="" onerror="this.src='${hero.poster || ''}'">
-                        <div class="perde-home-shade"></div>
-                        <div class="perde-home-topline"><span class="perde-home-logo"><i class="fa-solid fa-clapperboard"></i> My Library</span><span class="perde-home-topnote">KİŞİSEL SİNEMA ARŞİVİN</span></div>
-                        <div class="perde-home-feature">
-                            <img src="${hero.poster || ''}" class="perde-home-poster" alt="${hero.title} afişi" onerror="this.style.visibility='hidden'">
-                            <div class="perde-home-feature-copy">
-                                <div class="perde-home-meta"><span>${hero.year || 'Yıl bilinmiyor'}</span><span>${hero.runtime || 'Süre bilinmiyor'}</span><span>${hero.country || 'Ülke bilinmiyor'}</span></div>
-                                <span class="perde-home-kicker">ÖNE ÇIKAN YAPIM</span>
-                                <h1>${hero.title}</h1>
-                                <div class="perde-home-genres">${hero.genres && hero.genres.length ? hero.genres.slice(0,3).join(' · ') : 'Film · Sinema'}</div>
-                                <p>${hero.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p>
-                                <div class="perde-home-actions"><button onclick="openDetailModal('${hero.id}', 'tr_sub')" class="perde-home-primary"><i class="fa-solid fa-play"></i> Fragmanı İzle</button><button onclick="openDetailModal('${hero.id}')" class="perde-home-secondary"><i class="fa-solid fa-circle-info"></i> Künye ve Detaylar</button></div>
-                            </div>
+            // Manşette öncelik favorilere, ardından puanı yüksek yapımlara verilir.
+            const hero = [...movies].sort((a, b) =>
+                Number(Boolean(b.favorite)) - Number(Boolean(a.favorite)) ||
+                (Number(b.imdb) || 0) - (Number(a.imdb) || 0)
+            )[0] || onlineCatalog[0];
+            const heroBanner = document.getElementById('hero-banner');
+            if (heroBanner && hero) {
+                const heroType = hero.type === 'tv' ? 'DİZİ' : hero.type === 'doc' ? 'BELGESEL' : 'FİLM';
+                const heroGenres = Array.isArray(hero.genres) && hero.genres.length
+                    ? hero.genres.slice(0, 3).map(genre => `<span>${genre}</span>`).join('')
+                    : '<span>Sinema</span>';
+                heroBanner.innerHTML = `
+                    <article class="ml-editorial-hero">
+                        <img src="${hero.backdrop || hero.poster || ''}" class="ml-editorial-backdrop" alt="" onerror="this.onerror=null;this.src='${hero.poster || ''}'">
+                        <div class="ml-editorial-vignette"></div>
+                        <div class="ml-editorial-topline">
+                            <span class="ml-editorial-eyebrow"><i class="fa-solid fa-film"></i> MY LIBRARY <span>/</span> KOLEKSİYONUNDAN SEÇKİ</span>
+                            <span class="ml-editorial-index">ÖNE ÇIKAN <b>01</b></span>
                         </div>
-                    </div>
+                        <div class="ml-editorial-content">
+                            <div class="ml-editorial-copy">
+                                <div class="ml-editorial-tags"><span class="ml-editorial-feature-tag">EDİTÖRÜN SEÇİMİ</span><span>${heroType}</span><span>${hero.year || '—'}</span></div>
+                                <h1>${hero.title}</h1>
+                                <div class="ml-editorial-facts">
+                                    <span class="ml-editorial-rating"><i class="fa-solid fa-star"></i> ${hero.imdb || '—'} <small>PUAN</small></span>
+                                    <span>${hero.runtime || 'Süre belirtilmemiş'}</span>
+                                    ${hero.country && hero.country !== 'Bilinmiyor' ? `<span>${hero.country}</span>` : ''}
+                                </div>
+                                <div class="ml-editorial-genres">${heroGenres}</div>
+                                <p class="ml-editorial-overview">${hero.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p>
+                                <div class="ml-editorial-actions">
+                                    <button onclick="openDetailModal('${hero.id}', 'tr_sub')" class="ml-editorial-primary"><i class="fa-solid fa-play"></i> Fragman / İzleme</button>
+                                    <button onclick="openDetailModal('${hero.id}')" class="ml-editorial-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Yapımın künyesi</button>
+                                </div>
+                            </div>
+                            <button class="ml-editorial-poster-button" onclick="openDetailModal('${hero.id}')" aria-label="${hero.title} detaylarını aç">
+                                <img src="${hero.poster || ''}" class="ml-editorial-poster" alt="${hero.title} afişi" onerror="this.style.visibility='hidden'">
+                                <span class="ml-editorial-poster-caption"><i class="fa-solid fa-book-open"></i> KOLEKSİYON KAYDI</span>
+                            </button>
+                        </div>
+                        <div class="ml-editorial-bottomline"><span>HER HİKÂYENİN BİR YERİ VAR.</span><span>MY LIBRARY <i class="fa-solid fa-arrow-down"></i></span></div>
+                    </article>
                 `;
             }
 
             renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later'));
-            renderRow('recent-row', movies);
+            renderRow('recent-row', [...movies].reverse());
         }
 
         function renderRow(containerId, list) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            if (list.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-8 dark:text-clean-muted text-light-muted text-xs">Henüz bu kategoride yapım bulunmuyor.</div>`;
+            if (!list.length) {
+                container.innerHTML = `<div class="col-span-full ml-empty-state"><i class="fa-solid fa-film"></i><span>Henüz burada bir yapım yok.</span></div>`;
                 return;
             }
 
-            container.innerHTML = list.map((m, index) => {
-                const featured = containerId !== 'library-grid' && index === 0;
+            container.innerHTML = list.map(m => {
+                const typeLabel = m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM';
+                const watched = m.status === 'watched';
+                const genres = Array.isArray(m.genres) && m.genres.length ? m.genres.slice(0, 2).join(' · ') : '';
                 return `
-                <article onclick="openDetailModal('${m.id}')" class="perde-poster-card ${featured ? 'perde-featured-card' : 'perde-square-card'} group dark:bg-clean-card bg-white border dark:border-clean-border border-light-border rounded-2xl overflow-hidden cursor-pointer transition-all relative">
-                    <div class="perde-poster-art relative ${featured ? 'perde-featured-art' : 'perde-square-art'} overflow-hidden">
-                        <img src="${m.poster}" alt="${m.title} afişi" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.045]" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80'">
-                        <div class="perde-poster-shade absolute inset-0"></div>
-                        <div class="perde-poster-rating absolute top-3 right-3 backdrop-blur-md text-amber-300 text-[11px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-                            <i class="fa-solid fa-star text-[9px]"></i> ${m.imdb || '—'}
+                    <article class="ml-poster-card" role="button" tabindex="0" onclick="openDetailModal('${m.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetailModal('${m.id}')}">
+                        <div class="ml-poster-visual">
+                            <img src="${m.poster || ''}" alt="${m.title} afişi" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80'">
+                            <div class="ml-poster-gradient"></div>
+                            <span class="ml-poster-kind">${typeLabel}</span>
+                            <span class="ml-poster-rating"><i class="fa-solid fa-star"></i> ${m.imdb || '—'}</span>
+                            ${m.favorite ? '<span class="ml-poster-favorite" aria-label="Favori"><i class="fa-solid fa-heart"></i></span>' : ''}
+                            <span class="ml-poster-open"><i class="fa-solid fa-arrow-up-right-from-square"></i> DETAYLARI AÇ</span>
                         </div>
-                        ${m.favorite ? `<div class="absolute top-3 left-3 text-rose-400 text-sm drop-shadow"><i class="fa-solid fa-heart"></i></div>` : ''}
-                        <div class="perde-poster-hover absolute inset-x-0 bottom-0 p-4">
-                            <span class="text-[10px] font-semibold tracking-[.16em] uppercase">${m.status === 'watched' ? 'İzledim' : 'İzleme listemde'}</span>
-                            <div class="mt-1 text-sm font-semibold">Künye ve oyuncular <i class="fa-solid fa-arrow-right-long ml-1"></i></div>
+                        <div class="ml-poster-details">
+                            <h3 title="${m.title}">${m.title}</h3>
+                            <div class="ml-poster-subline"><span>${m.year || 'Yıl belirtilmemiş'}</span>${genres ? `<span class="ml-poster-dot">·</span><span class="ml-poster-genre">${genres}</span>` : ''}</div>
+                            <div class="ml-poster-statusline"><span class="ml-poster-status-dot ${watched ? 'is-watched' : 'is-watch-later'}"></span><span>${watched ? 'İzledim' : 'İzleme listemde'}</span><span class="ml-poster-card-arrow"><i class="fa-solid fa-arrow-right"></i></span></div>
                         </div>
-                    </div>
-                    <div class="perde-poster-info p-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="perde-poster-type">${m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM'}</span>
-                            <span class="perde-poster-year">${m.year || 'Yıl bilinmiyor'}</span>
-                        </div>
-                        <h4 class="perde-poster-title font-semibold leading-snug group-hover:underline decoration-1 underline-offset-4">${m.title}</h4>
-                        <p class="perde-poster-director mt-1.5">${m.director && m.director !== 'Bilinmiyor' ? m.director : 'Yönetmen bilgisi eklenmemiş'}</p>
-                        <div class="perde-poster-footer flex items-center justify-between gap-2 mt-3 pt-3">
-                            <span class="perde-poster-genres min-w-0 truncate">${Array.isArray(m.genres) && m.genres.length ? m.genres.slice(0, 2).join(' · ') : 'Tür bilgisi eklenmemiş'}</span>
-                            <span class="perde-poster-status ${m.status === 'watched' ? 'is-watched' : 'is-watch-later'}">${m.status === 'watched' ? 'İzlendi' : 'İzlenecek'}</span>
-                        </div>
-                    </div>
-                    ${featured ? `<p class="perde-featured-overview">${m.overview || 'Bu yapım için kısa konu özeti henüz eklenmemiş.'}</p>` : ''}
-                </article>
-            `}).join('');
+                    </article>
+                `;
+            }).join('');
         }
 
         function renderLibrary() {
