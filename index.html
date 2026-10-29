@@ -40,68 +40,45 @@
     <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
 
-    <!-- TOP NAVIGATION BAR -->
-    <header class="sticky top-0 z-40 glass-header">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchTab('dashboard')">
-                    <div class="perde-brand-mark group-hover:scale-105 transition-transform" aria-label="Film ve dizi kütüphanesi logosu">
-                        <svg viewBox="0 0 64 64" role="img" aria-hidden="true">
-                            <defs><linearGradient id="mlMarkGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#5141a8"/></linearGradient></defs>
-                            <rect x="7" y="9" width="50" height="46" rx="13" fill="url(#mlMarkGradient)"/>
-                            <path d="M7 23h50M7 39h50" stroke="#fff" stroke-opacity=".18" stroke-width="1.5"/>
-                            <path d="M20 9l7 14M36 9l7 14M20 55l7-16M36 55l7-16" stroke="#fff" stroke-opacity=".28" stroke-width="3"/>
-                            <path d="M27 28.5 41 32 27 35.5z" fill="#fff"/>
+    <!-- MODERN SITE HEADER -->
+    <header class="perde-site-header">
+        <div class="perde-header-inner">
+            <div class="perde-header-main">
+                <button type="button" class="perde-brand" onclick="switchTab('dashboard')" aria-label="Ana sayfaya dön">
+                    <span class="perde-brand-mark" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" role="img">
+                            <rect x="5" y="8" width="38" height="32" rx="9" fill="currentColor" opacity=".14"/>
+                            <path d="M12 8v32M36 8v32M5 17h38M5 31h38" fill="none" stroke="currentColor" stroke-width="2" opacity=".55"/>
+                            <path d="m20 19 12 6-12 6z" fill="currentColor"/>
                         </svg>
-                    </div>
-                    <div class="perde-brand-copy">
-                        <span class="perde-brand-name">FİLM / DİZİ KÜTÜPHANESİ</span>
-                        <span class="perde-brand-tagline">Kişisel film/dizi arşivim</span>
-                    </div>
-                </div>
-
-                <!-- Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-1.5 bg-slate-500/5 dark:bg-white/5 p-1 rounded-xl border border-slate-500/10 dark:border-white/10">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold dark:text-white text-slate-900 dark:bg-clean-hover bg-white shadow-sm">
-                        <i class="fa-solid fa-grid-2 text-blue-500 mr-1.5"></i>Genel Bakış
-                    </button>
-                    <button onclick="switchTab('library')" id="nav-library" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium dark:text-clean-muted text-light-muted hover:text-blue-500 dark:hover:text-white transition-colors">
-                        <i class="fa-solid fa-film mr-1.5"></i>Kütüphane
-                    </button>
-                    <button onclick="filterByMenu('watched')" id="nav-watched" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium dark:text-clean-muted text-light-muted hover:text-blue-500 dark:hover:text-white transition-colors">
-                        <i class="fa-solid fa-circle-check text-emerald-500 mr-1.5"></i>İzlediklerim
-                    </button>
-                    <button onclick="filterByMenu('watch_later')" id="nav-watch_later" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium dark:text-clean-muted text-light-muted hover:text-blue-500 dark:hover:text-white transition-colors">
-                        <i class="fa-solid fa-clock text-amber-500 mr-1.5"></i>İzleyeceklerim
-                    </button>
-                    <button onclick="filterByMenu('favorite')" id="nav-favorite" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium dark:text-clean-muted text-light-muted hover:text-blue-500 dark:hover:text-white transition-colors">
-                        <i class="fa-solid fa-heart text-rose-500 mr-1.5"></i>Favorilerim
-                    </button>
-                    <button onclick="switchTab('stats')" id="nav-stats" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium dark:text-clean-muted text-light-muted hover:text-blue-500 dark:hover:text-white transition-colors">
-                        <i class="fa-solid fa-chart-pie mr-1.5"></i>Analizler
-                    </button>
-                    <button onclick="openAdminAuthModal()" id="nav-admin" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium dark:text-clean-muted text-light-muted hover:text-blue-500 dark:hover:text-white transition-colors">
-                        <i class="fa-solid fa-user-shield text-indigo-500 mr-1.5"></i>Yönetim
-                    </button>
-                </nav>
-
-                <!-- Actions: Theme Switcher & Add Button -->
-                <div class="flex items-center space-x-3">
+                    </span>
+                    <span class="perde-brand-copy">
+                        <span class="perde-brand-eyebrow">MY PERSONAL COLLECTION</span>
+                        <span class="perde-brand-name">Perde<span>.</span></span>
+                        <span class="perde-brand-tagline">Kişisel film ve dizi arşivim</span>
+                    </span>
+                </button>
+                <div class="perde-header-actions">
                     <button type="button" onclick="openAdminAuthModal()" id="mobile-admin-shortcut" class="mobile-admin-shortcut" title="Yönetim Paneli" aria-label="Yönetim Paneli">
                         <i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Yönetim</span>
                     </button>
-                    <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-9 h-9 rounded-xl dark:bg-clean-card bg-white dark:border-clean-border border-light-border border flex items-center justify-center dark:text-amber-400 text-slate-700 hover:scale-105 transition-all shadow-sm" title="Tema Değiştir (Aydınlık/Koyu)">
-                        <i class="fa-solid fa-sun text-sm dark:inline hidden"></i>
-                        <i class="fa-solid fa-moon text-sm dark:hidden inline"></i>
+                    <button type="button" onclick="toggleTheme()" id="theme-toggle-btn" class="perde-icon-action" title="Tema Değiştir" aria-label="Tema değiştir">
+                        <i class="fa-solid fa-sun dark:inline hidden"></i><i class="fa-solid fa-moon dark:hidden inline"></i>
                     </button>
-
-                    <button onclick="openAddMovieModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-lg shadow-blue-600/25 flex items-center gap-2 hover:scale-105 transition-all">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                        <span>Yapım Ekle</span>
+                    <button type="button" onclick="openAddMovieModal()" class="perde-add-action">
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i><span>Yapım Ekle</span>
                     </button>
                 </div>
             </div>
+            <nav class="perde-primary-nav" aria-label="Ana menü">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn"><i class="fa-solid fa-grid-2"></i>Genel Bakış</button>
+                <button onclick="switchTab('library')" id="nav-library" class="nav-btn"><i class="fa-solid fa-film"></i>Kütüphane</button>
+                <button onclick="filterByMenu('watched')" id="nav-watched" class="nav-btn"><i class="fa-solid fa-circle-check"></i>İzlediklerim</button>
+                <button onclick="filterByMenu('watch_later')" id="nav-watch_later" class="nav-btn"><i class="fa-solid fa-bookmark"></i>İzleme Listem</button>
+                <button onclick="filterByMenu('favorite')" id="nav-favorite" class="nav-btn"><i class="fa-solid fa-heart"></i>Favorilerim</button>
+                <button onclick="switchTab('stats')" id="nav-stats" class="nav-btn"><i class="fa-solid fa-chart-pie"></i>Analizler</button>
+                <button onclick="openAdminAuthModal()" id="nav-admin" class="nav-btn"><i class="fa-solid fa-sliders"></i>Yönetim</button>
+            </nav>
         </div>
     </header>
 
@@ -438,9 +415,34 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="border-t dark:border-clean-border border-light-border py-6 text-center text-xs dark:text-clean-muted text-light-muted">
-        <p>© 2026 My Library · Kişisel film ve dizi arşivi</p>
+    <!-- EDITORIAL FOOTER -->
+    <footer class="perde-site-footer">
+        <div class="perde-footer-inner">
+            <div class="perde-footer-about">
+                <div class="perde-footer-brand"><span class="perde-footer-mark"><i class="fa-solid fa-clapperboard"></i></span><span>Perde<span>.</span></span></div>
+                <p>Burası benim kişisel film ve dizi kütüphanem. İzlediğim hikâyeleri, tekrar dönmek istediklerimi ve keşfetmeyi bekleyen yapımları tek bir yerde topluyorum.</p>
+                <p class="perde-footer-note">Her yapım bir iz bırakır. Bu arşiv, o izleri kaybetmemek için.</p>
+            </div>
+            <div class="perde-footer-links">
+                <h3>KÜTÜPHANE</h3>
+                <button type="button" onclick="switchTab('dashboard')">Genel Bakış</button>
+                <button type="button" onclick="switchTab('library')">Tüm Yapımlar</button>
+                <button type="button" onclick="filterByMenu('watched')">İzlediklerim</button>
+                <button type="button" onclick="filterByMenu('watch_later')">İzleme Listem</button>
+            </div>
+            <div class="perde-footer-links">
+                <h3>KOLEKSİYON</h3>
+                <button type="button" onclick="filterByMenu('favorite')">Favorilerim</button>
+                <button type="button" onclick="switchTab('stats')">Koleksiyon Analizi</button>
+                <button type="button" onclick="openAddMovieModal()">Arşive Yapım Ekle</button>
+            </div>
+            <div class="perde-footer-signoff">
+                <span class="perde-footer-kicker">PERSONAL MOVIE ARCHIVE</span>
+                <strong>İyi hikâyeler<br>hep hatırlanır.</strong>
+                <span class="perde-footer-line"></span>
+                <span class="perde-footer-year">© 2026 · Perde Kişisel Arşiv</span>
+            </div>
+        </div>
     </footer>
 
     <!-- JAVASCRIPT LOGIC -->
