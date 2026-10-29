@@ -164,18 +164,38 @@
 
         // Kütüphaneyi LocalStorage'dan Yükle / Başlat
         let movies = [];
+
+        // Eski yedeklerle uyumlu, ancak bozuk/yanlış biçimli veriyi reddeden temel şema kontrolü.
+        function isValidArchive(value) {
+            return Array.isArray(value) && value.every(item =>
+                item &&
+                typeof item === 'object' &&
+                !Array.isArray(item) &&
+                (typeof item.id === 'string' || typeof item.id === 'number') &&
+                typeof item.title === 'string' &&
+                item.title.trim().length > 0
+            );
+        }
+
         function loadFromLocalStorage() {
             try {
                 const data = localStorage.getItem(STORAGE_KEY);
                 if (data) {
-                    movies = JSON.parse(data);
+                    const parsed = JSON.parse(data);
+                    if (isValidArchive(parsed)) {
+                        movies = parsed;
+                    } else {
+                        // Hatalı kayıt varsa otomatik üzerine yazma; kullanıcı verisini koru.
+                        console.error("Arşiv biçimi geçersiz. Mevcut LocalStorage kaydı korunuyor.");
+                        movies = [];
+                    }
                 } else {
                     movies = [...onlineCatalog];
                     saveToLocalStorage();
                 }
             } catch (e) {
-                console.error("LocalStorage erişim hatası:", e);
-                movies = [...onlineCatalog];
+                console.error("LocalStorage arşivi okunamadı; kayıt otomatik olarak silinmedi:", e);
+                movies = [];
             }
         }
 
@@ -396,14 +416,15 @@
             fileReader.onload = function (e) {
                 try {
                     const importedMovies = JSON.parse(e.target.result);
-                    if (Array.isArray(importedMovies)) {
+                    if (isValidArchive(importedMovies)) {
                         movies = importedMovies;
                         saveToLocalStorage();
                         renderDashboard();
+                        renderLibrary();
                         renderAdminTable();
                         showToast('Arşiv yedekten başarıyla yüklendi!');
                     } else {
-                        showToast('Geçersiz yedek dosyası formatı.');
+                        showToast('Geçersiz yedek dosyası. Her yapımda geçerli bir ID ve başlık bulunmalı.');
                     }
                 } catch (err) {
                     showToast('JSON yükleme hatası!');
