@@ -150,49 +150,8 @@
 
         <!-- DASHBOARD TAB -->
         <section id="tab-dashboard" class="space-y-8">
-            <div class="perde-home-welcome"><span class="perde-home-welcome-kicker">KİŞİSEL KOLEKSİYONUN</span><h2>Arşivine hoş geldin.</h2><p>Filmlerini, dizilerini ve favorilerini tek yerde düzenle.</p></div>
-            <!-- Hero Featured Movie -->
-            <div id="hero-banner" class="relative rounded-2xl overflow-hidden glass-panel shadow-2xl transition-all"></div>
-
-            <!-- Stats Bar -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="glass-panel p-4 rounded-2xl flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-bold uppercase tracking-wider dark:text-clean-muted text-light-muted">Toplam Arşiv</p>
-                        <h3 class="text-2xl font-extrabold dark:text-white text-slate-900 tabular-nums mt-0.5" id="stat-total-count">0</h3>
-                    </div>
-                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center border border-blue-500/20">
-                        <i class="fa-solid fa-film text-sm"></i>
-                    </div>
-                </div>
-                <div class="glass-panel p-4 rounded-2xl flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-bold uppercase tracking-wider dark:text-clean-muted text-light-muted">İzlenenler</p>
-                        <h3 class="text-2xl font-extrabold text-emerald-500 tabular-nums mt-0.5" id="stat-watched-count">0</h3>
-                    </div>
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center border border-emerald-500/20">
-                        <i class="fa-solid fa-circle-check text-sm"></i>
-                    </div>
-                </div>
-                <div class="glass-panel p-4 rounded-2xl flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-bold uppercase tracking-wider dark:text-clean-muted text-light-muted">İzlenecekler</p>
-                        <h3 class="text-2xl font-extrabold text-amber-500 tabular-nums mt-0.5" id="stat-watchlist-count">0</h3>
-                    </div>
-                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center border border-amber-500/20">
-                        <i class="fa-solid fa-clock text-sm"></i>
-                    </div>
-                </div>
-                <div class="glass-panel p-4 rounded-2xl flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-bold uppercase tracking-wider dark:text-clean-muted text-light-muted">Favoriler</p>
-                        <h3 class="text-2xl font-extrabold text-rose-500 tabular-nums mt-0.5" id="stat-favorite-count">0</h3>
-                    </div>
-                    <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center border border-rose-500/20">
-                        <i class="fa-solid fa-heart text-sm"></i>
-                    </div>
-                </div>
-            </div>
+            <section class="ml-catalog-intro"><div><span class="ml-catalog-kicker">MY LIBRARY / KİŞİSEL ARŞİV</span><h1>Sinema koleksiyonun.</h1><p>Arşivindeki yapımları keşfet, düzenle ve yeniden hatırla.</p></div><label class="ml-home-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" placeholder="Arşivinde film, dizi ara..." aria-label="Arşivinde ara" onkeydown="if(event.key==='Enter'){switchTab('library');document.getElementById('search-input').value=this.value;applyFilters()}"><button type="button" onclick="switchTab('library');document.getElementById('search-input').focus()" aria-label="Gelişmiş arama"><i class="fa-solid fa-arrow-right"></i></button></label></section>
+            <section class="ml-catalog-section"><div class="ml-section-heading"><div><span class="ml-section-kicker">KOLEKSİYONUNDAN</span><h2>Editörün Seçtikleri</h2><p>En yüksek puanlı yapımlarından özel bir seçki.</p></div><button type="button" onclick="switchTab('library')">Tüm arşiv <i class="fa-solid fa-arrow-right"></i></button></div><div id="editor-picks-grid" class="ml-catalog-grid"></div></section>
 
             <!-- Watchlist Section -->
             <div class="space-y-4">
@@ -209,12 +168,14 @@
             <div class="space-y-4">
                 <div class="flex items-center justify-between">
                     <h2 class="text-base font-bold dark:text-white text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-sparkles text-rose-500 text-xs"></i>Arşive Son Eklenenler
+                        <i class="fa-solid fa-sparkles text-rose-500 text-xs"></i>Son Eklenenler
                     </h2>
                     <button onclick="switchTab('library')" class="text-xs text-rose-400 hover:underline font-medium">Tüm arşivi gör →</button>
                 </div>
                 <div id="recent-row" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
             </div>
+            <div class="ml-archive-stats"><div><strong id="stat-total-count">0</strong><span>Toplam yapım</span></div><div><strong id="stat-watched-count">0</strong><span>İzlenen</span></div><div><strong id="stat-watchlist-count">0</strong><span>İzlenecek</span></div><div><strong id="stat-favorite-count">0</strong><span>Favori</span></div></div>
+
         </section>
 
         <!-- DETAIL PAGE TAB -->
