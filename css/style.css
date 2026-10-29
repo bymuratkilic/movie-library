@@ -287,3 +287,43 @@ footer { border-color: var(--ml-border) !important; color: var(--ml-muted) !impo
   .ml-poster-open { display:none; }
 }
 @media (prefers-reduced-motion:reduce) { .ml-poster-card,.ml-poster-visual > img,.ml-editorial-actions button { transition:none !important; } }
+
+/* Filmdozu-inspired catalogue presentation */
+#tab-dashboard{display:flex;flex-direction:column;gap:32px!important}
+.ml-catalog-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:4px 0 22px;border-bottom:1px solid var(--ml-border)}
+.ml-catalog-kicker,.ml-section-kicker{display:block;color:var(--ml-accent);font-size:9px;font-weight:800;letter-spacing:.17em}
+.ml-catalog-intro h1{margin:7px 0 4px;color:var(--ml-text);font-size:clamp(27px,3.2vw,38px);line-height:1.12;font-weight:800;letter-spacing:-.06em}
+.ml-catalog-intro p{margin:0;color:var(--ml-muted);font-size:12px}
+.ml-home-search{display:flex;align-items:center;gap:10px;width:min(340px,38%);min-height:44px;padding:0 9px 0 14px;border:1px solid var(--ml-border);border-radius:10px;background:var(--ml-surface);color:var(--ml-muted)}
+.ml-home-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--ml-text);font-size:11px}
+.ml-home-search input::placeholder{color:var(--ml-muted)}
+.ml-home-search button{display:grid;place-items:center;width:29px;height:29px;flex:0 0 29px;border-radius:7px;background:var(--ml-surface-muted);color:var(--ml-text)}
+.ml-catalog-section{display:flex;flex-direction:column;gap:17px}
+.ml-section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.ml-section-heading h2{margin:4px 0 2px;color:var(--ml-text);font-size:21px!important;line-height:1.2;letter-spacing:-.045em;font-weight:800}
+.ml-section-heading p{margin:4px 0 0;color:var(--ml-muted);font-size:11px}
+.ml-section-heading>button{display:inline-flex;align-items:center;gap:9px;padding:8px 0;color:var(--ml-accent);font-size:10px;font-weight:750;white-space:nowrap}
+.ml-catalog-grid,#watchlist-row,#recent-row,#library-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px!important;align-items:start}
+.ml-catalog-card{min-width:0;overflow:hidden;cursor:pointer;border:1px solid var(--ml-border);border-radius:9px;background:var(--ml-surface);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.ml-catalog-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--ml-accent) 65%,var(--ml-border));box-shadow:0 12px 28px rgba(0,0,0,.1)}
+.ml-catalog-card:focus-visible{outline:2px solid var(--ml-accent);outline-offset:3px}
+.ml-catalog-poster{position:relative;overflow:hidden;aspect-ratio:2/3;background:var(--ml-surface-muted)}
+.ml-catalog-poster img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.ml-catalog-card:hover .ml-catalog-poster img{transform:scale(1.045)}
+.ml-catalog-type,.ml-catalog-rating,.ml-catalog-favorite{position:absolute;top:9px;display:flex;align-items:center;gap:5px;padding:5px 7px;border-radius:4px;background:rgba(15,16,15,.78);color:#fff;font-size:8px;font-weight:800;letter-spacing:.05em;backdrop-filter:blur(6px)}
+.ml-catalog-type{left:9px}.ml-catalog-rating{right:9px;color:#f3d28b;font-size:9px;letter-spacing:0}.ml-catalog-favorite{top:36px;left:9px;color:#ffb6c0}
+.ml-catalog-overlay{position:absolute;inset:auto 8px 8px;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 6px;border:1px solid rgba(255,255,255,.28);border-radius:5px;background:rgba(12,13,12,.78);color:white;font-size:8px;font-weight:800;letter-spacing:.1em;opacity:0;transform:translateY(5px);transition:opacity .18s ease,transform .18s ease}
+.ml-catalog-card:hover .ml-catalog-overlay,.ml-catalog-card:focus-visible .ml-catalog-overlay{opacity:1;transform:translateY(0)}
+.ml-catalog-meta{padding:10px 10px 11px}
+.ml-catalog-meta h3{display:-webkit-box;min-height:32px;margin:0;overflow:hidden;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:var(--ml-text);font-size:11px;line-height:1.45;font-weight:750;letter-spacing:-.015em}
+.ml-catalog-sub{display:flex;align-items:center;gap:6px;min-width:0;margin-top:6px;color:var(--ml-muted);font-size:9px;white-space:nowrap}
+.ml-catalog-separator{opacity:.55}.ml-catalog-genre{overflow:hidden;text-overflow:ellipsis}
+.ml-catalog-status{display:flex;align-items:center;gap:6px;margin-top:9px;padding-top:8px;border-top:1px solid var(--ml-border);color:var(--ml-muted);font-size:8px}
+.ml-catalog-status-dot{width:6px;height:6px;flex:0 0 6px;border-radius:50%}.ml-catalog-status-dot.watched{background:#4c9a75}.ml-catalog-status-dot.planned{background:#c99b4d}
+.ml-archive-stats{display:flex;justify-content:flex-end;gap:26px;padding-top:16px;border-top:1px solid var(--ml-border)}
+.ml-archive-stats>div{display:flex;align-items:baseline;gap:7px}.ml-archive-stats strong{color:var(--ml-text);font-size:17px;font-weight:800;letter-spacing:-.04em}.ml-archive-stats span{color:var(--ml-muted);font-size:9px}
+#hero-banner{display:none!important}
+@media(max-width:1279px){.ml-catalog-grid,#watchlist-row,#recent-row,#library-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:15px!important}}
+@media(max-width:1023px){.ml-catalog-grid,#watchlist-row,#recent-row,#library-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px!important}}
+@media(max-width:767px){#tab-dashboard{gap:25px!important}.ml-catalog-intro{display:block;padding-bottom:18px}.ml-catalog-intro h1{font-size:28px}.ml-home-search{width:100%;margin-top:17px}.ml-section-heading h2{font-size:18px!important}.ml-section-heading p{font-size:10px}.ml-catalog-grid,#watchlist-row,#recent-row,#library-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important}.ml-catalog-meta{padding:9px}.ml-catalog-meta h3{font-size:10px;min-height:29px}.ml-catalog-sub{font-size:8px}.ml-catalog-overlay{display:none}.ml-archive-stats{justify-content:space-between;gap:7px}.ml-archive-stats>div{flex-direction:column;gap:0;align-items:flex-start}.ml-archive-stats strong{font-size:15px}.ml-archive-stats span{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.ml-catalog-card,.ml-catalog-poster img,.ml-catalog-overlay{transition:none!important}}
