@@ -61,11 +61,11 @@
                     </div>
                 </div>
 
-                <label class="ml-header-search" aria-label="Kütüphanede ara">
+                <div class="ml-header-search" role="search">
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                     <input type="search" id="header-search-input" placeholder="Film, dizi veya oyuncu ara..." autocomplete="off" oninput="syncHeaderSearch(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();openHeaderSearch()}">
-                    <kbd>ENTER</kbd>
-                </label>
+                    <button type="button" onclick="openHeaderSearch()" aria-label="Ara"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
 
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center space-x-1.5 bg-slate-500/5 dark:bg-white/5 p-1 rounded-xl border border-slate-500/10 dark:border-white/10">
