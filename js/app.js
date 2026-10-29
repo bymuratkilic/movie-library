@@ -451,88 +451,35 @@
             document.getElementById('stat-watched-count').textContent = movies.filter(m => m.status === 'watched').length;
             const watchLaterCount = movies.filter(m => m.status === 'watch_later').length;
             document.getElementById('stat-watchlist-count').textContent = watchLaterCount;
-            document.getElementById('watchlist-badge').textContent = `${watchLaterCount} yapım`;
+            document.getElementById('watchlist-badge').textContent = watchLaterCount + ' yapım';
             document.getElementById('stat-favorite-count').textContent = movies.filter(m => m.favorite).length;
-
-            // Manşette öncelik favorilere, ardından puanı yüksek yapımlara verilir.
-            const hero = [...movies].sort((a, b) =>
-                Number(Boolean(b.favorite)) - Number(Boolean(a.favorite)) ||
-                (Number(b.imdb) || 0) - (Number(a.imdb) || 0)
-            )[0] || onlineCatalog[0];
-            const heroBanner = document.getElementById('hero-banner');
-            if (heroBanner && hero) {
-                const heroType = hero.type === 'tv' ? 'DİZİ' : hero.type === 'doc' ? 'BELGESEL' : 'FİLM';
-                const heroGenres = Array.isArray(hero.genres) && hero.genres.length
-                    ? hero.genres.slice(0, 3).map(genre => `<span>${genre}</span>`).join('')
-                    : '<span>Sinema</span>';
-                heroBanner.innerHTML = `
-                    <article class="ml-editorial-hero">
-                        <img src="${hero.backdrop || hero.poster || ''}" class="ml-editorial-backdrop" alt="" onerror="this.onerror=null;this.src='${hero.poster || ''}'">
-                        <div class="ml-editorial-vignette"></div>
-                        <div class="ml-editorial-topline">
-                            <span class="ml-editorial-eyebrow"><i class="fa-solid fa-film"></i> MY LIBRARY <span>/</span> KOLEKSİYONUNDAN SEÇKİ</span>
-                            <span class="ml-editorial-index">ÖNE ÇIKAN <b>01</b></span>
-                        </div>
-                        <div class="ml-editorial-content">
-                            <div class="ml-editorial-copy">
-                                <div class="ml-editorial-tags"><span class="ml-editorial-feature-tag">EDİTÖRÜN SEÇİMİ</span><span>${heroType}</span><span>${hero.year || '—'}</span></div>
-                                <h1>${hero.title}</h1>
-                                <div class="ml-editorial-facts">
-                                    <span class="ml-editorial-rating"><i class="fa-solid fa-star"></i> ${hero.imdb || '—'} <small>PUAN</small></span>
-                                    <span>${hero.runtime || 'Süre belirtilmemiş'}</span>
-                                    ${hero.country && hero.country !== 'Bilinmiyor' ? `<span>${hero.country}</span>` : ''}
-                                </div>
-                                <div class="ml-editorial-genres">${heroGenres}</div>
-                                <p class="ml-editorial-overview">${hero.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p>
-                                <div class="ml-editorial-actions">
-                                    <button onclick="openDetailModal('${hero.id}', 'tr_sub')" class="ml-editorial-primary"><i class="fa-solid fa-play"></i> Fragman / İzleme</button>
-                                    <button onclick="openDetailModal('${hero.id}')" class="ml-editorial-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Yapımın künyesi</button>
-                                </div>
-                            </div>
-                            <button class="ml-editorial-poster-button" onclick="openDetailModal('${hero.id}')" aria-label="${hero.title} detaylarını aç">
-                                <img src="${hero.poster || ''}" class="ml-editorial-poster" alt="${hero.title} afişi" onerror="this.style.visibility='hidden'">
-                                <span class="ml-editorial-poster-caption"><i class="fa-solid fa-book-open"></i> KOLEKSİYON KAYDI</span>
-                            </button>
-                        </div>
-                        <div class="ml-editorial-bottomline"><span>HER HİKÂYENİN BİR YERİ VAR.</span><span>MY LIBRARY <i class="fa-solid fa-arrow-down"></i></span></div>
-                    </article>
-                `;
-            }
-
+            const picks = [...movies].sort((a,b) => (Number(b.imdb)||0)-(Number(a.imdb)||0) || Number(Boolean(b.favorite))-Number(Boolean(a.favorite))).slice(0,12);
+            renderRow('editor-picks-grid', picks);
             renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later'));
-            renderRow('recent-row', movies);
+            renderRow('recent-row', movies.slice(0,18));
         }
 
         function renderRow(containerId, list) {
             const container = document.getElementById(containerId);
             if (!container) return;
-
             if (!list.length) {
-                container.innerHTML = `<div class="col-span-full ml-empty-state"><i class="fa-solid fa-film"></i><span>Henüz burada bir yapım yok.</span></div>`;
+                container.innerHTML = '<div class="col-span-full ml-empty-state"><i class="fa-solid fa-film"></i><span>Henüz burada bir yapım yok. Arşivine yapım ekleyerek başlayabilirsin.</span></div>';
                 return;
             }
-
+            const safe = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
             container.innerHTML = list.map(m => {
-                const typeLabel = m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM';
+                const type = m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM';
                 const watched = m.status === 'watched';
-                const genres = Array.isArray(m.genres) && m.genres.length ? m.genres.slice(0, 2).join(' · ') : '';
-                return `
-                    <article class="ml-poster-card" role="button" tabindex="0" onclick="openDetailModal('${m.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetailModal('${m.id}')}">
-                        <div class="ml-poster-visual">
-                            <img src="${m.poster || ''}" alt="${m.title} afişi" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80'">
-                            <div class="ml-poster-gradient"></div>
-                            <span class="ml-poster-kind">${typeLabel}</span>
-                            <span class="ml-poster-rating"><i class="fa-solid fa-star"></i> ${m.imdb || '—'}</span>
-                            ${m.favorite ? '<span class="ml-poster-favorite" aria-label="Favori"><i class="fa-solid fa-heart"></i></span>' : ''}
-                            <span class="ml-poster-open"><i class="fa-solid fa-arrow-up-right-from-square"></i> DETAYLARI AÇ</span>
-                        </div>
-                        <div class="ml-poster-details">
-                            <h3 title="${m.title}">${m.title}</h3>
-                            <div class="ml-poster-subline"><span>${m.year || 'Yıl belirtilmemiş'}</span>${genres ? `<span class="ml-poster-dot">·</span><span class="ml-poster-genre">${genres}</span>` : ''}</div>
-                            <div class="ml-poster-statusline"><span class="ml-poster-status-dot ${watched ? 'is-watched' : 'is-watch-later'}"></span><span>${watched ? 'İzledim' : 'İzleme listemde'}</span><span class="ml-poster-card-arrow"><i class="fa-solid fa-arrow-right"></i></span></div>
-                        </div>
-                    </article>
-                `;
+                const genres = Array.isArray(m.genres) ? m.genres.slice(0,2).join(' · ') : '';
+                const title = safe(m.title), id = safe(m.id);
+                return '<article class="ml-catalog-card" role="button" tabindex="0" aria-label="' + title + ' detaylarını aç" onclick="openDetailModal(\'' + id + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openDetailModal(\'' + id + '\')}">' +
+                    '<div class="ml-catalog-poster"><img src="' + safe(m.poster || '') + '" alt="' + title + ' afişi" loading="lazy" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80\'">' +
+                    '<span class="ml-catalog-type">' + type + '</span><span class="ml-catalog-rating"><i class="fa-solid fa-star"></i> ' + safe(m.imdb || '—') + '</span>' +
+                    (m.favorite ? '<span class="ml-catalog-favorite"><i class="fa-solid fa-heart"></i></span>' : '') +
+                    '<span class="ml-catalog-overlay"><i class="fa-solid fa-arrow-up-right-from-square"></i> DETAYLAR</span></div>' +
+                    '<div class="ml-catalog-meta"><h3 title="' + title + '">' + title + '</h3><div class="ml-catalog-sub"><span>' + safe(m.year || '—') + '</span>' +
+                    (genres ? '<span class="ml-catalog-separator">•</span><span class="ml-catalog-genre">' + safe(genres) + '</span>' : '') +
+                    '</div><div class="ml-catalog-status"><span class="ml-catalog-status-dot ' + (watched ? 'watched' : 'planned') + '"></span>' + (watched ? 'İzlendi' : 'İzleme listesinde') + '</div></div></article>';
             }).join('');
         }
 
