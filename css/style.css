@@ -525,3 +525,38 @@ footer { border-color: var(--ml-border) !important; color: var(--ml-muted) !impo
 .mobile-admin-shortcut i{font-size:13px}
 @media(max-width:767px){.mobile-admin-shortcut{display:inline-flex!important}.glass-header .flex.items-center.justify-between{gap:8px}.glass-header .flex.items-center.space-x-3{gap:7px}.glass-header .perde-brand-copy{display:block}.glass-header .perde-brand-name{font-size:14px}.glass-header .perde-brand-tagline{font-size:7px}}
 @media(max-width:380px){.mobile-admin-shortcut{width:36px;min-width:36px;padding:0}.mobile-admin-shortcut span{display:none}}
+
+
+/* Premium hybrid typography: Manrope for hierarchy, Plus Jakarta Sans for UI */
+:root {
+  --ml-font-ui: "Plus Jakarta Sans", sans-serif;
+  --ml-font-display: "Manrope", "Plus Jakarta Sans", sans-serif;
+}
+body { font-family: var(--ml-font-ui); }
+h1, h2, h3, h4, h5, h6,
+.perde-brand-name,
+.ml-featured-title,
+.ml-featured-hero h1,
+.ml-featured-hero h2,
+.ml-catalog-intro h1,
+.ml-section-heading h2,
+.ml-catalog-meta h3,
+.detail-title,
+.actor-name,
+.stats-title,
+#tab-admin h2,
+#tab-admin h3 {
+  font-family: var(--ml-font-display);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.ml-catalog-intro h1,
+.ml-section-heading h2 { letter-spacing: -0.045em; }
+.ml-catalog-meta h3 { font-weight: 700; letter-spacing: -0.025em; }
+button, input, select, textarea,
+.nav-btn, .ml-catalog-sub, .ml-catalog-status,
+.ml-catalog-type, .ml-catalog-rating,
+.ml-section-heading > button {
+  font-family: var(--ml-font-ui);
+}
