@@ -1,0 +1,21 @@
+name: Static app checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  smoke-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate JavaScript syntax
+        run: node --check js/app.js
+      - name: Run static smoke checks
+        run: node tests/smoke-check.mjs
