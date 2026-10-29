@@ -730,7 +730,7 @@
                             <img class="perde-imdb-backdrop" src="${m.backdrop || m.poster || ''}" alt="" onerror="this.src='${m.poster || ''}'">
                             <div class="perde-imdb-hero-shade"></div>
                             <div class="perde-imdb-hero-top"><span class="perde-imdb-brand">My Library<span>ARŞİV</span></span><span class="perde-imdb-type">${m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM'}</span></div>
-                            <button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-play" aria-label="Fragmanı aç"><i class="fa-solid fa-play"></i></button>
+                            <div class="perde-imdb-feature-art"><img src="${m.poster || m.backdrop || ''}" alt="${m.title} afişi" onerror="this.src='${m.backdrop || ''}'"><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-play" aria-label="${m.title} fragmanını oynat"><i class="fa-solid fa-play"></i><span>FRAGMANI İZLE</span></button></div>
                             <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker">${m.year || 'Yıl bilinmiyor'} <span>•</span> ${m.runtime || 'Süre bilgisi yok'} <span>•</span> ${m.country || 'Ülke bilgisi yok'}</div><h2>${m.title}</h2><div class="perde-imdb-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div></div>
                         </section>
                         <section class="perde-imdb-content">
