@@ -477,6 +477,20 @@
         let featuredHeroIndex = 0;
         let featuredHeroTimer = null;
 
+
+        function syncHeaderSearch(value) {
+            const librarySearch = document.getElementById('search-input');
+            if (librarySearch) librarySearch.value = value;
+        }
+
+        function openHeaderSearch() {
+            const headerSearch = document.getElementById('header-search-input');
+            const value = headerSearch ? headerSearch.value : '';
+            syncHeaderSearch(value);
+            switchTab('library');
+            applyFilters();
+        }
+
         function renderFeaturedHero() {
             const container = document.getElementById('ml-featured-hero');
             if (!container) return;
@@ -504,6 +518,7 @@
                 const genres = Array.isArray(item.genres) ? item.genres.slice(0, 3).join(' · ') : '';
                 return '<article class="ml-featured-slide' + (index === featuredHeroIndex ? ' is-active' : '') + '" data-slide="' + index + '" aria-hidden="' + (index === featuredHeroIndex ? 'false' : 'true') + '">' +
                     '<div class="ml-featured-backdrop"><img src="' + image + '" alt="" loading="' + (index === featuredHeroIndex ? 'eager' : 'lazy') + '" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=85\'"></div><div class="ml-featured-shade"></div>' +
+                    '<div class="ml-featured-artwork"><img src="' + safe(item.poster || image) + '" alt="' + title + ' afişi" loading="' + (index === featuredHeroIndex ? 'eager' : 'lazy') + '" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=700&q=85\'"></div>' +
                     '<div class="ml-featured-copy"><span class="ml-featured-eyebrow"><i class="fa-solid fa-clapperboard"></i> MY LIBRARY SEÇKİSİ <span>·</span> ' + type + '</span>' +
                     '<h2>' + title + '</h2><div class="ml-featured-meta">' + (item.year ? '<span>' + safe(item.year) + '</span>' : '') + (item.imdb ? '<span class="ml-featured-imdb"><i class="fa-solid fa-star"></i> ' + safe(item.imdb) + ' IMDb</span>' : '') + (genres ? '<span>' + safe(genres) + '</span>' : '') + '</div>' +
                     '<p>' + overview + '</p><div class="ml-featured-actions"><button type="button" onclick="openDetailModal(\'' + id + '\')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button><button type="button" class="ml-featured-secondary" onclick="switchTab(\'library\')"><i class="fa-solid fa-film"></i> Arşive Git</button></div></div></article>';

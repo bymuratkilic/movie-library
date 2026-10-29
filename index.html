@@ -46,14 +46,26 @@
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
                 <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchTab('dashboard')">
-                    <div class="perde-brand-mark group-hover:scale-105 transition-transform" aria-label="My Library logo">
-                        <svg viewBox="0 0 64 64" role="img" aria-hidden="true"><defs><linearGradient id="perdeLogoGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4338ca"/></linearGradient></defs><path d="M13 18 49 8l4 13-36 10z" fill="url(#perdeLogoGradient)"/><path d="M17 32h36v25H17z" rx="3" fill="url(#perdeLogoGradient)"/><path d="M22 36h7v6h-7zm12 0h7v6h-7zm12 0h3v6h-3z" fill="#fff" opacity=".9"/><path d="M9 26h6v31H9z" fill="#a78bfa"/><path d="M18 48h32" stroke="#fff" stroke-width="2" opacity=".8"/></svg>
+                    <div class="perde-brand-mark group-hover:scale-105 transition-transform" aria-label="Film ve dizi kütüphanesi logosu">
+                        <svg viewBox="0 0 64 64" role="img" aria-hidden="true">
+                            <defs><linearGradient id="mlMarkGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#5141a8"/></linearGradient></defs>
+                            <rect x="7" y="9" width="50" height="46" rx="13" fill="url(#mlMarkGradient)"/>
+                            <path d="M7 23h50M7 39h50" stroke="#fff" stroke-opacity=".18" stroke-width="1.5"/>
+                            <path d="M20 9l7 14M36 9l7 14M20 55l7-16M36 55l7-16" stroke="#fff" stroke-opacity=".28" stroke-width="3"/>
+                            <path d="M27 28.5 41 32 27 35.5z" fill="#fff"/>
+                        </svg>
                     </div>
                     <div class="perde-brand-copy">
-                        <span class="perde-brand-name">My Library</span>
-                        <span class="perde-brand-tagline">KİŞİSEL ARŞİV</span>
+                        <span class="perde-brand-name">FİLM / DİZİ KÜTÜPHANESİ</span>
+                        <span class="perde-brand-tagline">Kişisel film/dizi arşivim</span>
                     </div>
                 </div>
+
+                <label class="ml-header-search" aria-label="Kütüphanede ara">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <input type="search" id="header-search-input" placeholder="Film, dizi veya oyuncu ara..." autocomplete="off" oninput="syncHeaderSearch(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();openHeaderSearch()}">
+                    <kbd>ENTER</kbd>
+                </label>
 
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center space-x-1.5 bg-slate-500/5 dark:bg-white/5 p-1 rounded-xl border border-slate-500/10 dark:border-white/10">
@@ -154,7 +166,6 @@
         <!-- DASHBOARD TAB -->
         <section id="tab-dashboard" class="space-y-8">
             <section id="ml-featured-hero" class="ml-featured-hero" aria-label="Öne çıkan yapım"></section>
-            <section class="ml-catalog-intro"><div><span class="ml-catalog-kicker">MY LIBRARY / KİŞİSEL ARŞİV</span><h1>Sinema koleksiyonun.</h1><p>Arşivindeki yapımları keşfet, düzenle ve yeniden hatırla.</p></div><label class="ml-home-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" placeholder="Arşivinde film, dizi ara..." aria-label="Arşivinde ara" onkeydown="if(event.key==='Enter'){switchTab('library');document.getElementById('search-input').value=this.value;applyFilters()}"><button type="button" onclick="switchTab('library');document.getElementById('search-input').focus()" aria-label="Gelişmiş arama"><i class="fa-solid fa-arrow-right"></i></button></label></section>
             <section class="ml-catalog-section"><div class="ml-section-heading"><div><span class="ml-section-kicker">KOLEKSİYONUNDAN</span><h2>Editörün Seçtikleri</h2><p>En yüksek puanlı yapımlarından özel bir seçki.</p></div><button type="button" onclick="openHomeCollection('editor')">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></button></div><div id="editor-picks-grid" class="ml-catalog-grid"></div></section>
 
             <!-- Recently Added -->
