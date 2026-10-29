@@ -82,6 +82,9 @@
 
                 <!-- Actions: Theme Switcher & Add Button -->
                 <div class="flex items-center space-x-3">
+                    <button onclick="openAdminAuthModal()" id="mobile-admin-shortcut" class="md:hidden w-9 h-9 rounded-xl dark:bg-clean-card bg-white dark:border-clean-border border-light-border border flex items-center justify-center dark:text-indigo-300 text-indigo-600 hover:scale-105 transition-all shadow-sm" title="Yönetim Paneli" aria-label="Yönetim Paneli">
+                        <i class="fa-solid fa-user-shield text-sm"></i>
+                    </button>
                     <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-9 h-9 rounded-xl dark:bg-clean-card bg-white dark:border-clean-border border-light-border border flex items-center justify-center dark:text-amber-400 text-slate-700 hover:scale-105 transition-all shadow-sm" title="Tema Değiştir (Aydınlık/Koyu)">
                         <i class="fa-solid fa-sun text-sm dark:inline hidden"></i>
                         <i class="fa-solid fa-moon text-sm dark:hidden inline"></i>
