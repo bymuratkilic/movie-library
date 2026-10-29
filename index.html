@@ -153,17 +153,6 @@
             <section class="ml-catalog-intro"><div><span class="ml-catalog-kicker">MY LIBRARY / KİŞİSEL ARŞİV</span><h1>Sinema koleksiyonun.</h1><p>Arşivindeki yapımları keşfet, düzenle ve yeniden hatırla.</p></div><label class="ml-home-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" placeholder="Arşivinde film, dizi ara..." aria-label="Arşivinde ara" onkeydown="if(event.key==='Enter'){switchTab('library');document.getElementById('search-input').value=this.value;applyFilters()}"><button type="button" onclick="switchTab('library');document.getElementById('search-input').focus()" aria-label="Gelişmiş arama"><i class="fa-solid fa-arrow-right"></i></button></label></section>
             <section class="ml-catalog-section"><div class="ml-section-heading"><div><span class="ml-section-kicker">KOLEKSİYONUNDAN</span><h2>Editörün Seçtikleri</h2><p>En yüksek puanlı yapımlarından özel bir seçki.</p></div><button type="button" onclick="switchTab('library')">Tüm arşiv <i class="fa-solid fa-arrow-right"></i></button></div><div id="editor-picks-grid" class="ml-catalog-grid"></div></section>
 
-            <!-- Watchlist Section -->
-            <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-base font-bold dark:text-white text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-bookmark text-rose-500 text-xs"></i>İzleme Listem
-                    </h2>
-                    <span id="watchlist-badge" class="text-xs text-amber-500 font-semibold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">0 yapım</span>
-                </div>
-                <div id="watchlist-row" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
-            </div>
-
             <!-- Recently Added -->
             <div class="space-y-4">
                 <div class="flex items-center justify-between">
@@ -173,6 +162,17 @@
                     <button onclick="switchTab('library')" class="text-xs text-rose-400 hover:underline font-medium">Tüm arşivi gör →</button>
                 </div>
                 <div id="recent-row" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+            </div>
+
+            <!-- Watchlist Section -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base font-bold dark:text-white text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-bookmark text-rose-500 text-xs"></i>İzleme Listem
+                    </h2>
+                    <span id="watchlist-badge" class="text-xs text-amber-500 font-semibold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">0 yapım</span>
+                </div>
+                <div id="watchlist-row" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
             </div>
             <div class="ml-archive-stats"><div><strong id="stat-total-count">0</strong><span>Toplam yapım</span></div><div><strong id="stat-watched-count">0</strong><span>İzlenen</span></div><div><strong id="stat-watchlist-count">0</strong><span>İzlenecek</span></div><div><strong id="stat-favorite-count">0</strong><span>Favori</span></div></div>
 
