@@ -518,3 +518,10 @@ footer { border-color: var(--ml-border) !important; color: var(--ml-muted) !impo
   .ml-section-heading > button { transition: none !important; }
 }
 
+
+
+/* Mobile header admin shortcut — explicit visibility and readable label */
+.mobile-admin-shortcut{display:none;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:0 11px;border:1px solid var(--ml-border);border-radius:10px;background:var(--ml-surface);color:#6d5bd0;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.mobile-admin-shortcut i{font-size:13px}
+@media(max-width:767px){.mobile-admin-shortcut{display:inline-flex!important}.glass-header .flex.items-center.justify-between{gap:8px}.glass-header .flex.items-center.space-x-3{gap:7px}.glass-header .perde-brand-copy{display:block}.glass-header .perde-brand-name{font-size:14px}.glass-header .perde-brand-tagline{font-size:7px}}
+@media(max-width:380px){.mobile-admin-shortcut{width:36px;min-width:36px;padding:0}.mobile-admin-shortcut span{display:none}}

@@ -82,8 +82,8 @@
 
                 <!-- Actions: Theme Switcher & Add Button -->
                 <div class="flex items-center space-x-3">
-                    <button onclick="openAdminAuthModal()" id="mobile-admin-shortcut" class="md:hidden w-9 h-9 rounded-xl dark:bg-clean-card bg-white dark:border-clean-border border-light-border border flex items-center justify-center dark:text-indigo-300 text-indigo-600 hover:scale-105 transition-all shadow-sm" title="Yönetim Paneli" aria-label="Yönetim Paneli">
-                        <i class="fa-solid fa-user-shield text-sm"></i>
+                    <button type="button" onclick="openAdminAuthModal()" id="mobile-admin-shortcut" class="mobile-admin-shortcut" title="Yönetim Paneli" aria-label="Yönetim Paneli">
+                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Yönetim</span>
                     </button>
                     <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-9 h-9 rounded-xl dark:bg-clean-card bg-white dark:border-clean-border border-light-border border flex items-center justify-center dark:text-amber-400 text-slate-700 hover:scale-105 transition-all shadow-sm" title="Tema Değiştir (Aydınlık/Koyu)">
                         <i class="fa-solid fa-sun text-sm dark:inline hidden"></i>
@@ -155,7 +155,7 @@
         <section id="tab-dashboard" class="space-y-8">
             <section id="ml-featured-hero" class="ml-featured-hero" aria-label="Öne çıkan yapım"></section>
             <section class="ml-catalog-intro"><div><span class="ml-catalog-kicker">MY LIBRARY / KİŞİSEL ARŞİV</span><h1>Sinema koleksiyonun.</h1><p>Arşivindeki yapımları keşfet, düzenle ve yeniden hatırla.</p></div><label class="ml-home-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" placeholder="Arşivinde film, dizi ara..." aria-label="Arşivinde ara" onkeydown="if(event.key==='Enter'){switchTab('library');document.getElementById('search-input').value=this.value;applyFilters()}"><button type="button" onclick="switchTab('library');document.getElementById('search-input').focus()" aria-label="Gelişmiş arama"><i class="fa-solid fa-arrow-right"></i></button></label></section>
-            <section class="ml-catalog-section"><div class="ml-section-heading"><div><span class="ml-section-kicker">KOLEKSİYONUNDAN</span><h2>Editörün Seçtikleri</h2><p>En yüksek puanlı yapımlarından özel bir seçki.</p></div><button type="button" onclick="switchTab('library')">Tüm arşiv <i class="fa-solid fa-arrow-right"></i></button></div><div id="editor-picks-grid" class="ml-catalog-grid"></div></section>
+            <section class="ml-catalog-section"><div class="ml-section-heading"><div><span class="ml-section-kicker">KOLEKSİYONUNDAN</span><h2>Editörün Seçtikleri</h2><p>En yüksek puanlı yapımlarından özel bir seçki.</p></div><button type="button" onclick="openHomeCollection('editor')">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></button></div><div id="editor-picks-grid" class="ml-catalog-grid"></div></section>
 
             <!-- Recently Added -->
             <div class="space-y-4">
@@ -163,7 +163,7 @@
                     <h2 class="text-base font-bold dark:text-white text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-sparkles text-rose-500 text-xs"></i>Son Eklenenler
                     </h2>
-                    <button onclick="switchTab('library')" class="text-xs text-rose-400 hover:underline font-medium">Tüm arşivi gör →</button>
+                    <button type="button" onclick="openHomeCollection('recent')" class="text-xs text-rose-400 hover:underline font-medium">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
                 <div id="recent-row" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
             </div>
@@ -174,7 +174,7 @@
                     <h2 class="text-base font-bold dark:text-white text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-bookmark text-rose-500 text-xs"></i>İzleme Listem
                     </h2>
-                    <span id="watchlist-badge" class="text-xs text-amber-500 font-semibold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">0 yapım</span>
+                    <div class="flex items-center gap-3"><span id="watchlist-badge" class="text-xs text-amber-500 font-semibold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">0 yapım</span><button type="button" onclick="openHomeCollection('watchlist')" class="text-xs text-rose-400 hover:underline font-medium whitespace-nowrap">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></button></div>
                 </div>
                 <div id="watchlist-row" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
             </div>
