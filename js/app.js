@@ -718,6 +718,13 @@
             if (m) {
                 m.status = newStatus;
                 saveToLocalStorage();
+
+                // Detay sayfasındaki seçili izleme durumunu da hemen güncelle.
+                const detailPage = document.getElementById('tab-detail');
+                if (detailPage && !detailPage.classList.contains('hidden')) {
+                    openDetailModal(id);
+                }
+
                 renderDashboard();
                 renderLibrary();
                 showToast('İzleme durumu güncellendi.');
