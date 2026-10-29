@@ -150,6 +150,7 @@
 
         <!-- DASHBOARD TAB -->
         <section id="tab-dashboard" class="space-y-8">
+            <section id="ml-featured-hero" class="ml-featured-hero" aria-label="Öne çıkan yapım"></section>
             <section class="ml-catalog-intro"><div><span class="ml-catalog-kicker">MY LIBRARY / KİŞİSEL ARŞİV</span><h1>Sinema koleksiyonun.</h1><p>Arşivindeki yapımları keşfet, düzenle ve yeniden hatırla.</p></div><label class="ml-home-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" placeholder="Arşivinde film, dizi ara..." aria-label="Arşivinde ara" onkeydown="if(event.key==='Enter'){switchTab('library');document.getElementById('search-input').value=this.value;applyFilters()}"><button type="button" onclick="switchTab('library');document.getElementById('search-input').focus()" aria-label="Gelişmiş arama"><i class="fa-solid fa-arrow-right"></i></button></label></section>
             <section class="ml-catalog-section"><div class="ml-section-heading"><div><span class="ml-section-kicker">KOLEKSİYONUNDAN</span><h2>Editörün Seçtikleri</h2><p>En yüksek puanlı yapımlarından özel bir seçki.</p></div><button type="button" onclick="switchTab('library')">Tüm arşiv <i class="fa-solid fa-arrow-right"></i></button></div><div id="editor-picks-grid" class="ml-catalog-grid"></div></section>
 
