@@ -159,7 +159,7 @@ footer { border-color: var(--ml-border) !important; color: var(--ml-muted) !impo
 #mobile-bottom-nav button { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 10px 2px; color: var(--ml-muted); font-size: 9px; }
 #mobile-bottom-nav button i { font-size: 15px; }
 @media (min-width: 1280px) { #watchlist-row, #recent-row { grid-template-columns: repeat(6,minmax(0,1fr)); } #library-grid { grid-template-columns: repeat(6,minmax(0,1fr)); } }
-@media (max-width: 1050px) { header nav { display: none !important; } }
+@media (max-width: 1050px) { header nav { display: none !important; } #mobile-bottom-nav { display: flex !important; } }
 @media (max-width: 767px) {
   header .h-16 { height: 64px; }
   header .perde-brand-name { font-size: 14px; }
