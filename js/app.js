@@ -710,6 +710,8 @@
 
                 const videoId = getYouTubeVideoId(m.trailerUrl || '');
                 const searchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(searchQuery);
+                // Fragman bağlantısı kayıtlı değilse tıklama doğrudan YouTube arama sonuçlarını açar.
+                if (!videoId) window.open(searchUrl, '_blank', 'noopener,noreferrer');
                 const safeTitle = escapeTrailerField(m.title);
                 const playerMarkup = videoId
                     ? '<div class="aspect-video w-full bg-black"><iframe title="' + safeTitle + ' fragman" class="w-full h-full" src="https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0&playsinline=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>'
