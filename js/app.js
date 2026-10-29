@@ -1,5 +1,5 @@
 // Global State & Persistent Storage Key
-        const STORAGE_KEY = 'perde_movies_archive_v1';
+        const STORAGE_KEY = 'perde_movies_archive_v1'; // Eski anahtar korunur: mevcut arşiv verileri kaybolmaz.
         const ADMIN_PASS_KEY = 'perde_admin_password_v1';
         let isAdminLoggedIn = false;
         let searchDebounceTimer = null;
@@ -228,11 +228,11 @@
             if (html.classList.contains('dark')) {
                 html.classList.remove('dark');
                 html.classList.add('light');
-                localStorage.setItem('perde_theme', 'light');
+                localStorage.setItem('my_library_theme', 'light');
             } else {
                 html.classList.remove('light');
                 html.classList.add('dark');
-                localStorage.setItem('perde_theme', 'dark');
+                localStorage.setItem('my_library_theme', 'dark');
             }
             if (!document.getElementById('tab-stats').classList.contains('hidden')) {
                 renderCharts();
@@ -240,7 +240,7 @@
         }
 
         function initTheme() {
-            const savedTheme = localStorage.getItem('perde_theme') || 'dark';
+            const savedTheme = localStorage.getItem('my_library_theme') || localStorage.getItem('perde_theme') || 'light';
             document.documentElement.className = savedTheme;
         }
 
@@ -287,7 +287,7 @@
                 return;
             }
 
-            ['dashboard', 'library', 'stats', 'admin'].forEach(t => {
+            ['dashboard', 'library', 'detail', 'stats', 'admin'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 if (el) el.classList.toggle('hidden', t !== tabId);
                 const navBtn = document.getElementById(`nav-${t}`);
@@ -299,6 +299,8 @@
                     }
                 }
             });
+            const categoryNav = document.getElementById('category-navigation');
+            if (categoryNav) categoryNav.classList.toggle('hidden', tabId === 'detail');
             if (tabId === 'stats') renderCharts();
             if (tabId === 'admin') renderAdminTable();
         }
@@ -384,7 +386,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(movies, null, 2));
             const dlAnchorElem = document.createElement('a');
             dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", `perde_arsiv_yedek_${new Date().toISOString().slice(0,10)}.json`);
+            dlAnchorElem.setAttribute("download", `my-library-backup-${new Date().toISOString().slice(0,10)}.json`);
             dlAnchorElem.click();
             showToast('Arşiv JSON yedek olarak indirildi.');
         }
@@ -437,7 +439,7 @@
                     <div class="perde-home-hero">
                         <img src="${hero.backdrop || hero.poster || ''}" class="perde-home-backdrop" alt="" onerror="this.src='${hero.poster || ''}'">
                         <div class="perde-home-shade"></div>
-                        <div class="perde-home-topline"><span class="perde-home-logo"><i class="fa-solid fa-clapperboard"></i> PERDE<span>+</span></span><span class="perde-home-topnote">KİŞİSEL SİNEMA ARŞİVİN</span></div>
+                        <div class="perde-home-topline"><span class="perde-home-logo"><i class="fa-solid fa-clapperboard"></i> My Library</span><span class="perde-home-topnote">KİŞİSEL SİNEMA ARŞİVİN</span></div>
                         <div class="perde-home-feature">
                             <img src="${hero.poster || ''}" class="perde-home-poster" alt="${hero.title} afişi" onerror="this.style.visibility='hidden'">
                             <div class="perde-home-feature-copy">
@@ -624,7 +626,7 @@
             const m = movies.find(x => x.id === id) || onlineCatalog.find(x => x.id === id) || fetchedOnlineResults.find(x => x.id === id);
             if (!m) return;
 
-            const modalContent = document.getElementById('detail-modal-content');
+            const modalContent = document.getElementById(trailerMode ? 'detail-modal-content' : 'detail-page-content');
 
             if (trailerMode) {
                 let searchQuery = m.title + ' fragman';
@@ -652,7 +654,7 @@
                         <section class="perde-imdb-hero" style="--perde-hero-image:url('${m.backdrop || m.poster || ''}')">
                             <img class="perde-imdb-backdrop" src="${m.backdrop || m.poster || ''}" alt="" onerror="this.src='${m.poster || ''}'">
                             <div class="perde-imdb-hero-shade"></div>
-                            <div class="perde-imdb-hero-top"><span class="perde-imdb-brand">PERDE<span>IMDb</span></span><span class="perde-imdb-type">${m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM'}</span></div>
+                            <div class="perde-imdb-hero-top"><span class="perde-imdb-brand">My Library<span>ARŞİV</span></span><span class="perde-imdb-type">${m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM'}</span></div>
                             <button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-play" aria-label="Fragmanı aç"><i class="fa-solid fa-play"></i></button>
                             <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker">${m.year || 'Yıl bilinmiyor'} <span>•</span> ${m.runtime || 'Süre bilgisi yok'} <span>•</span> ${m.country || 'Ülke bilgisi yok'}</div><h2>${m.title}</h2><div class="perde-imdb-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div></div>
                         </section>
@@ -677,7 +679,13 @@
                 }
             }
 
-            document.getElementById('detail-modal').classList.remove('hidden');
+            if (trailerMode) {
+                document.getElementById('detail-modal').classList.remove('hidden');
+            } else {
+                closeModal('detail-modal');
+                switchTab('detail');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         function toggleFavorite(id) {
