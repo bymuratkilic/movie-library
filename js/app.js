@@ -447,6 +447,7 @@
 
         // Dashboard & Liste Görünümleri Render
         function renderDashboard() {
+            renderFeaturedHero();
             document.getElementById('stat-total-count').textContent = movies.length;
             document.getElementById('stat-watched-count').textContent = movies.filter(m => m.status === 'watched').length;
             const watchLaterCount = movies.filter(m => m.status === 'watch_later').length;
@@ -457,6 +458,30 @@
             renderRow('editor-picks-grid', picks);
             renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later'));
             renderRow('recent-row', movies.slice(0,18));
+        }
+
+        function renderFeaturedHero() {
+            const container = document.getElementById('ml-featured-hero');
+            if (!container) return;
+            const safe = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            const featured = [...movies].sort((a,b) => (Number(b.imdb)||0)-(Number(a.imdb)||0) || Number(Boolean(b.favorite))-Number(Boolean(a.favorite)))[0]
+                || onlineCatalog.find(m => m.id === 'tmdb-batman-1')
+                || onlineCatalog[0];
+            if (!featured) {
+                container.innerHTML = '<div class="ml-featured-empty"><span>MY LIBRARY</span><h2>Bir sonraki favorin burada.</h2><p>Arşivine yapım eklediğinde manşet alanı otomatik olarak güncellenir.</p><button type="button" onclick="openAddMovieModal()">İlk yapımını ekle <i class="fa-solid fa-arrow-right"></i></button></div>';
+                return;
+            }
+            const id = safe(featured.id);
+            const title = safe(featured.title || 'Öne çıkan yapım');
+            const overview = safe(featured.overview || 'Kişisel arşivinden öne çıkan yapım. Detayları açarak oyuncu kadrosunu, puanını ve diğer bilgileri incele.');
+            const poster = safe(featured.backdrop || featured.poster || '');
+            const type = featured.type === 'tv' ? 'DİZİ' : featured.type === 'doc' ? 'BELGESEL' : 'FİLM';
+            const genres = Array.isArray(featured.genres) ? featured.genres.slice(0, 3).join(' · ') : '';
+            container.innerHTML = '<div class="ml-featured-backdrop"><img src="' + poster + '" alt="" loading="eager" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=85\'"></div>' +
+                '<div class="ml-featured-shade"></div><div class="ml-featured-copy"><span class="ml-featured-eyebrow"><i class="fa-solid fa-clapperboard"></i> MY LIBRARY SEÇKİSİ <span>·</span> ' + type + '</span>' +
+                '<h2>' + title + '</h2><div class="ml-featured-meta">' + (featured.year ? '<span>' + safe(featured.year) + '</span>' : '') + (featured.imdb ? '<span class="ml-featured-imdb"><i class="fa-solid fa-star"></i> ' + safe(featured.imdb) + ' IMDb</span>' : '') + (genres ? '<span>' + safe(genres) + '</span>' : '') + '</div>' +
+                '<p>' + overview + '</p><div class="ml-featured-actions"><button type="button" onclick="openDetailModal(\'' + id + '\')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button><button type="button" class="ml-featured-secondary" onclick="switchTab(\'library\')"><i class="fa-solid fa-film"></i> Arşive Git</button></div></div>' +
+                '<div class="ml-featured-side-label">ÖNE ÇIKAN YAPIM</div>';
         }
 
         function renderRow(containerId, list) {
