@@ -893,3 +893,74 @@ header .max-w-7xl > .flex.items-center.justify-between {
     mask-image:linear-gradient(0deg,transparent 0%,#000 24%,#000 85%,transparent 100%) !important;
   }
 }
+
+
+/* Structural correction: the header layout needs a real grid, not grid-* on a flex row. */
+@media (min-width: 768px) {
+  header .max-w-7xl > .flex.items-center.justify-between {
+    display:grid !important;
+    grid-template-columns:minmax(220px,auto) minmax(190px,250px) minmax(0,1fr) auto !important;
+    grid-template-areas:"brand search nav actions" !important;
+    align-items:center !important;
+    column-gap:clamp(10px,1.35vw,20px) !important;
+    row-gap:0 !important;
+    height:auto !important;
+    min-height:72px !important;
+    padding-top:10px !important;
+    padding-bottom:10px !important;
+  }
+  header .max-w-7xl > .flex.items-center.justify-between > .group {
+    grid-area:brand !important; min-width:0 !important; white-space:nowrap;
+  }
+  header .max-w-7xl > .flex.items-center.justify-between > .ml-header-search {
+    grid-area:search !important; width:100% !important; min-width:0 !important;
+    max-width:none !important; flex:none !important; height:38px !important;
+  }
+  header .max-w-7xl > .flex.items-center.justify-between > nav {
+    grid-area:nav !important; min-width:0 !important; justify-self:end !important;
+    display:flex !important; flex-wrap:nowrap !important; overflow:visible !important;
+    gap:2px !important;
+  }
+  header .max-w-7xl > .flex.items-center.justify-between > .flex.items-center.space-x-3 {
+    grid-area:actions !important; justify-self:end !important; min-width:max-content;
+  }
+  header .nav-btn { padding-left:8px !important; padding-right:8px !important; }
+}
+@media (min-width:768px) and (max-width:1180px) {
+  header .max-w-7xl > .flex.items-center.justify-between {
+    grid-template-columns:minmax(210px,1fr) minmax(180px,230px) auto !important;
+    grid-template-areas:"brand search actions" "nav nav nav" !important;
+    row-gap:8px !important;
+  }
+  header .max-w-7xl > .flex.items-center.justify-between > nav {
+    justify-self:start !important;
+  }
+}
+@media (max-width:767px) {
+  header .max-w-7xl > .flex.items-center.justify-between {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    grid-template-areas:"brand actions" "search search" !important;
+    align-items:center !important;
+    column-gap:8px !important; row-gap:10px !important;
+    height:auto !important; min-height:0 !important;
+    padding-top:9px !important; padding-bottom:10px !important;
+  }
+  header .max-w-7xl > .flex.items-center.justify-between > .group {
+    grid-area:brand !important; min-width:0 !important;
+  }
+  header .max-w-7xl > .flex.items-center.justify-between > .ml-header-search {
+    grid-area:search !important; width:100% !important; max-width:none !important;
+    min-width:0 !important; height:40px !important;
+  }
+  header .max-w-7xl > .flex.items-center.justify-between > nav { display:none !important; }
+  header .max-w-7xl > .flex.items-center.justify-between > .flex.items-center.space-x-3 {
+    grid-area:actions !important; justify-self:end !important;
+  }
+}
+/* Keep the poster visible above the backdrop and let the shade blend its left edge. */
+.ml-featured-slide { isolation:isolate !important; }
+.ml-featured-slide .ml-featured-backdrop { z-index:-2 !important; }
+.ml-featured-slide .ml-featured-artwork { z-index:0 !important; }
+.ml-featured-slide .ml-featured-shade { z-index:1 !important; pointer-events:none !important; }
+.ml-featured-slide .ml-featured-copy { position:relative !important; z-index:2 !important; }
