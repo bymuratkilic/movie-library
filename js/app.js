@@ -712,7 +712,6 @@
             else if (sortFilter === 'title_desc') filtered.sort((a, b) => String(b.title || '').localeCompare(String(a.title || ''), 'tr'));
 
             renderRow('library-grid', filtered);
-            syncLibraryViewControls();
             const count = document.getElementById('library-result-count');
             if (count) count.textContent = filtered.length + ' / ' + movies.length + ' yapım gösteriliyor';
         }
@@ -920,6 +919,7 @@
                                 <p class="perde-imdb-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p>
                                 
                                 <div class="perde-imdb-actions"><label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
+                                ${renderPersonalDiary(m)}
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
                             </div>
                         </section>
@@ -1079,7 +1079,14 @@
                 }
             }
             if (m) {
+                const previousStatus = m.status;
                 m.status = newStatus;
+                if (newStatus === 'watched' && previousStatus !== 'watched') {
+                    const today = new Date().toISOString().slice(0, 10);
+                    m.watchedAt = today;
+                    if (!Array.isArray(m.watchHistory)) m.watchHistory = [];
+                    m.watchHistory.push({ date: today, rating: '', review: '' });
+                }
                 saveToLocalStorage();
 
                 // Detay sayfasındaki seçili izleme durumunu da hemen güncelle.
@@ -1092,6 +1099,45 @@
                 renderLibrary();
                 showToast('İzleme durumu güncellendi.');
             }
+        }
+
+        function renderPersonalDiary(movie) {
+            if (!movie || !movies.some(item => String(item.id) === String(movie.id))) return '';
+            const history = Array.isArray(movie.watchHistory) ? movie.watchHistory : [];
+            const latest = history.length ? history[history.length - 1] : null;
+            const date = latest?.date || movie.watchedAt || new Date().toISOString().slice(0, 10);
+            const rating = latest?.rating ?? movie.personalRating ?? '';
+            const review = latest?.review ?? movie.personalReview ?? '';
+            const esc = value => escapeTrailerField(value || '');
+            const historyMarkup = history.length ? '<div class="ml-diary-history"><h4>İzleme geçmişi <span>' + history.length + ' kayıt</span></h4><ol>' + history.slice().reverse().map(entry => '<li><div><strong>' + esc(entry.date || 'Tarih yok') + '</strong>' + (entry.rating ? '<span class="ml-diary-entry-rating"><i class="fa-solid fa-star"></i> ' + esc(entry.rating) + '/10</span>' : '') + '</div>' + (entry.review ? '<p>' + esc(entry.review) + '</p>' : '') + '</li>').join('') + '</ol></div>' : '<p class="ml-diary-empty">Henüz izleme kaydı eklenmedi.</p>';
+            const form = movie.status === 'watched'
+                ? '<div class="ml-diary-form"><div class="ml-diary-fields"><label>İzleme tarihi<input id="diary-watch-date" type="date" value="' + esc(date) + '" class="input-field"></label><label>Kişisel puan<input id="diary-personal-rating" type="number" min="1" max="10" step="0.5" placeholder="1–10" value="' + esc(rating) + '" class="input-field"></label></div><label class="ml-diary-review-label">Kısa yorum<textarea id="diary-personal-review" rows="3" maxlength="500" placeholder="Bu yapım hakkında ne düşündün?" class="input-field">' + esc(review) + '</textarea></label><div class="ml-diary-actions"><button onclick="savePersonalWatchEntry(\'' + movie.id + '\')" class="ml-diary-save"><i class="fa-solid fa-floppy-disk"></i> Kaydı kaydet</button><button onclick="addPersonalWatchEntry(\'' + movie.id + '\')" class="ml-diary-new"><i class="fa-solid fa-plus"></i> Yeniden izledim</button></div></div>' + historyMarkup
+                : '<div class="ml-diary-empty-state"><p>İzlediğinde kişisel puanını, tarihini ve yorumunu burada saklayabilirsin.</p><button onclick="updateMovieStatus(\'' + movie.id + '\', \'watched\')" class="ml-diary-save"><i class="fa-solid fa-check"></i> İzledim olarak işaretle</button></div>';
+            return '<section class="ml-diary-panel" aria-label="Kişisel izleme günlüğü"><div class="ml-diary-heading"><div><span class="ml-diary-kicker">KİŞİSEL SİNEMA GÜNLÜĞÜ</span><h3>İzleme notlarım</h3></div><span class="ml-diary-imdb">IMDb ' + esc(movie.imdb || '—') + '</span></div>' + form + '</section>';
+        }
+
+        function savePersonalWatchEntry(id) {
+            const movie = movies.find(item => String(item.id) === String(id));
+            if (!movie || movie.status !== 'watched') return;
+            const date = document.getElementById('diary-watch-date')?.value || new Date().toISOString().slice(0, 10);
+            const rawRating = document.getElementById('diary-personal-rating')?.value ?? '';
+            const rating = rawRating === '' ? '' : Number(rawRating);
+            const review = (document.getElementById('diary-personal-review')?.value || '').trim();
+            if (rating !== '' && (!Number.isFinite(rating) || rating < 1 || rating > 10)) { showToast('Kişisel puan 1 ile 10 arasında olmalıdır.'); return; }
+            if (!Array.isArray(movie.watchHistory)) movie.watchHistory = [];
+            const entry = { date, rating, review };
+            if (movie.watchHistory.length) movie.watchHistory[movie.watchHistory.length - 1] = entry; else movie.watchHistory.push(entry);
+            movie.watchedAt = date; movie.personalRating = rating; movie.personalReview = review;
+            saveToLocalStorage(); openDetailModal(id); renderDashboard(); showToast('Kişisel izleme notun kaydedildi.');
+        }
+
+        function addPersonalWatchEntry(id) {
+            const movie = movies.find(item => String(item.id) === String(id));
+            if (!movie || movie.status !== 'watched') return;
+            if (!Array.isArray(movie.watchHistory)) movie.watchHistory = [];
+            movie.watchHistory.push({ date: new Date().toISOString().slice(0, 10), rating: '', review: '' });
+            movie.watchedAt = movie.watchHistory[movie.watchHistory.length - 1].date; movie.personalRating = ''; movie.personalReview = '';
+            saveToLocalStorage(); openDetailModal(id); showToast('Yeni izleme kaydı açıldı.');
         }
 
         function deleteMovie(id) {
