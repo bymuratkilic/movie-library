@@ -96,6 +96,11 @@ assert.match(app, /'\/similar\?' \+ params\.toString\(\)/, 'Refresh must combine
 assert.match(app, /previousRecommendationIds\.has\(item\.id\)/, 'Refresh must prioritize titles not shown in the previous result');
 assert.match(app, /Fragmanı izle/, 'Recommendation cards must include a trailer popup action');
 assert.match(app, /Detaylar/, 'Recommendation cards must include a details action');
+assert.match(app, /perde-personal-details/, 'Recommendation details action must sit below the poster');
+assert.match(app, /fa-solid fa-circle-info/, 'Recommendation details action must use a visible solid info icon');
+assert.match(app, /perde-personal-overview/, 'Recommendation cards must show a short production synopsis');
+assert.match(css, /\.perde-personal-details/, 'Prominent details action below posters must be styled');
+assert.match(css, /\.perde-personal-overview/, 'Recommendation synopsis must be compactly styled');
 assert.match(app, /popupOnly = false/, 'Trailer popup mode must avoid opening an external tab');
 assert.match(html, /onclick="renderPersonalRecommendations\(\)"/, 'Users must be able to refresh personal recommendations');
 assert.match(css, /\.ml-recommendation-refresh/, 'Recommendation refresh control must be styled');
