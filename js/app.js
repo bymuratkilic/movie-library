@@ -796,7 +796,7 @@
                 paintCinemaShowcase(cinemaShowcaseCache);
             }catch(error){
                 if(request!==cinemaShowcaseRequest)return;
-                const fallback=movies.filter(m=>m&&m.title&&(m.backdrop||m.poster)).map(m=>({...m,source:'archive',score:(Number(m.perdeRating)||0)*2.2+(Number(m.imdb)||0)*1.4+(m.favorite?3.5:0)})).sort((a,b)=>b.score-a.score).slice(0,14);
+                const fallback=movies.filter(m=>m&&m.title&&(m.backdrop||m.poster)).map(m=>({...m,source:'archive',score:(Number(m.imdb)||0)*1.4+(m.favorite?3.5:0)})).sort((a,b)=>b.score-a.score).slice(0,14);
                 cinemaShowcaseCache=fallback;
                 if(fallback.length)paintCinemaShowcase(fallback);else feature.innerHTML='<div class="perde-cinema-loading">Vitrin şu anda yüklenemedi. Biraz sonra yeniden deneyebilirsin.</div>';
                 console.warn('Sinema vitrini yüklenemedi:',error);
@@ -2177,7 +2177,6 @@
             if (!root) return;
             const watched = movies.filter(item => item.status === 'watched');
             const favorites = movies.filter(item => item.favorite);
-            const rated = getPerdeRatedMovies();
             const genres = new Set();
             watched.forEach(item => {
                 const values = Array.isArray(item.genres) ? item.genres : (typeof item.genres === 'string' ? item.genres.split(',') : []);
