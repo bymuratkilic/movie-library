@@ -2183,3 +2183,59 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 @media(prefers-reduced-motion:reduce) {
   .perde-detail-add-to-list { transition:none; }
 }
+
+
+/* Cinematic, offline-safe fallback for failed homepage poster images */
+.ml-home-poster-fallback {
+  position:absolute;
+  inset:0;
+  z-index:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  overflow:hidden;
+  padding:18px;
+  color:rgba(255,255,255,.78);
+  text-align:center;
+  background:
+    radial-gradient(ellipse at 50% 35%,rgba(186,151,91,.22),transparent 48%),
+    linear-gradient(145deg,#26282b 0%,#141619 52%,#090a0c 100%);
+}
+.ml-home-poster-fallback::before,
+.ml-home-poster-fallback::after {
+  position:absolute;
+  content:"";
+  pointer-events:none;
+}
+.ml-home-poster-fallback::before {
+  inset:12px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:5px;
+}
+.ml-home-poster-fallback::after {
+  width:72%;
+  height:1px;
+  bottom:29%;
+  background:linear-gradient(90deg,transparent,rgba(220,190,133,.5),transparent);
+}
+.ml-home-poster-fallback i {
+  position:relative;
+  z-index:1;
+  color:#d2b477;
+  font-size:clamp(25px,3vw,38px);
+  opacity:.9;
+}
+.ml-home-poster-fallback span {
+  position:relative;
+  z-index:1;
+  color:rgba(255,255,255,.62);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.2em;
+}
+.ml-home-poster-card .ml-catalog-poster > img[hidden] { display:none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .ml-home-poster-card .ml-catalog-poster > img { transition:none; }
+}
