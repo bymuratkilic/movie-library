@@ -49,6 +49,9 @@ for (const fn of [
 
 assert.match(html, /perde-year-panel/, 'Annual cinema recap section must exist');
 assert.match(html, /perde-achievement-grid/, 'Personal achievements section must exist');
+assert.match(app, /perde-achievement-name/, 'Achievements must use compact icon labels');
+assert.match(css, /repeat\(5,minmax\(0,1fr\)\)/, 'Achievements must use a compact five-column grid');
+
 assert.match(app, /renderPerdeAchievements\(\);/, 'Profile must refresh achievements when rendered');
 assert.match(app, /watch-100/, '100 watched titles achievement must be defined');
 assert.match(app, /perde_movies_archive_v1/, 'The existing local archive storage key must remain compatible');

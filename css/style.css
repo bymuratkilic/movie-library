@@ -1793,21 +1793,13 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 @media(max-width:700px){.perde-year-panel{padding:15px}.perde-year-heading{align-items:flex-start;flex-direction:column}.perde-year-heading h2{font-size:19px}.perde-year-actions{width:100%}.perde-year-actions select{flex:1}.perde-year-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.perde-year-kpis article{padding:12px}.perde-year-kpis strong{font-size:17px}.perde-year-list{grid-template-columns:1fr}}
 
 
-/* Perde achievements */
-.perde-achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.perde-achievement-card{display:flex;align-items:center;gap:11px;min-width:0;padding:13px;border:1px solid var(--ml-border);border-radius:12px;background:var(--ml-bg);transition:border-color .18s,opacity .18s}
-.perde-achievement-card.is-earned{border-color:rgba(16,185,129,.38);background:linear-gradient(120deg,var(--ml-bg),rgba(16,185,129,.055))}
-.perde-achievement-card.is-locked{opacity:.78}
-.perde-achievement-icon{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:12px;background:var(--ml-surface-muted);color:var(--ml-muted);font-size:15px}
+/* Perde achievements · compact icon grid */
+.perde-achievement-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.perde-achievement-card{position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;min-width:0;min-height:88px;padding:11px 5px 9px;border:1px solid var(--ml-border);border-radius:12px;background:var(--ml-bg);text-align:center;transition:transform .18s,border-color .18s,opacity .18s}
+.perde-achievement-card.is-earned{border-color:rgba(16,185,129,.4);background:linear-gradient(145deg,var(--ml-bg),rgba(16,185,129,.07))}
+.perde-achievement-card.is-locked{opacity:.48}
+.perde-achievement-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:var(--ml-surface-muted);color:var(--ml-muted);font-size:16px}
 .perde-achievement-card.is-earned .perde-achievement-icon{background:rgba(16,185,129,.13);color:#10a36b}
-.perde-achievement-copy{display:flex;min-width:0;flex:1;flex-direction:column;gap:4px}
-.perde-achievement-copy strong{color:var(--ml-text);font-size:10px;font-weight:850}
-.perde-achievement-copy small{color:var(--ml-muted);font-size:8px;line-height:1.45}
-.perde-achievement-copy em{color:var(--ml-muted);font-size:8px;font-style:normal;font-weight:750}
-.perde-achievement-card.is-earned .perde-achievement-copy em{color:#10a36b}
-.perde-achievement-progress{height:4px;overflow:hidden;border-radius:9px;background:var(--ml-surface-muted)}
-.perde-achievement-progress i{display:block;height:100%;border-radius:9px;background:var(--ml-accent)}
-.perde-achievement-card.is-earned .perde-achievement-progress i{background:#10a36b}
-.perde-achievement-status{flex:0 0 auto;color:var(--ml-muted);font-size:12px}
-.perde-achievement-card.is-earned .perde-achievement-status{color:#10a36b}
-@media(max-width:620px){.perde-achievement-grid{grid-template-columns:1fr}.perde-achievement-card{padding:11px}}
+.perde-achievement-name{display:block;max-width:100%;color:var(--ml-text);font-size:9px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.perde-achievement-status{position:absolute;top:5px;right:5px;color:#10a36b;font-size:10px}
+@media(max-width:620px){.perde-achievement-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.perde-achievement-card{min-height:78px;padding:9px 3px 7px;gap:6px;border-radius:10px}.perde-achievement-icon{width:31px;height:31px;font-size:14px;border-radius:9px}.perde-achievement-name{font-size:8px}.perde-achievement-status{top:3px;right:3px;font-size:9px}}
