@@ -1206,3 +1206,34 @@ html.dark button:focus-visible, html.dark input:focus-visible,
 html.dark select:focus-visible, html.dark textarea:focus-visible {
   outline:2px solid var(--ml-accent)!important; outline-offset:3px;
 }
+
+
+/* Detail page: carry the homepage's cinematic poster treatment into the title view. */
+.perde-imdb-detail { isolation:isolate; }
+.perde-imdb-hero { min-height:360px !important; }
+.perde-imdb-backdrop { opacity:.34 !important; filter:saturate(.72) contrast(1.08) !important; }
+.perde-imdb-hero-shade { background:linear-gradient(90deg,rgba(13,17,15,.97) 0%,rgba(13,17,15,.88) 38%,rgba(13,17,15,.48) 72%,rgba(13,17,15,.18) 100%),linear-gradient(0deg,rgba(13,17,15,.88),transparent 72%) !important; }
+.perde-imdb-feature-art { z-index:2 !important; }
+.perde-imdb-play { display:inline-flex !important; align-items:center; justify-content:center; gap:9px; width:auto !important; min-height:44px; padding:0 17px; border-radius:999px !important; border:1px solid rgba(255,255,255,.35) !important; background:rgba(15,20,18,.82) !important; color:#fff !important; font-size:11px; font-weight:800; letter-spacing:.07em; box-shadow:0 10px 28px rgba(0,0,0,.28); cursor:pointer; }
+.perde-imdb-play:hover { background:var(--ml-accent) !important; color:#10201b !important; transform:translateY(-50%) scale(1.03); }
+.perde-imdb-poster-wrap { gap:16px !important; }
+.perde-film-credits { padding:16px 14px; border:1px solid var(--ml-border); border-radius:12px; background:var(--ml-surface-muted); }
+.perde-film-credits h3 { display:flex; align-items:center; gap:8px; margin:0 0 13px; color:var(--ml-text); font:800 12px Manrope,sans-serif; letter-spacing:.01em; }
+.perde-film-credits h3 i { color:var(--ml-accent); }
+.perde-film-credits dl { display:grid; gap:11px; margin:0; }
+.perde-film-credits dl>div { display:grid; gap:4px; }
+.perde-film-credits dt { color:var(--ml-muted); font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; }
+.perde-film-credits dd { margin:0; color:var(--ml-text); font-size:12px; line-height:1.5; overflow-wrap:anywhere; }
+@media(max-width:767px) {
+ .perde-imdb-hero { min-height:470px !important; }
+ .perde-imdb-feature-art { z-index:2 !important; }
+ .perde-imdb-play { right:50% !important; transform:translate(50%,-50%) !important; white-space:nowrap; }
+ .perde-imdb-play:hover { transform:translate(50%,-50%) scale(1.03); }
+ .perde-imdb-content { grid-template-columns:minmax(0,1fr) !important; }
+ .perde-imdb-poster-wrap { display:grid !important; grid-template-columns:minmax(110px,38%) minmax(0,1fr); align-items:start !important; gap:12px !important; }
+ .perde-imdb-poster { grid-column:1; grid-row:1; width:100% !important; }
+ .perde-film-credits { grid-column:2; grid-row:1; padding:12px 10px; }
+ .perde-film-credits dl { gap:8px; }
+ .perde-film-credits dt { font-size:9px; }
+ .perde-film-credits dd { font-size:11px; }
+}
