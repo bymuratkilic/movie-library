@@ -3900,3 +3900,268 @@ p {
 @media (max-width: 767px) {
   body { font-size: 14px; line-height: 1.6; }
 }
+
+
+/* PERDE Tasarım Aşaması 6 — mobil görünüm ve küçük ekran uyumu */
+/* Küçük ekranlarda yatay taşmayı önle; yatay koleksiyon rayları kendi içinde kaydırılabilir kalsın. */
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+.perde-header-inner,
+.perde-header-compact,
+.perde-header-actions,
+#tab-dashboard,
+#tab-library,
+#tab-trailers,
+.ml-catalog-section {
+  min-width: 0;
+}
+@media (max-width: 767px) {
+  main.max-w-7xl {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-bottom: max(92px, env(safe-area-inset-bottom));
+  }
+  .perde-header-inner {
+    width: 100%;
+    min-width: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .perde-header-compact {
+    gap: 8px;
+  }
+  .perde-header-compact .perde-brand {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .perde-header-compact .perde-brand-copy {
+    min-width: 0;
+  }
+  .perde-header-compact .perde-brand-name {
+    white-space: nowrap;
+  }
+  .perde-header-compact .perde-header-actions {
+    flex: 0 0 auto;
+    gap: 5px;
+  }
+  .perde-header-compact .perde-icon-action,
+  .perde-header-compact .perde-add-action {
+    width: 35px;
+    min-width: 35px;
+    height: 35px;
+    min-height: 35px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .perde-header-compact .perde-add-action span {
+    display: none;
+  }
+  .perde-menu-panel {
+    position: fixed;
+    top: 70px;
+    right: 9px;
+    left: 9px;
+    width: auto;
+    max-width: none;
+    max-height: calc(100dvh - 84px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .perde-menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #tab-dashboard > .ml-home-feature-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #ml-featured-hero {
+    min-height: clamp(350px, 105vw, 440px);
+  }
+  #ml-featured-hero .ml-featured-slide {
+    min-width: 0;
+  }
+  #ml-featured-hero .ml-featured-copy {
+    max-width: 100%;
+  }
+  #ml-todays-pick {
+    min-width: 0;
+    max-width: 100%;
+  }
+  #tab-dashboard .ml-section-heading,
+  #tab-dashboard .perde-cinema-heading {
+    flex-wrap: wrap;
+  }
+  #tab-dashboard .ml-section-heading > div:first-child,
+  #tab-dashboard .perde-cinema-heading > div:first-child {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  #tab-dashboard .ml-section-heading > button,
+  #tab-dashboard .ml-watchlist-actions,
+  #tab-dashboard .perde-cinema-refresh {
+    max-width: 100%;
+    align-self: flex-start;
+  }
+  .ml-watchlist-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .perde-recommendation-carousel,
+  .perde-cinema-rail-heading,
+  .perde-editor-picks-carousel {
+    min-width: 0;
+  }
+  .perde-personal-recommendation-grid,
+  .perde-cinema-rail,
+  .perde-editor-picks-grid,
+  #recent-row.ml-recent-rail,
+  #watchlist-row.ml-watchlist-rail {
+    max-width: 100%;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: 3px;
+  }
+  .perde-personal-card {
+    flex-basis: min(88vw, 350px);
+    min-width: 0;
+  }
+  .perde-cinema-card {
+    flex: 0 0 clamp(118px, 36vw, 148px);
+  }
+  .ml-catalog-grid,
+  #library-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    min-width: 0;
+  }
+  #tab-library .ml-catalog-intro {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+  #tab-library .ml-home-search {
+    width: 100%;
+    max-width: none;
+  }
+  #tab-library .ml-genre-menu,
+  #tab-library .ml-library-filters,
+  #tab-library .flex.flex-wrap {
+    min-width: 0;
+    max-width: 100%;
+  }
+  #tab-library select,
+  #tab-library input {
+    max-width: 100%;
+  }
+  .perde-imdb-content,
+  .perde-profile-top-grid,
+  .perde-profile-favorite-grid {
+    min-width: 0;
+  }
+  #detail-modal > div,
+  #actor-modal > div,
+  #add-modal > div,
+  #admin-auth-modal > div {
+    width: min(100%, 620px);
+    max-width: calc(100vw - 18px);
+    max-height: calc(100dvh - 18px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .perde-trailer-player {
+    width: 100%;
+  }
+  .perde-compare-dialog,
+  .perde-rating-panel,
+  .perde-year-panel,
+  .perde-profile-section {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .ml-archive-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  main.max-w-7xl {
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+  .perde-header-inner {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .perde-header-compact .perde-brand-mark {
+    width: 33px;
+    height: 33px;
+    flex-basis: 33px;
+  }
+  .perde-header-compact .perde-brand-name {
+    font-size: 18px;
+  }
+  .perde-header-compact .perde-header-actions {
+    gap: 4px;
+  }
+  .perde-header-compact .perde-icon-action,
+  .perde-header-compact .perde-add-action {
+    width: 33px;
+    min-width: 33px;
+    height: 33px;
+    min-height: 33px;
+  }
+  #tab-dashboard {
+    gap: 23px !important;
+  }
+  .ml-section-heading h2,
+  #tab-dashboard .perde-cinema-heading h2 {
+    font-size: 17px !important;
+  }
+  .ml-section-heading p,
+  #tab-dashboard .perde-cinema-heading p {
+    max-width: 100%;
+    font-size: 10px;
+  }
+  #recent-row.ml-recent-rail > .ml-catalog-card,
+  #watchlist-row.ml-watchlist-rail > .ml-catalog-card {
+    flex-basis: 42vw;
+    width: 42vw;
+  }
+  .ml-catalog-grid,
+  #library-grid {
+    gap: 10px !important;
+  }
+  .ml-archive-stats > div {
+    min-width: 0;
+    padding: 10px;
+  }
+}
+@media (max-width: 360px) {
+  .perde-header-compact .perde-brand {
+    gap: 6px;
+  }
+  .perde-header-compact .perde-brand-name {
+    font-size: 16px;
+  }
+  .perde-header-compact .perde-header-actions {
+    gap: 3px;
+  }
+  .perde-header-compact .perde-icon-action,
+  .perde-header-compact .perde-add-action {
+    width: 31px;
+    min-width: 31px;
+    height: 31px;
+    min-height: 31px;
+  }
+  .perde-menu-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ml-archive-stats strong {
+    font-size: 17px;
+  }
+}
