@@ -2329,3 +2329,12 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .ml-recommendation-reason{display:inline-flex;align-items:center;gap:4px;color:var(--ml-accent);font-size:9px;font-weight:750;line-height:1.4}
 .ml-recommendation-reason i{font-size:8px}
 @media(max-width:560px){.ml-recommendation-actions{gap:8px}.ml-recommendation-refresh{padding:6px 8px;font-size:9px}}
+
+
+/* Streaming availability on personalized recommendation cards */
+.perde-recommendation-providers{display:flex;align-items:center;flex-wrap:wrap;gap:5px;min-height:22px;margin-top:2px}
+.perde-recommendation-provider-label{color:var(--ml-muted);font-size:7px;font-weight:900;letter-spacing:.09em;margin-right:2px}
+.perde-recommendation-provider{display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:3px 6px;border:1px solid var(--ml-border);border-radius:5px;background:var(--ml-surface-muted);color:var(--ml-text);font-size:8px;font-weight:700;line-height:1.2}
+.perde-recommendation-provider img{width:14px;height:14px;flex:0 0 14px;border-radius:3px;object-fit:cover}
+.perde-recommendation-provider span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.perde-recommendation-provider-empty{color:var(--ml-muted);font-size:8px;line-height:1.35}

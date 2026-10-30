@@ -700,11 +700,52 @@
                     container.innerHTML = '<p class="perde-recommendation-empty">Şu an yeni öneri bulunamadı. İzleme geçmişin değiştikçe önerilerin de yenilenecek.</p>';
                     return;
                 }
+        // Öneri kartları için Türkiye'deki abonelik platformlarını TMDB Watch Providers üzerinden getirir.
+        async function loadRecommendationProviders(item) {
+            const mediaType = item.type === 'tv' ? 'tv' : 'movie';
+            const tmdbId = item.tmdbId || (String(item.id || '').match(/^tmdb-(?:movie|tv)-(.+)$/) || [])[1] || '';
+            const targetId = 'perde-recommendation-providers-' + mediaType + '-' + tmdbId;
+            const target = document.getElementById(targetId);
+            if (!target || !tmdbId) return;
+            const cacheKey = mediaType + ':' + tmdbId;
+            try {
+                let result;
+                if (Object.prototype.hasOwnProperty.call(watchProviderCache, cacheKey)) {
+                    result = watchProviderCache[cacheKey];
+                } else {
+                    const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
+                    const response = await fetch('https://api.themoviedb.org/3/' + mediaType + '/' + encodeURIComponent(tmdbId) + '/watch/providers?api_key=' + encodeURIComponent(apiKey));
+                    if (!response.ok) throw new Error('providers');
+                    const data = await response.json();
+                    result = data.results && data.results.TR ? data.results.TR : null;
+                    watchProviderCache[cacheKey] = result;
+                }
+                const streaming = result ? [...(result.flatrate || []), ...(result.free || []), ...(result.ads || [])] : [];
+                const uniqueStreaming = streaming.filter((provider,index,list) => list.findIndex(entry => entry.provider_id === provider.provider_id) === index);
+                const paid = result ? [...(result.rent || []), ...(result.buy || [])] : [];
+                const uniquePaid = paid.filter((provider,index,list) => list.findIndex(entry => entry.provider_id === provider.provider_id) === index);
+                const selected = uniqueStreaming.length ? uniqueStreaming.slice(0,3) : uniquePaid.slice(0,2);
+                if (!selected.length) {
+                    target.innerHTML = '<span class="perde-recommendation-provider-empty">Türkiye platform bilgisi yok</span>';
+                    return;
+                }
+                const label = uniqueStreaming.length ? 'İZLE' : 'KİRALA / SATIN AL';
+                target.innerHTML = '<span class="perde-recommendation-provider-label">' + label + '</span>' +
+                    selected.map(provider => '<span class="perde-recommendation-provider" title="' + escapeProviderText(provider.provider_name) + '">' +
+                        (provider.logo_path ? '<img src="https://image.tmdb.org/t/p/w45' + escapeProviderText(provider.logo_path) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+                        '<span>' + escapeProviderText(provider.provider_name) + '</span></span>').join('');
+            } catch (error) {
+                if (target.isConnected) target.innerHTML = '<span class="perde-recommendation-provider-empty">Platform bilgisi alınamadı</span>';
+                console.warn('Öneri platform bilgileri alınamadı:', item.title, error);
+            }
+        }
+
                 container.innerHTML = recommendations.map(item => {
                     const id = escapeProviderText(item.id), title = escapeProviderText(item.title), poster = escapeProviderText(item.poster);
                     const reason = item.genreMatches > 0 ? 'Sevdiğin türlerle eşleşiyor' : 'İzlediklerine benzer';
-                    return '<article class="perde-personal-card"><button type="button" class="perde-personal-poster" onclick="openDetailModal(\'' + id + '\')"><img src="' + poster + '" alt="' + title + ' afişi" loading="lazy"><span><i class="fa-solid fa-star"></i> ' + escapeProviderText(item.imdb) + '</span></button><div class="perde-personal-card-copy"><button type="button" onclick="openDetailModal(\'' + id + '\')">' + title + '</button><small>' + escapeProviderText(item.year || 'Yıl bilinmiyor') + ' · ' + (item.type === 'tv' ? 'Dizi' : 'Film') + '</small><span class="perde-recommendation-reason"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + reason + '</span><button type="button" class="perde-personal-add" onclick="addSimilarProduction(\'' + id + '\', this)"><i class="fa-solid fa-plus"></i> İzleme listeme ekle</button></div></article>';
+                    return '<article class="perde-personal-card"><button type="button" class="perde-personal-poster" onclick="openDetailModal(\'' + id + '\')"><img src="' + poster + '" alt="' + title + ' afişi" loading="lazy"><span><i class="fa-solid fa-star"></i> ' + escapeProviderText(item.imdb) + '</span></button><div class="perde-personal-card-copy"><button type="button" onclick="openDetailModal(\'' + id + '\')">' + title + '</button><small>' + escapeProviderText(item.year || 'Yıl bilinmiyor') + ' · ' + (item.type === 'tv' ? 'Dizi' : 'Film') + '</small><span class="perde-recommendation-reason"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + reason + '</span><div class="perde-recommendation-providers" id="perde-recommendation-providers-' + item.type + '-' + escapeProviderText(item.tmdbId) + '"><span class="perde-recommendation-provider-empty">Platformlar yükleniyor…</span></div><button type="button" class="perde-personal-add" onclick="addSimilarProduction(\'' + id + '\', this)"><i class="fa-solid fa-plus"></i> İzleme listeme ekle</button></div></article>';
                 }).join('');
+                recommendations.forEach(item => loadRecommendationProviders(item));
             } catch (error) {
                 if (requestId === personalRecommendationRequest) container.innerHTML = '<p class="perde-recommendation-empty">Öneriler şu anda yüklenemedi. Biraz sonra tekrar deneyebilirsin.</p>';
                 console.warn('Kişisel öneriler alınamadı:', error);
