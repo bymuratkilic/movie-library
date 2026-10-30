@@ -894,36 +894,36 @@
                 modalContent.innerHTML = `
                     <div class="perde-imdb-detail">
                         <section class="perde-imdb-hero" style="--perde-hero-image:url('${m.backdrop || m.poster || ''}')">
-                            <img class="perde-imdb-backdrop" src="${m.backdrop || m.poster || ''}" alt="" onerror="this.src='${m.poster || ''}'">
+                            <img id="perde-detail-backdrop" class="perde-imdb-backdrop" src="${m.backdrop || m.poster || ''}" alt="" onerror="this.src='${m.poster || ''}'">
                             <div class="perde-imdb-hero-shade"></div>
                             <div class="perde-imdb-hero-top"><span class="perde-imdb-brand">My Library<span>ARŞİV</span></span><span class="perde-imdb-type">${m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM'}</span></div>
-                            <div class="perde-imdb-feature-art"><img src="${m.poster || m.backdrop || ''}" alt="${m.title} afişi" onerror="this.src='${m.backdrop || ''}'"><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-play" aria-label="${m.title} fragmanını oynat"><i class="fa-solid fa-play"></i><span>FRAGMANI İZLE</span></button></div>
-                            <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker">${m.year || 'Yıl bilinmiyor'} <span>•</span> ${m.runtime || 'Süre bilgisi yok'}</div><h2>${m.title}</h2><div class="perde-imdb-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div></div>
+                            <div class="perde-imdb-feature-art"><img id="perde-detail-hero-poster" src="${m.poster || m.backdrop || ''}" alt="${m.title} afişi" onerror="this.src='${m.backdrop || ''}'"><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-play" aria-label="${m.title} fragmanını oynat"><i class="fa-solid fa-play"></i><span>FRAGMANI İZLE</span></button></div>
+                            <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker"><span id="perde-detail-year">${m.year || 'Yıl bilinmiyor'}</span> <span>•</span> <span id="perde-detail-runtime">${m.runtime || 'Süre bilgisi yok'}</span></div><h2 id="perde-detail-title">${m.title}</h2><div class="perde-imdb-genres" id="perde-detail-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div></div>
                         </section>
                         <section class="perde-imdb-content">
                             <aside class="perde-imdb-poster-wrap">
-                                <img class="perde-imdb-poster" src="${m.poster || ''}" alt="${m.title} afişi" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80'">
+                                <img id="perde-detail-poster" class="perde-imdb-poster" src="${m.poster || ''}" alt="${m.title} afişi" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80'">
                                 <section class="perde-film-credits" aria-label="Film künyesi">
                                     <h3><i class="fa-solid fa-ticket"></i> Film Künyesi</h3>
                                     <dl>
-                                        <div><dt>Yönetmen</dt><dd>${m.director || 'Bilinmiyor'}</dd></div>
+                                        <div><dt>${m.type === 'tv' ? 'Yaratıcı' : 'Yönetmen'}</dt><dd id="perde-detail-director">${m.director || 'Bilinmiyor'}</dd></div>
                                         <div><dt>Yapım yılı</dt><dd>${m.year || 'Bilinmiyor'}</dd></div>
                                         <div><dt>Süre</dt><dd>${m.runtime || 'Bilinmiyor'}</dd></div>
-                                        <div class="perde-film-country-row"><dt>Ülke</dt><dd class="perde-film-country-list">${renderCountryCredits(m.country)}</dd></div>
+                                        <div class="perde-film-country-row"><dt>Ülke</dt><dd id="perde-detail-country" class="perde-film-country-list">${renderCountryCredits(m.country)}</dd></div>
                                         <div><dt>Tür</dt><dd>${m.genres && m.genres.length ? m.genres.join(', ') : 'Bilinmiyor'}</dd></div>
                                     </dl>
                                 </section>
                             </aside>
                             <div class="perde-imdb-main">
                                 <div class="perde-imdb-rating-row"><div class="perde-imdb-score"><strong>${m.imdb || '—'}</strong><span>IMDb</span></div><button onclick="toggleFavorite('${m.id}')" class="perde-imdb-fav ${m.favorite ? 'is-favorite' : ''}"><i class="fa-solid fa-heart"></i> ${m.favorite ? 'Favorilerde' : 'Favorilere Ekle'}</button></div>
-                                <p class="perde-imdb-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p>
+                                <p class="perde-imdb-overview" id="perde-detail-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p><div id="perde-detail-series-meta" class="perde-detail-series-meta" hidden></div>
                                 <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite">
                                     <div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div>
                                     <div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div>
                                 </section>
                                 
                                 <div class="perde-imdb-actions"><label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
-                                <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
+                                <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
                             </div>
                         </section>
                         <section class="perde-similar" aria-label="Benzer yapımlar">
@@ -935,6 +935,8 @@
 
                 loadSimilarProductions(m);
                 loadWatchProviders(m);
+                enrichDetailFromTmdb(m);
+                enrichDetailFromTmdb(m);
 
                 if (m.cast && m.cast.length > 0) {
                     m.cast.forEach((c, idx) => {
@@ -953,6 +955,96 @@
             }
         }
 
+        // Detay sayfasındaki eksik künye, oyuncu kadrosu ve fragman bilgilerini TMDB'den tamamlar.
+        const detailMetadataCache = {};
+        async function enrichDetailFromTmdb(movie) {
+            const mediaType = movie.type === 'tv' ? 'tv' : 'movie';
+            const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
+            const apiBase = 'https://api.themoviedb.org/3/';
+            const cacheKey = mediaType + ':' + (movie.tmdbId || movie.id || movie.title);
+            const setText = (id, value) => { const node = document.getElementById(id); if (node && value) node.textContent = value; };
+            try {
+                let tmdbId = movie.tmdbId || (String(movie.id || '').match(/^tmdb-(?:movie|tv)-(.+)$/) || [])[1] || '';
+                if (!tmdbId) {
+                    const searchUrl = apiBase + 'search/' + mediaType + '?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR&include_adult=false&query=' + encodeURIComponent(movie.title || '');
+                    const searchResponse = await fetch(searchUrl);
+                    if (!searchResponse.ok) throw new Error('TMDb araması başarısız');
+                    const searchData = await searchResponse.json();
+                    const year = String(movie.year || '');
+                    const results = searchData.results || [];
+                    const match = results.find(item => { const date = String(item.release_date || item.first_air_date || ''); return year && date.startsWith(year); }) || results[0];
+                    tmdbId = match && match.id;
+                }
+                if (!tmdbId) return;
+                let payload = detailMetadataCache[mediaType + ':' + tmdbId];
+                if (!payload) {
+                    const base = apiBase + mediaType + '/' + tmdbId + '?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR';
+                    const requests = await Promise.all([
+                        fetch(base),
+                        fetch(apiBase + mediaType + '/' + tmdbId + '/credits?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR'),
+                        fetch(apiBase + mediaType + '/' + tmdbId + '/videos?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR&include_video_language=tr-TR,en-US,null')
+                    ]);
+                    const responses = await Promise.all(requests.map(async response => response.ok ? response.json() : null));
+                    payload = { details: responses[0], credits: responses[1], videos: responses[2] };
+                    detailMetadataCache[mediaType + ':' + tmdbId] = payload;
+                }
+                const details = payload.details || {};
+                const credits = payload.credits || {};
+                const videos = payload.videos || {};
+                const esc = value => escapeProviderText(value);
+                const date = details.release_date || details.first_air_date || '';
+                if ((!movie.year || String(movie.year).toLowerCase().includes('bilinmiyor')) && date) { movie.year = date.slice(0, 4); setText('perde-detail-year', movie.year); }
+                if ((!movie.overview || movie.overview === 'Bu yapım için henüz bir konu özeti eklenmemiş.') && details.overview) { movie.overview = details.overview; setText('perde-detail-overview', details.overview); }
+                if ((!movie.genres || !movie.genres.length) && Array.isArray(details.genres)) {
+                    movie.genres = details.genres.map(genre => genre.name);
+                    const genreNode = document.getElementById('perde-detail-genres');
+                    if (genreNode) genreNode.innerHTML = movie.genres.map(genre => '<span>' + esc(genre) + '</span>').join('');
+                }
+                if ((!movie.poster || movie.poster.includes('unsplash')) && details.poster_path) {
+                    movie.poster = 'https://image.tmdb.org/t/p/w500' + details.poster_path;
+                    ['perde-detail-poster','perde-detail-hero-poster'].forEach(id => { const image = document.getElementById(id); if (image) image.src = movie.poster; });
+                }
+                if ((!movie.backdrop || movie.backdrop.includes('unsplash')) && details.backdrop_path) {
+                    movie.backdrop = 'https://image.tmdb.org/t/p/w1280' + details.backdrop_path;
+                    const image = document.getElementById('perde-detail-backdrop'); if (image) image.src = movie.backdrop;
+                }
+                if ((!movie.country || movie.country === 'Bilinmiyor') && details.production_countries && details.production_countries.length) {
+                    movie.country = details.production_countries.map(country => country.name).join(', ');
+                    setText('perde-detail-country', movie.country);
+                }
+                if (mediaType === 'movie' && (!movie.runtime || ['Bilinmiyor','Süre bilgisi yok'].includes(movie.runtime)) && details.runtime) { movie.runtime = details.runtime + ' dk'; setText('perde-detail-runtime', movie.runtime); }
+                let director = '';
+                if (mediaType === 'movie') director = (credits.crew || []).filter(person => person.job === 'Director').map(person => person.name).slice(0, 2).join(', ');
+                else director = (details.created_by || []).map(person => person.name).slice(0, 3).join(', ');
+                if ((!movie.director || movie.director === 'Bilinmiyor') && director) { movie.director = director; setText('perde-detail-director', director); }
+                if (mediaType === 'tv') {
+                    const seasons = Number(details.number_of_seasons) || 0;
+                    const episodes = Number(details.number_of_episodes) || 0;
+                    const status = details.status === 'Ended' ? 'Tamamlandı' : details.status === 'Returning Series' ? 'Devam ediyor' : details.status === 'Canceled' ? 'İptal edildi' : details.status || '';
+                    const episodeRuntime = Array.isArray(details.episode_run_time) && details.episode_run_time.length ? details.episode_run_time[0] + ' dk / bölüm' : '';
+                    const meta = document.getElementById('perde-detail-series-meta');
+                    if (meta && (seasons || episodes || status || episodeRuntime)) {
+                        meta.hidden = false;
+                        meta.innerHTML = [seasons ? '<span><b>' + seasons + '</b> sezon</span>' : '', episodes ? '<span><b>' + episodes + '</b> bölüm</span>' : '', episodeRuntime ? '<span>' + esc(episodeRuntime) + '</span>' : '', status ? '<span>' + esc(status) + '</span>' : ''].filter(Boolean).join('');
+                    }
+                    if ((!movie.runtime || ['Bilinmiyor','Süre bilgisi yok'].includes(movie.runtime)) && episodeRuntime) { movie.runtime = episodeRuntime; setText('perde-detail-runtime', episodeRuntime); }
+                }
+                const castGrid = document.getElementById('perde-detail-cast-grid');
+                if (castGrid && (!Array.isArray(movie.cast) || !movie.cast.length) && Array.isArray(credits.cast) && credits.cast.length) {
+                    movie.cast = credits.cast.slice(0, 12).map(person => ({ name: person.name || 'Bilinmiyor', role: person.character || 'Oyuncu', profile: person.profile_path ? 'https://image.tmdb.org/t/p/w185' + person.profile_path : '' }));
+                    castGrid.innerHTML = movie.cast.map((person, index) => {
+                        const name = String(person.name || 'Oyuncu');
+                        const jsName = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                        const avatar = person.profile || getAvatarUrl(name);
+                        return '<button onclick="openActorBio(\\'' + jsName + '\\')" class="perde-imdb-cast-card"><img id="actor-img-' + movie.id + '-' + index + '" src="' + esc(avatar) + '" alt="' + esc(name) + '" loading="lazy"><span><b>' + esc(name) + '</b><small>' + esc(person.role || 'Oyuncu') + '</small></span></button>';
+                    }).join('');
+                }
+                if (!movie.trailerUrl) {
+                    const trailer = (videos.results || []).find(video => video.site === 'YouTube' && video.type === 'Trailer' && video.official) || (videos.results || []).find(video => video.site === 'YouTube' && video.type === 'Trailer');
+                    if (trailer && trailer.key) { movie.trailerUrl = 'https://www.youtube.com/watch?v=' + trailer.key; if (movies.some(item => item.id === movie.id)) saveToLocalStorage(); }
+                }
+            } catch (error) { console.warn('Detay bilgileri tamamlanamadı:', error); }
+        }
         // Türkiye'deki yayın seçenekleri TMDB'nin JustWatch destekli Watch Providers verisinden alınır.
         const watchProviderCache = {};
         function escapeProviderText(value) {
