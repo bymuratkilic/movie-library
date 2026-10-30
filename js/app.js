@@ -808,52 +808,104 @@
         }
 
         // Oyuncu Biyografisi Açma Modal Fonksiyonu
+        async const personProfileCache = {};
+
         async function openActorBio(actorName) {
             if (!actorName) return;
-
-            const actor = actorDatabase[actorName] || {
-                bio: `${actorName}, sinema ve televizyon dünyasında tanınmış bir sanatçıdır. Biyografisi veritabanımızda güncellenmektedir.`,
-                filmography: movies.filter(m => m.cast && m.cast.some(c => c.name && c.name.toLowerCase() === actorName.toLowerCase())).map(m => ({
-                    title: m.title,
-                    year: m.year,
-                    role: m.cast.find(c => c.name && c.name.toLowerCase() === actorName.toLowerCase())?.role || 'Oyuncu'
-                }))
-            };
-
-            const modalId = 'actor-modal-img-' + Math.random().toString(36).substring(2, 7);
-
             const content = document.getElementById('actor-modal-content');
-            content.innerHTML = `
-                <div class="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
-                    <img id="${modalId}" src="${getAvatarUrl(actorName)}" class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl object-cover shadow-xl border border-white/10 shrink-0 bg-slate-800" onerror="this.src='${getAvatarUrl(actorName)}'">
-                    <div class="space-y-2 text-center sm:text-left">
-                        <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20 uppercase tracking-wider">Sanatçı Profili</span>
-                        <h3 class="text-xl font-bold dark:text-white text-slate-900">${actorName}</h3>
-                        <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">${actor.bio}</p>
-                    </div>
-                </div>
+            const modal = document.getElementById('actor-modal');
+            if (!content || !modal) return;
+            const safeName = escapeProviderText(actorName);
+            modal.classList.remove('hidden');
+            content.innerHTML = '<div class="perde-person-loading"><i class="fa-solid fa-spinner fa-spin"></i><span>' + safeName + ' profili yükleniyor…</span></div>';
 
-                <div class="mt-6 pt-4 border-t dark:border-clean-border border-light-border space-y-3">
-                    <h4 class="text-xs font-bold uppercase tracking-wider dark:text-clean-muted text-light-muted flex items-center gap-2">
-                        <i class="fa-solid fa-clapperboard text-blue-500"></i> Oynadığı Diğer Yapımlar
-                    </h4>
-                    <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
-                        ${(actor.filmography && actor.filmography.length > 0) ? actor.filmography.map(f => `
-                            <div class="flex items-center justify-between p-2.5 rounded-xl dark:bg-clean-bg bg-slate-50 border dark:border-clean-border border-light-border text-xs">
-                                <div>
-                                    <h5 class="font-bold dark:text-white text-slate-900">${f.title}</h5>
-                                    <p class="text-[10px] dark:text-clean-muted text-light-muted">${f.role}</p>
-                                </div>
-                                <span class="font-semibold text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded">${f.year}</span>
-                            </div>
-                        `).join('') : '<p class="text-xs text-slate-400">Kayıtlı başka bir yapım bulunamadı.</p>'}
-                    </div>
-                </div>
-            `;
+            const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
+            const apiBase = 'https://api.themoviedb.org/3/';
+            try {
+                let profile = personProfileCache[String(actorName).toLowerCase()];
+                if (!profile) {
+                    const searchResponse = await fetch(apiBase + 'search/person?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR&query=' + encodeURIComponent(actorName));
+                    if (!searchResponse.ok) throw new Error('Sanatçı araması başarısız');
+                    const searchData = await searchResponse.json();
+                    const people = searchData.results || [];
+                    const normalizedName = String(actorName).trim().toLocaleLowerCase('tr-TR');
+                    const person = people.find(item => String(item.name || '').trim().toLocaleLowerCase('tr-TR') === normalizedName) || people[0];
+                    if (!person) throw new Error('Sanatçı bulunamadı');
+                    const responses = await Promise.all([
+                        fetch(apiBase + 'person/' + person.id + '?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR'),
+                        fetch(apiBase + 'person/' + person.id + '/combined_credits?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR')
+                    ]);
+                    const details = responses[0].ok ? await responses[0].json() : person;
+                    const credits = responses[1].ok ? await responses[1].json() : {};
+                    profile = { person: details, credits: credits };
+                    personProfileCache[String(actorName).toLowerCase()] = profile;
+                }
 
-            document.getElementById('actor-modal').classList.remove('hidden');
+                const person = profile.person || {};
+                const isDirector = String(person.known_for_department || '').toLowerCase() === 'directing';
+                const castCredits = (profile.credits.cast || []).map(item => Object.assign({}, item, { profileRole: item.character || 'Oyuncu' }));
+                const crewCredits = (profile.credits.crew || []).filter(item => ['director','creator','writer'].includes(String(item.job || '').toLowerCase())).map(item => Object.assign({}, item, { profileRole: item.job || 'Ekip' }));
+                const credits = (isDirector ? crewCredits.concat(castCredits) : castCredits.concat(crewCredits))
+                    .filter(item => item && item.id && (item.title || item.name))
+                    .sort((a,b) => (Number(b.vote_count)||0) - (Number(a.vote_count)||0))
+                    .filter((item,index,array) => array.findIndex(other => other.id === item.id && (other.media_type || 'movie') === (item.media_type || 'movie')) === index)
+                    .slice(0,10);
 
-            fetchActorImage(actorName, modalId);
+                credits.forEach(item => {
+                    const mediaType = item.media_type === 'tv' ? 'tv' : 'movie';
+                    const id = 'tmdb-' + mediaType + '-' + item.id;
+                    if (!fetchedOnlineResults.some(existing => existing.id === id)) {
+                        fetchedOnlineResults.push({
+                            id: id, tmdbId: item.id, type: mediaType,
+                            title: item.title || item.name || 'İsimsiz yapım',
+                            year: String(item.release_date || item.first_air_date || '').slice(0,4) || 'Bilinmiyor',
+                            poster: item.poster_path ? 'https://image.tmdb.org/t/p/w500' + item.poster_path : getAvatarUrl(item.title || item.name),
+                            backdrop: item.backdrop_path ? 'https://image.tmdb.org/t/p/w1280' + item.backdrop_path : '',
+                            imdb: item.vote_average ? Number(item.vote_average).toFixed(1) : '—',
+                            overview: item.overview || '', genres: [], cast: [],
+                            director: 'Bilinmiyor', country: 'Bilinmiyor', runtime: 'Bilinmiyor'
+                        });
+                    }
+                });
+
+                const imageUrl = person.profile_path ? 'https://image.tmdb.org/t/p/w342' + person.profile_path : getAvatarUrl(actorName);
+                const biography = person.biography || (actorDatabase[actorName] && actorDatabase[actorName].bio) || 'Bu sanatçı için henüz bir biyografi eklenmemiş.';
+                const department = person.known_for_department === 'Acting' ? 'Oyuncu' : person.known_for_department === 'Directing' ? 'Yönetmen' : (person.known_for_department || 'Sanatçı');
+                const facts = [person.birthday ? 'Doğum: ' + person.birthday : '', person.place_of_birth || '', person.deathday ? 'Vefat: ' + person.deathday : ''].filter(Boolean);
+                const creditMarkup = credits.length ? credits.map(item => {
+                    const title = escapeProviderText(item.title || item.name || 'İsimsiz yapım');
+                    const year = escapeProviderText(String(item.release_date || item.first_air_date || '').slice(0,4) || '—');
+                    const role = escapeProviderText(item.profileRole || 'Ekip');
+                    const score = item.vote_average ? Number(item.vote_average).toFixed(1) : '—';
+                    const mediaId = 'tmdb-' + (item.media_type === 'tv' ? 'tv' : 'movie') + '-' + item.id;
+                    return '<button class="perde-person-credit" onclick="openDetailModal(\\'' + mediaId + '\\')"><span class="perde-person-credit-title">' + title + '</span><span class="perde-person-credit-meta">' + year + ' · ' + role + '</span><span class="perde-person-credit-score"><i class="fa-solid fa-star"></i> ' + score + '</span></button>';
+                }).join('') : '<p class="perde-person-empty">Bu sanatçı için öne çıkan yapım kaydı bulunamadı.</p>';
+
+                content.innerHTML = '<div class="perde-person-profile-head">' +
+                    '<img src="' + escapeProviderText(imageUrl) + '" alt="' + safeName + '" class="perde-person-profile-image" onerror="this.src=\\'' + getAvatarUrl(actorName) + '\\'">' +
+                    '<div class="perde-person-profile-intro"><span class="perde-person-department">' + escapeProviderText(department) + '</span><h3>' + safeName + '</h3>' +
+                    (facts.length ? '<p class="perde-person-facts">' + facts.map(escapeProviderText).join(' · ') + '</p>' : '') +
+                    '<p class="perde-person-biography">' + escapeProviderText(biography) + '</p></div></div>' +
+                    '<section class="perde-person-filmography"><div class="perde-person-section-heading"><h4><i class="fa-solid fa-clapperboard"></i> Öne çıkan yapımları</h4><span>' + credits.length + ' yapım</span></div>' +
+                    '<div class="perde-person-credit-grid">' + creditMarkup + '</div></section>' +
+                    '<p class="perde-person-source">Sanatçı ve filmografi bilgileri TMDB kaynaklıdır.</p>';
+            } catch (error) {
+                console.warn('Sanatçı profili yüklenemedi:', error);
+                const local = actorDatabase[actorName];
+                const localCredits = movies.filter(movie => movie.cast && movie.cast.some(person => person.name && person.name.toLowerCase() === actorName.toLowerCase()));
+                content.innerHTML = '<div class="perde-person-profile-head"><img src="' + getAvatarUrl(actorName) + '" alt="' + safeName + '" class="perde-person-profile-image"><div class="perde-person-profile-intro"><span class="perde-person-department">Sanatçı Profili</span><h3>' + safeName + '</h3><p class="perde-person-biography">' + escapeProviderText((local && local.bio) || 'Çevrimiçi sanatçı bilgisine şu anda ulaşılamıyor.') + '</p></div></div>' +
+                    '<section class="perde-person-filmography"><div class="perde-person-section-heading"><h4>Arşivindeki yapımlar</h4></div><div class="perde-person-credit-grid">' +
+                    (localCredits.map(movie => '<button class="perde-person-credit" onclick="openDetailModal(\\'' + String(movie.id).replace(/'/g, "\\\\'") + '\\')"><span class="perde-person-credit-title">' + escapeProviderText(movie.title) + '</span><span class="perde-person-credit-meta">' + escapeProviderText(movie.year || '') + '</span></button>').join('') || '<p class="perde-person-empty">Arşivinde kayıtlı başka yapım bulunamadı.</p>') +
+                    '</div></section>';
+            }
+        }
+
+        function renderPersonLinks(names) {
+            return String(names || 'Bilinmiyor').split(',').map(name => name.trim()).filter(Boolean).map(name => {
+                const safe = escapeProviderText(name);
+                const jsName = name.replace(/\\\\/g, "\\\\\\\\").replace(/'/g, "\\\\'");
+                return '<button type="button" class="perde-person-inline-link" onclick="openActorBio(\\'' + jsName + '\\')">' + safe + '</button>';
+            }).join(', ') || 'Bilinmiyor';
         }
 
         // YouTube bağlantısından video kimliğini çıkarır; API anahtarı gerektirmez.
@@ -980,7 +1032,7 @@
                                 <section class="perde-film-credits" aria-label="Film künyesi">
                                     <h3><i class="fa-solid fa-ticket"></i> Film Künyesi</h3>
                                     <dl>
-                                        <div><dt>${m.type === 'tv' ? 'Yaratıcı' : 'Yönetmen'}</dt><dd id="perde-detail-director">${m.director || 'Bilinmiyor'}</dd></div>
+                                        <div><dt>${m.type === 'tv' ? 'Yaratıcı' : 'Yönetmen'}</dt><dd id="perde-detail-director">${renderPersonLinks(m.director)}</dd></div>
                                         <div><dt>Yapım yılı</dt><dd>${m.year || 'Bilinmiyor'}</dd></div>
                                         <div><dt>Süre</dt><dd>${m.runtime || 'Bilinmiyor'}</dd></div>
                                         <div class="perde-film-country-row"><dt>Ülke</dt><dd id="perde-detail-country" class="perde-film-country-list">${renderCountryCredits(m.country)}</dd></div>
@@ -1089,7 +1141,7 @@
                 let director = '';
                 if (mediaType === 'movie') director = (credits.crew || []).filter(person => person.job === 'Director').map(person => person.name).slice(0, 2).join(', ');
                 else director = (details.created_by || []).map(person => person.name).slice(0, 3).join(', ');
-                if ((!movie.director || movie.director === 'Bilinmiyor') && director) { movie.director = director; setText('perde-detail-director', director); }
+                if ((!movie.director || movie.director === 'Bilinmiyor') && director) { movie.director = director; const directorNode = document.getElementById('perde-detail-director'); if (directorNode) directorNode.innerHTML = renderPersonLinks(director); }
                 if (mediaType === 'tv') {
                     const seasons = Number(details.number_of_seasons) || 0;
                     const episodes = Number(details.number_of_episodes) || 0;
