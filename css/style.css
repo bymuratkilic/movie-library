@@ -3313,3 +3313,44 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
  .perde-trailer-save button{min-height:39px}
 }
 @media(max-width:380px){.perde-trailer-actions a{flex:1 1 calc(50% - 6px)}}
+
+
+/* Fragman popup konu özeti ve alt kapatma aksiyonu */
+.perde-trailer-overview{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  overflow:hidden;
+  font-size:14px;
+  line-height:1.65;
+  max-height:calc(1.65em * 3);
+}
+.perde-trailer-close-wrap{
+  display:flex;
+  justify-content:center;
+  margin-top:20px;
+  padding-top:16px;
+  border-top:1px solid var(--ml-border);
+}
+.perde-trailer-close-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  width:100%;
+  min-height:44px;
+  padding:0 18px;
+  border:1px solid var(--ml-border);
+  border-radius:11px;
+  background:var(--ml-surface-muted);
+  color:var(--ml-text);
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  transition:background .2s ease,transform .2s ease;
+}
+.perde-trailer-close-button:hover{background:var(--ml-border);transform:translateY(-1px)}
+@media(max-width:640px){
+  .perde-trailer-overview{font-size:14px;line-height:1.6;max-height:calc(1.6em * 3)}
+  .perde-trailer-close-button{min-height:46px;font-size:13px}
+}
