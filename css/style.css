@@ -1500,3 +1500,24 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
     font-size:10px;
   }
 }
+
+
+/* Library display mode switch */
+.ml-library-view-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:-8px}
+.ml-library-view-label{font-size:9px;font-weight:800;letter-spacing:.14em;color:var(--ml-muted)}
+.ml-library-view-switch{display:inline-flex;gap:3px;padding:3px;border:1px solid var(--ml-border);border-radius:8px;background:var(--ml-surface)}
+.ml-library-view-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:34px;padding:0 11px;border:1px solid transparent;border-radius:6px;color:var(--ml-muted);font-size:10px;font-weight:750;transition:background .18s ease,color .18s ease,border-color .18s ease}
+.ml-library-view-button.is-active{background:var(--ml-surface-muted);border-color:var(--ml-border);color:var(--ml-text)}
+.ml-library-view-button:focus-visible{outline:2px solid var(--ml-accent);outline-offset:2px}
+#library-grid.ml-library-list-view{display:flex!important;flex-direction:column;gap:9px!important}
+#library-grid.ml-library-list-view .ml-catalog-card{display:flex;align-items:stretch;min-height:112px;border-radius:9px}
+#library-grid.ml-library-list-view .ml-catalog-poster{width:76px;min-width:76px;aspect-ratio:2/3}
+#library-grid.ml-library-list-view .ml-catalog-type{top:5px;left:5px;padding:4px 5px;font-size:7px}
+#library-grid.ml-library-list-view .ml-catalog-rating{top:auto;right:5px;bottom:5px;padding:4px 5px;font-size:8px}
+#library-grid.ml-library-list-view .ml-catalog-favorite{top:5px;left:auto;right:5px;padding:4px 5px}
+#library-grid.ml-library-list-view .ml-catalog-overlay{display:none}
+#library-grid.ml-library-list-view .ml-catalog-meta{display:flex;flex:1;flex-direction:column;justify-content:center;min-width:0;padding:12px 16px}
+#library-grid.ml-library-list-view .ml-catalog-meta h3{min-height:0;font-size:13px;-webkit-line-clamp:1}
+#library-grid.ml-library-list-view .ml-catalog-sub{margin-top:7px;font-size:10px}
+#library-grid.ml-library-list-view .ml-catalog-status{margin-top:9px;padding-top:7px;font-size:9px}
+@media(max-width:767px){.ml-library-view-toolbar{margin-top:-3px}.ml-library-view-button{min-height:36px;padding:0 10px}#library-grid.ml-library-list-view .ml-catalog-card{min-height:96px}#library-grid.ml-library-list-view .ml-catalog-poster{width:64px;min-width:64px}#library-grid.ml-library-list-view .ml-catalog-meta{padding:9px 11px}#library-grid.ml-library-list-view .ml-catalog-meta h3{font-size:11px}#library-grid.ml-library-list-view .ml-catalog-sub{font-size:9px}}
