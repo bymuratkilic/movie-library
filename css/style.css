@@ -4165,3 +4165,41 @@ html, body {
     font-size: 17px;
   }
 }
+
+
+/* PERDE düzeltme — anasayfa Son Eklenenler ve İzleme Listem afişleri */
+#recent-row.ml-recent-rail > .ml-home-poster-card,
+#watchlist-row.ml-watchlist-rail > .ml-home-poster-card {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  min-width: 0;
+  overflow: hidden !important;
+  border: 1px solid var(--ml-border) !important;
+  border-radius: 14px !important;
+  isolation: isolate;
+  contain: paint;
+  background: var(--ml-surface) !important;
+  clip-path: inset(0 round 14px);
+}
+#recent-row.ml-recent-rail > .ml-home-poster-card > .ml-catalog-poster,
+#watchlist-row.ml-watchlist-rail > .ml-home-poster-card > .ml-catalog-poster {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden !important;
+  border-radius: 13px 13px 0 0 !important;
+}
+#recent-row.ml-recent-rail > .ml-home-poster-card .ml-catalog-poster > img,
+#watchlist-row.ml-watchlist-rail > .ml-home-poster-card .ml-catalog-poster > img {
+  max-width: 100%;
+  border-radius: inherit;
+}
+#recent-row.ml-recent-rail > .ml-home-poster-card .ml-home-poster-gradient,
+#watchlist-row.ml-watchlist-rail > .ml-home-poster-card .ml-home-poster-gradient,
+#recent-row.ml-recent-rail > .ml-home-poster-card .ml-home-poster-info,
+#watchlist-row.ml-watchlist-rail > .ml-home-poster-card .ml-home-poster-info,
+#recent-row.ml-recent-rail > .ml-home-poster-card .ml-home-poster-preview,
+#watchlist-row.ml-watchlist-rail > .ml-home-poster-card .ml-home-poster-preview {
+  border-radius: 0 0 13px 13px;
+}
