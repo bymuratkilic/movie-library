@@ -1598,3 +1598,37 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .ml-recommendation-note{display:inline-flex;align-items:center;gap:6px;color:var(--ml-accent);font-size:9px;font-weight:800;white-space:nowrap}
 @media(max-width:900px){.perde-personal-recommendation-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.perde-personal-recommendation-grid{grid-template-columns:1fr}.perde-personal-card{grid-template-columns:72px minmax(0,1fr)}.ml-recommendation-note{display:none}}
+
+
+/* Perde sanatçı ve yönetmen profilleri */
+.perde-person-loading { display:flex; align-items:center; justify-content:center; gap:10px; min-height:180px; color:var(--ml-muted); font-size:13px; }
+.perde-person-profile-head { display:grid; grid-template-columns:150px minmax(0,1fr); gap:22px; align-items:start; }
+.perde-person-profile-image { width:150px; aspect-ratio:2/3; object-fit:cover; border-radius:13px; background:var(--ml-surface-muted); border:1px solid var(--ml-border); }
+.perde-person-profile-intro { min-width:0; }
+.perde-person-department { display:inline-flex; padding:5px 9px; border-radius:999px; color:var(--ml-accent); background:var(--ml-accent-soft); font-size:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+.perde-person-profile-intro h3 { margin:10px 0 5px; color:var(--ml-text); font-size:23px; line-height:1.2; font-weight:800; }
+.perde-person-facts { margin:0 0 10px; color:var(--ml-muted); font-size:11px; line-height:1.6; }
+.perde-person-biography { color:var(--ml-text); font-size:12px; line-height:1.75; white-space:pre-line; max-height:180px; overflow:auto; }
+.perde-person-filmography { margin-top:22px; padding-top:17px; border-top:1px solid var(--ml-border); }
+.perde-person-section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.perde-person-section-heading h4 { display:flex; align-items:center; gap:8px; color:var(--ml-text); font-size:13px; font-weight:800; }
+.perde-person-section-heading h4 i { color:var(--ml-accent); }
+.perde-person-section-heading > span { color:var(--ml-muted); font-size:10px; }
+.perde-person-credit-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.perde-person-credit { position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:5px; min-width:0; padding:12px 38px 12px 12px; border:1px solid var(--ml-border); border-radius:10px; background:var(--ml-surface-muted); color:var(--ml-text); text-align:left; transition:border-color .18s ease,transform .18s ease; }
+.perde-person-credit:hover { border-color:var(--ml-accent); transform:translateY(-1px); }
+.perde-person-credit-title { max-width:100%; overflow:hidden; color:var(--ml-text); font-size:12px; font-weight:750; text-overflow:ellipsis; white-space:nowrap; }
+.perde-person-credit-meta { color:var(--ml-muted); font-size:10px; }
+.perde-person-credit-score { position:absolute; top:12px; right:10px; color:var(--ml-accent); font-size:10px; font-weight:800; }
+.perde-person-credit-score i { font-size:9px; }
+.perde-person-empty,.perde-person-source { color:var(--ml-muted); font-size:11px; line-height:1.6; }
+.perde-person-source { margin-top:14px; text-align:right; }
+.perde-person-inline-link { display:inline; padding:0; border:0; background:transparent; color:var(--ml-accent); font:inherit; font-weight:650; cursor:pointer; }
+.perde-person-inline-link:hover { text-decoration:underline; }
+@media (max-width:560px) {
+ .perde-person-profile-head { grid-template-columns:94px minmax(0,1fr); gap:13px; }
+ .perde-person-profile-image { width:94px; border-radius:10px; }
+ .perde-person-profile-intro h3 { font-size:18px; margin-top:8px; }
+ .perde-person-biography { max-height:155px; font-size:11px; }
+ .perde-person-credit-grid { grid-template-columns:1fr; }
+}
