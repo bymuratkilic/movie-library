@@ -3181,3 +3181,33 @@ html.dark .perde-cinema-card-image{border-color:#2a3b5e;background:#111a2c}
 
 /* IMDb marka yazısı: sarı zemin üzerinde siyah IMDb harfleri */
 .perde-imdb-hero-rating .imdb-brand-badge .imdb-brand-word{background:#f5c518!important;color:#111!important;border:1px solid #111!important;}
+
+
+/* Perde dizi detay metaverileri: tema uyumlu, rafine bilgi rozetleri */
+#perde-detail-series-meta{
+ display:flex;flex-wrap:wrap;align-items:center;gap:9px;
+ margin:16px 0 20px;padding:0;border:0;background:transparent;
+}
+#perde-detail-series-meta>span{
+ display:inline-flex;align-items:center;gap:7px;min-height:34px;
+ padding:7px 12px;border:1px solid var(--ml-border);
+ border-radius:9px;background:var(--ml-surface-muted);
+ color:var(--ml-muted);font-size:11px;font-weight:650;letter-spacing:.01em;
+ box-shadow:0 2px 7px rgba(20,35,60,.045);
+ transition:transform .18s ease,border-color .18s ease,background .18s ease;
+}
+#perde-detail-series-meta>span:hover{transform:translateY(-1px);border-color:var(--ml-accent)}
+#perde-detail-series-meta>span b{color:var(--ml-text);font-size:13px;font-weight:850}
+#perde-detail-series-meta>span:last-child{
+ border-color:color-mix(in srgb,var(--ml-accent) 28%,var(--ml-border));
+ background:color-mix(in srgb,var(--ml-accent) 9%,var(--ml-surface));
+ color:var(--ml-text);
+}
+#perde-detail-series-meta>span:last-child:has(:not(b)){font-weight:700}
+html.dark #perde-detail-series-meta>span{background:#111e38;border-color:#2e4778;color:#aebddd;box-shadow:0 3px 10px rgba(0,0,0,.16)}
+html.dark #perde-detail-series-meta>span b{color:#f0f4ff}
+html.dark #perde-detail-series-meta>span:last-child{background:rgba(99,132,205,.13);border-color:rgba(115,151,226,.35);color:#dce7ff}
+html.light #perde-detail-series-meta>span{background:#f3f6fc;border-color:#dce5f4;color:#61718c}
+html.light #perde-detail-series-meta>span b{color:#23395f}
+html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-color:#d2def8;color:#31528f}
+@media(max-width:600px){#perde-detail-series-meta{gap:7px;margin:13px 0 17px}#perde-detail-series-meta>span{min-height:31px;padding:6px 9px;font-size:10px}#perde-detail-series-meta>span b{font-size:12px}}
