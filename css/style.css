@@ -1294,3 +1294,21 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .perde-similar-add:hover { border-color: var(--ml-accent); color: var(--ml-accent); }
 .perde-similar-loading,.perde-similar-empty { color: var(--ml-muted); font-size: 11px; padding: 10px 0; }
 @media (max-width: 767px) { .perde-similar { padding: 20px 16px 22px; } .perde-similar-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; } }
+
+
+/* Dinamik kategori menüsü */
+.ml-genre-menu { position:relative; z-index:20; }
+.ml-genre-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; padding:12px 15px; border:1px solid var(--ml-border); border-radius:12px; background:var(--ml-surface); color:var(--ml-text); font-size:12px; font-weight:750; text-align:left; }
+.ml-genre-toggle span { display:flex; align-items:center; gap:9px; }
+.ml-genre-toggle span>i { color:var(--ml-accent); }
+.ml-genre-toggle small { padding:3px 7px; border-radius:20px; background:var(--ml-accent-soft); color:var(--ml-accent); font-size:9px; font-weight:800; }
+.ml-genre-toggle>i { color:var(--ml-muted); font-size:10px; }
+.ml-genre-panel { margin-top:8px; padding:15px; border:1px solid var(--ml-border); border-radius:14px; background:var(--ml-surface); box-shadow:var(--ml-shadow); }
+.ml-genre-panel-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:6px; margin-bottom:12px; }
+.ml-genre-panel-heading strong { color:var(--ml-text); font-size:11px; }
+.ml-genre-panel-heading span,.ml-genre-empty { color:var(--ml-muted); font-size:10px; }
+.ml-genre-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(145px,1fr)); gap:7px; }
+.ml-genre-item { display:flex; align-items:center; justify-content:space-between; gap:8px; min-width:0; padding:9px 10px; border:1px solid var(--ml-border); border-radius:9px; background:var(--ml-surface-muted); color:var(--ml-text); text-align:left; font-size:10px; font-weight:650; transition:border-color .15s,background .15s; }
+.ml-genre-item:hover,.ml-genre-item.active { border-color:var(--ml-accent); background:var(--ml-accent-soft); }
+.ml-genre-item b { flex:0 0 auto; min-width:22px; padding:3px 5px; border-radius:6px; background:var(--ml-surface); color:var(--ml-accent); font-size:9px; text-align:center; }
+.ml-genre-empty { padding:8px 2px; }
