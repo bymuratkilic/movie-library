@@ -611,6 +611,13 @@
         let personalRecommendationRequest = 0;
         let personalRecommendationRefreshCycle = 0;
         let personalRecommendationPreviousIds = new Set();
+        function scrollPersonalRecommendations(direction) {
+            const rail = document.getElementById('perde-personal-recommendations');
+            if (!rail) return;
+            const distance = Math.max(rail.clientWidth * 0.85, 280);
+            rail.scrollBy({ left: direction * distance, behavior: 'smooth' });
+        }
+
         async function renderPersonalRecommendations() {
             const container = document.getElementById('perde-personal-recommendations');
             if (!container) return;
