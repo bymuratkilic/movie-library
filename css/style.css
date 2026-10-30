@@ -3354,3 +3354,98 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
   .perde-trailer-overview{font-size:14px;line-height:1.6;max-height:calc(1.6em * 3)}
   .perde-trailer-close-button{min-height:46px;font-size:13px}
 }
+
+
+/* PERDE Tasarım Aşaması 1 — anasayfa görsel bütünlüğü */
+#tab-dashboard {
+  gap: clamp(26px, 3.2vw, 42px) !important;
+  position: relative;
+}
+main.max-w-7xl {
+  max-width: 1480px;
+}
+#tab-dashboard > section {
+  min-width: 0;
+}
+.ml-home-feature-row {
+  align-items: stretch;
+  gap: clamp(14px, 1.8vw, 22px) !important;
+}
+#ml-featured-hero,
+#ml-todays-pick {
+  border-radius: 18px !important;
+  box-shadow: 0 14px 38px rgba(0,0,0,.13);
+}
+#ml-featured-hero {
+  border-color: color-mix(in srgb, var(--ml-border) 72%, transparent) !important;
+}
+.ml-catalog-section {
+  gap: 18px;
+}
+.ml-catalog-section > .ml-section-heading {
+  align-items: flex-end;
+  padding: 0 0 13px;
+  border-bottom: 1px solid var(--ml-border);
+}
+.ml-section-heading > div { min-width: 0; }
+.ml-section-kicker {
+  margin-bottom: 6px;
+  font-size: 9px;
+  letter-spacing: .19em;
+}
+.ml-section-heading h2 {
+  margin-top: 0 !important;
+  font-size: clamp(19px, 2vw, 23px) !important;
+  line-height: 1.25 !important;
+  letter-spacing: -.045em !important;
+}
+.ml-section-heading p {
+  max-width: 620px;
+  margin-top: 6px !important;
+  font-size: 11px;
+  line-height: 1.65;
+}
+.ml-section-heading > button,
+.ml-watchlist-actions > button {
+  flex: 0 0 auto;
+}
+#recent-row,
+#watchlist-row {
+  align-items: start;
+  row-gap: 22px !important;
+}
+.ml-archive-stats {
+  margin-top: 2px;
+  padding: 19px 22px !important;
+  border-radius: 15px;
+}
+.ml-archive-stats > div {
+  min-width: 0;
+}
+.perde-cinema-showcase {
+  border-radius: 19px !important;
+}
+.ml-personal-recommendations {
+  border-radius: 18px;
+}
+@media (min-width: 768px) {
+  #tab-dashboard { padding-top: 4px; }
+  .ml-section-heading h2 i { margin-right: 5px; }
+}
+@media (max-width: 767px) {
+  #tab-dashboard { gap: 27px !important; }
+  .ml-home-feature-row { gap: 12px !important; }
+  #ml-featured-hero,
+  #ml-todays-pick { border-radius: 14px !important; }
+  .ml-catalog-section { gap: 14px; }
+  .ml-catalog-section > .ml-section-heading {
+    align-items: flex-start;
+    padding-bottom: 11px;
+  }
+  .ml-section-heading h2 { font-size: 18px !important; }
+  .ml-section-heading p { font-size: 10px; }
+  .ml-archive-stats {
+    padding: 14px 12px !important;
+    border-radius: 12px;
+  }
+}
