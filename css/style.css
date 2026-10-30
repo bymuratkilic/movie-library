@@ -3807,3 +3807,96 @@ html.light .perde-menu-grid>button:hover{
     flex: 1 1 auto;
   }
 }
+
+
+/* PERDE Tasarım Aşaması 5 — renk, arka plan ve tipografi */
+:root,
+html.light {
+  --ml-bg: #f5f6f8;
+  --ml-surface: #ffffff;
+  --ml-surface-muted: #eef1f5;
+  --ml-text: #202633;
+  --ml-muted: #697386;
+  --ml-border: #e1e5ec;
+  --ml-accent: #4268d5;
+  --ml-accent-soft: #eaf0ff;
+  --ml-success: #23765f;
+  --ml-danger: #b34f60;
+  --ml-shadow: 0 8px 26px rgba(28, 39, 60, .055);
+}
+html.dark {
+  --ml-bg: #080d18;
+  --ml-surface: #0e1627;
+  --ml-surface-muted: #141f33;
+  --ml-text: #edf2fc;
+  --ml-muted: #9aa8bf;
+  --ml-border: #26344c;
+  --ml-accent: #7898ff;
+  --ml-accent-soft: #1b2b50;
+  --ml-success: #79d8b5;
+  --ml-danger: #ff8799;
+  --ml-shadow: 0 14px 36px rgba(0, 0, 0, .28);
+}
+html {
+  background-color: var(--ml-bg);
+}
+body {
+  background-color: var(--ml-bg) !important;
+  background-image:
+    radial-gradient(ellipse at 12% 0%, color-mix(in srgb, var(--ml-accent) 5%, transparent), transparent 34%),
+    radial-gradient(ellipse at 92% 18%, color-mix(in srgb, var(--ml-accent) 3%, transparent), transparent 30%);
+  color: var(--ml-text) !important;
+  font-family: var(--ml-font-ui, "Plus Jakarta Sans", sans-serif);
+  font-size: 15px;
+  line-height: 1.65;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, h4,
+.ml-catalog-intro h1,
+.ml-section-heading h2,
+.perde-imdb-hero-copy h2 {
+  font-family: var(--ml-font-display, "Manrope", "Plus Jakarta Sans", sans-serif);
+  color: var(--ml-text);
+  text-wrap: balance;
+}
+h1, h2, h3 {
+  line-height: 1.25;
+}
+p {
+  text-wrap: pretty;
+}
+::selection {
+  background: color-mix(in srgb, var(--ml-accent) 28%, var(--ml-surface));
+  color: var(--ml-text);
+}
+.glass-panel,
+.perde-poster-card,
+.ml-catalog-card,
+.ml-catalog-card,
+.perde-imdb-detail {
+  border-color: var(--ml-border);
+}
+.input-field,
+.ml-home-search,
+.ml-category-search,
+.ml-header-search {
+  background-color: var(--ml-surface);
+  border-color: var(--ml-border);
+}
+.input-field:focus,
+.ml-home-search:focus-within,
+.ml-category-search:focus-within,
+.ml-header-search:focus-within {
+  border-color: var(--ml-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ml-accent) 14%, transparent);
+}
+.ml-section-kicker,
+.ml-catalog-kicker {
+  color: var(--ml-accent);
+}
+@media (max-width: 767px) {
+  body { font-size: 14px; line-height: 1.6; }
+}
