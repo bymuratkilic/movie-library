@@ -3223,3 +3223,48 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
 .perde-cinema-card:focus-visible{outline:2px solid var(--ml-accent);outline-offset:3px}
 .perde-cinema-card-image{transition:border-color .2s ease,box-shadow .2s ease}
 .perde-cinema-card:hover .perde-cinema-card-image{border-color:var(--ml-accent);box-shadow:0 10px 24px rgba(24,48,95,.18)}
+
+
+/* PERDE compact navigation refresh */
+.perde-header-compact{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.perde-header-compact .perde-brand{gap:10px}
+.perde-header-compact .perde-brand-mark{width:40px;height:40px;flex-basis:40px;border-radius:12px}
+.perde-header-compact .perde-brand-mark svg{width:27px;height:27px}
+.perde-header-compact .perde-brand-name{font-size:22px}
+.perde-header-compact .perde-brand-eyebrow{display:none}
+.perde-header-compact .perde-brand-tagline{font-size:9px;margin-top:1px}
+.perde-header-compact .perde-header-actions{gap:8px}
+.perde-menu-trigger{font-size:15px}
+.perde-menu-panel{position:absolute;right:max(24px,calc((100vw - 1376px)/2));top:calc(100% + 10px);width:min(440px,calc(100vw - 28px));padding:18px;border:1px solid var(--ml-border);border-radius:18px;background:var(--ml-surface);box-shadow:0 22px 65px rgba(0,0,0,.22);z-index:60;animation:perdeMenuIn .18s ease-out}
+.perde-menu-heading,.perde-search-top{display:flex;align-items:center;justify-content:space-between;color:var(--ml-muted);font-size:9px;font-weight:850;letter-spacing:.16em;margin-bottom:12px}
+.perde-menu-heading button,.perde-search-top button{width:30px;height:30px;border:1px solid var(--ml-border);border-radius:9px;background:var(--ml-surface-muted);color:var(--ml-text)}
+.perde-menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.perde-menu-grid>button{display:flex;align-items:center;gap:11px;min-width:0;padding:12px;border:1px solid transparent;border-radius:12px;background:var(--ml-surface-muted);color:var(--ml-text);text-align:left}
+.perde-menu-grid>button:hover{border-color:var(--ml-accent);background:var(--ml-accent-soft)}
+.perde-menu-grid>button>i{width:18px;text-align:center;color:var(--ml-accent)}
+.perde-menu-grid b,.perde-menu-grid small{display:block}
+.perde-menu-grid b{font-size:11px}.perde-menu-grid small{margin-top:3px;color:var(--ml-muted);font-size:9px}
+.perde-search-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-start;justify-content:center;padding: min(16vh,120px) 16px 24px}
+.perde-search-backdrop{position:absolute;inset:0;background:rgba(4,8,18,.68);backdrop-filter:blur(5px)}
+.perde-search-dialog{position:relative;width:min(650px,100%);padding:19px;border:1px solid var(--ml-border);border-radius:20px;background:var(--ml-surface);box-shadow:0 28px 90px rgba(0,0,0,.35);animation:perdeMenuIn .18s ease-out}
+.perde-search-top{margin-bottom:15px}.perde-search-top span{display:flex;align-items:center;gap:8px}.perde-search-top span i{color:var(--ml-accent)}
+.perde-search-field{display:flex;align-items:center;gap:12px;height:54px;padding:0 14px;border:1px solid var(--ml-accent);border-radius:13px;background:var(--ml-surface-muted);box-shadow:0 0 0 3px var(--ml-accent-soft)}
+.perde-search-field>i{color:var(--ml-accent)}
+.perde-search-field input{flex:1;min-width:0;border:0!important;outline:0!important;background:transparent!important;color:var(--ml-text)!important;font:600 14px var(--ml-font-ui)}
+.perde-search-field kbd{padding:4px 7px;border:1px solid var(--ml-border);border-radius:6px;color:var(--ml-muted);font-size:9px}
+.perde-search-hint{margin:14px 2px 1px;color:var(--ml-muted);font-size:10px}
+@keyframes perdeMenuIn{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:767px){
+ .perde-header-inner{padding:0 15px}.perde-header-compact{min-height:60px}
+ .perde-header-compact .perde-brand-mark{width:35px;height:35px;flex-basis:35px}
+ .perde-header-compact .perde-brand-name{font-size:19px}
+ .perde-header-compact .perde-brand-tagline{display:none}
+ .perde-header-compact .perde-header-actions{gap:6px}
+ .perde-header-compact .perde-icon-action{width:36px;height:36px;border-radius:10px}
+ .perde-header-compact .perde-add-action{width:36px;min-height:36px;padding:0;border-radius:10px}
+ .perde-header-compact .perde-add-action span{display:none}
+ .perde-menu-panel{position:fixed;top:68px;right:10px;width:calc(100vw - 20px);max-height:calc(100dvh - 84px);overflow:auto;padding:14px}
+ .perde-menu-grid{gap:6px}.perde-menu-grid>button{padding:10px}
+ .perde-search-overlay{padding:12vh 12px 20px}
+ .perde-search-dialog{padding:15px;border-radius:17px}
+}
