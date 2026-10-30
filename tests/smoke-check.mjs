@@ -17,6 +17,7 @@ const requiredIds = [
   'tab-stats',
   'tab-profile',
   'perde-year-review',
+  'perde-achievements',
   'tab-admin',
   'detail-modal',
   'detail-modal-content',
@@ -40,12 +41,16 @@ for (const fn of [
   'exportArchiveJSON',
   'importArchiveJSON',
   'renderCharts',
-  'renderYearInReview'
+  'renderYearInReview',
+  'renderPerdeAchievements'
 ]) {
   assert.match(app, new RegExp(`function\\s+${fn}\\s*\\(`), `Missing expected feature function: ${fn}`);
 }
 
 assert.match(html, /perde-year-panel/, 'Annual cinema recap section must exist');
+assert.match(html, /perde-achievement-grid/, 'Personal achievements section must exist');
+assert.match(app, /renderPerdeAchievements\(\);/, 'Profile must refresh achievements when rendered');
+assert.match(app, /watch-100/, '100 watched titles achievement must be defined');
 assert.match(app, /perde_movies_archive_v1/, 'The existing local archive storage key must remain compatible');
 assert.match(app, /item\.title\.trim\(\)\.length > 0/, 'Imported/local archive entries must include a non-empty title');
 assert.match(app, /renderLibrary\(\);\s*renderAdminTable\(\);/, 'Import must refresh the library and admin views');
