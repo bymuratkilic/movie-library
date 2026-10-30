@@ -160,15 +160,17 @@
             <section class="ml-catalog-section"><div class="ml-section-heading"><div><span class="ml-section-kicker">KOLEKSİYONUNDAN</span><h2>Editörün Seçtikleri</h2><p>En yüksek puanlı yapımlarından özel bir seçki.</p></div><button type="button" onclick="openHomeCollection('editor')">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></button></div><div id="editor-picks-grid" class="ml-catalog-grid"></div></section>
 
             <!-- Recently Added -->
-            <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-base font-bold dark:text-white text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-sparkles text-rose-500 text-xs"></i>Son Eklenenler
-                    </h2>
-                    <button type="button" onclick="openHomeCollection('recent')" class="text-xs text-rose-400 hover:underline font-medium">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></button>
+            <section id="ml-recent-section" class="ml-catalog-section ml-recent-section">
+                <div class="ml-section-heading">
+                    <div>
+                        <span class="ml-section-kicker">ARŞİVİNDEN</span>
+                        <h2><i class="fa-solid fa-sparkles"></i> Son Eklenenler</h2>
+                        <p>Koleksiyonuna en son eklediğin yapımlar.</p>
+                    </div>
+                    <button type="button" onclick="openHomeCollection('recent')">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
-                <div id="recent-row" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
-            </div>
+                <div id="recent-row" class="ml-recent-rail" aria-label="Son eklenen yapımlar"></div>
+            </section>
 
             <!-- Watchlist Section -->
             <div class="space-y-4">

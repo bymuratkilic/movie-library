@@ -1867,3 +1867,53 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 @media(prefers-reduced-motion:reduce) {
   #ml-featured-hero .ml-featured-slide .ml-featured-backdrop img { transform:none !important; }
 }
+
+
+/* PERDE homepage stage 2 — recently added horizontal poster rail */
+#ml-recent-section { min-width:0; }
+#ml-recent-section .ml-section-heading { align-items:flex-end; }
+#ml-recent-section .ml-section-heading h2 { display:flex; align-items:center; gap:9px; }
+#ml-recent-section .ml-section-heading h2 i { color:var(--ml-accent); font-size:13px; }
+#ml-recent-section .ml-section-heading p { margin:5px 0 0; color:var(--ml-muted); font-size:11px; }
+#recent-row.ml-recent-rail {
+  display:flex !important;
+  grid-template-columns:none !important;
+  grid-auto-columns:unset !important;
+  align-items:stretch;
+  gap:16px !important;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:3px 2px 14px;
+  margin:0 -2px;
+  scroll-snap-type:x mandatory;
+  scroll-padding-inline:2px;
+  overscroll-behavior-inline:contain;
+  scrollbar-width:thin;
+  scrollbar-color:var(--ml-border) transparent;
+  -webkit-overflow-scrolling:touch;
+}
+#recent-row.ml-recent-rail > .ml-catalog-card {
+  flex:0 0 clamp(150px,15.5vw,190px);
+  width:clamp(150px,15.5vw,190px);
+  min-width:0;
+  scroll-snap-align:start;
+}
+#recent-row.ml-recent-rail > .ml-empty-state {
+  flex:1 0 100%;
+  min-width:100%;
+}
+#recent-row.ml-recent-rail::-webkit-scrollbar { height:6px; }
+#recent-row.ml-recent-rail::-webkit-scrollbar-track { background:transparent; }
+#recent-row.ml-recent-rail::-webkit-scrollbar-thumb { background:var(--ml-border); border-radius:99px; }
+#recent-row.ml-recent-rail::-webkit-scrollbar-thumb:hover { background:var(--ml-muted); }
+@media(max-width:767px) {
+  #ml-recent-section .ml-section-heading { align-items:flex-start; gap:12px; }
+  #ml-recent-section .ml-section-heading h2 { font-size:18px !important; }
+  #ml-recent-section .ml-section-heading p { max-width:230px; line-height:1.5; }
+  #ml-recent-section .ml-section-heading > button { white-space:nowrap; font-size:10px; }
+  #recent-row.ml-recent-rail { gap:12px !important; padding-bottom:10px; }
+  #recent-row.ml-recent-rail > .ml-catalog-card {
+    flex:0 0 min(43vw,168px);
+    width:min(43vw,168px);
+  }
+}
