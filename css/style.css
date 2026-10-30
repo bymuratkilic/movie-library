@@ -3090,3 +3090,45 @@ html.light .perde-editor-picks-section{background:radial-gradient(ellipse at 0% 
  html.light .perde-primary-nav::-webkit-scrollbar{display:none}
  html.light .perde-site-footer{margin-top:30px}
 }
+
+
+/* PERDE — Cinema Showcase */
+.perde-cinema-showcase{position:relative;overflow:hidden;padding:clamp(18px,2.7vw,32px);border:1px solid #dce6f7;border-radius:24px;background:linear-gradient(145deg,#fff,#f5f8ff);box-shadow:0 14px 38px rgba(31,64,130,.07)}
+.perde-cinema-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+.perde-cinema-kicker{color:#4169d8;font-size:9px;font-weight:900;letter-spacing:.17em}
+.perde-cinema-heading h2{margin:7px 0 4px;color:#17233d;font-size:clamp(24px,3vw,34px);font-weight:850;letter-spacing:-.045em}
+.perde-cinema-heading p{margin:0;color:#71809b;font-size:12px}
+.perde-cinema-refresh{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid #d8e2f4;border-radius:9px;background:#fff;color:#3459bf;font-size:10px;font-weight:800;white-space:nowrap}
+.perde-cinema-feature{position:relative;display:flex;align-items:flex-end;min-height:clamp(260px,34vw,420px);overflow:hidden;border-radius:18px;background:#101a32;color:#fff;isolation:isolate}
+.perde-cinema-backdrop{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:center 35%;filter:saturate(.9)}
+.perde-cinema-overlay{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(5,12,29,.94),rgba(7,17,39,.68) 44%,rgba(8,18,39,.08)),linear-gradient(0deg,rgba(5,12,29,.55),transparent 65%)}
+.perde-cinema-feature-copy{max-width:660px;padding:clamp(22px,4vw,48px)}
+.perde-cinema-feature-tag{display:inline-flex;align-items:center;gap:7px;color:#a9c1ff;font-size:9px;font-weight:900;letter-spacing:.16em}
+.perde-cinema-feature-copy h3{margin:12px 0;color:#fff;font-size:clamp(30px,5vw,56px);font-weight:900;line-height:1.02;letter-spacing:-.055em}
+.perde-cinema-meta{display:flex;flex-wrap:wrap;gap:9px 16px;color:#d4def3;font-size:11px;font-weight:750}
+.perde-cinema-meta i{color:#a9c1ff}
+.perde-cinema-feature-copy p{max-width:560px;margin:14px 0 18px;color:rgba(240,244,255,.83);font-size:12px;line-height:1.65}
+.perde-cinema-feature-copy>button{display:inline-flex;align-items:center;gap:12px;padding:11px 16px;border:1px solid rgba(171,194,255,.35);border-radius:9px;background:linear-gradient(135deg,#4774f4,#2852cf);color:white;font-size:11px;font-weight:850;box-shadow:0 9px 24px rgba(27,72,205,.28)}
+.perde-cinema-rail-heading{display:flex;align-items:center;justify-content:space-between;margin:23px 0 11px}
+.perde-cinema-rail-heading>div:first-child{display:flex;align-items:baseline;gap:12px}
+.perde-cinema-rail-heading span{color:#345bc9;font-size:9px;font-weight:900;letter-spacing:.16em}
+.perde-cinema-rail-heading small{color:#8490a7;font-size:9px}
+.perde-cinema-rail-actions{display:flex;gap:7px}
+.perde-cinema-rail-actions button{display:grid;place-items:center;width:30px;height:30px;border:1px solid #dce5f4;border-radius:50%;background:#fff;color:#345bc9}
+.perde-cinema-rail{display:flex;gap:13px;overflow-x:auto;padding:3px 2px 10px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.perde-cinema-rail::-webkit-scrollbar{display:none}
+.perde-cinema-card{flex:0 0 clamp(125px,14%,165px);min-width:0;text-align:left;scroll-snap-align:start}
+.perde-cinema-card-image{position:relative;display:block;aspect-ratio:2/3;overflow:hidden;border:1px solid #e0e7f3;border-radius:11px;background:#e9eef8;box-shadow:0 7px 18px rgba(24,48,95,.09)}
+.perde-cinema-card-image img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.perde-cinema-card:hover .perde-cinema-card-image img{transform:scale(1.06)}
+.perde-cinema-card-image>span{position:absolute;left:7px;top:7px;padding:4px 6px;border-radius:5px;background:rgba(13,29,65,.82);color:#fff;font-size:7px;font-weight:900;letter-spacing:.1em}
+.perde-cinema-card strong{display:block;margin:8px 1px 3px;overflow:hidden;color:#1d2b49;font-size:10px;font-weight:850;text-overflow:ellipsis;white-space:nowrap}
+.perde-cinema-card small{display:block;margin-left:1px;color:#7b88a0;font-size:8px}
+.perde-cinema-loading{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:160px;color:#7c8ba8;font-size:12px}
+@media(max-width:767px){.perde-cinema-showcase{padding:16px 12px;border-radius:17px}.perde-cinema-heading{align-items:flex-start}.perde-cinema-heading p{max-width:240px;font-size:10px}.perde-cinema-refresh{padding:8px;font-size:9px}.perde-cinema-feature{min-height:300px}.perde-cinema-overlay{background:linear-gradient(0deg,rgba(5,12,29,.96),rgba(7,17,39,.56) 58%,rgba(8,18,39,.05))}.perde-cinema-feature-copy{padding:20px 17px}.perde-cinema-feature-copy h3{font-size:32px}.perde-cinema-feature-copy p{font-size:10px;line-height:1.5}.perde-cinema-card{flex-basis:clamp(118px,36vw,145px)}}
+@media(max-width:390px){.perde-cinema-heading{flex-direction:column}.perde-cinema-refresh{align-self:flex-start}}
+html.dark .perde-cinema-showcase{background:linear-gradient(145deg,#0e172a,#080e1c);border-color:#25385e}
+html.dark .perde-cinema-heading h2,html.dark .perde-cinema-card strong{color:#edf2ff}
+html.dark .perde-cinema-heading p,html.dark .perde-cinema-card small{color:#9baaca}
+html.dark .perde-cinema-refresh,html.dark .perde-cinema-rail-actions button{background:#111d34;border-color:#2a416d;color:#b9cbff}
+html.dark .perde-cinema-card-image{border-color:#2a3b5e;background:#111a2c}
