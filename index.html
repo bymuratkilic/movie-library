@@ -33,7 +33,7 @@
     <!-- PERDE: Kompakt film kartları ve yenilenmiş detay penceresi -->
     
 
-    <link rel="stylesheet" href="./css/style.css?v=perde-news-1">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
 
@@ -60,7 +60,6 @@
           <button onclick="switchTab('dashboard');togglePerdeMenu(false)"><i class="fa-solid fa-house"></i><span><b>Ana Sayfa</b><small>Perde vitrini</small></span></button>
           <button onclick="switchTab('library');togglePerdeMenu(false)"><i class="fa-solid fa-film"></i><span><b>Kütüphane</b><small>Tüm yapımlar</small></span></button>
           <button onclick="switchTab('trailers');togglePerdeMenu(false)"><i class="fa-brands fa-youtube"></i><span><b>Fragmanlar</b><small>Yeni keşifler</small></span></button>
-          <button onclick="switchTab('news');togglePerdeMenu(false)"><i class="fa-regular fa-newspaper"></i><span><b>Sektör Haberleri</b><small>Sinema ve dizi gündemi</small></span></button>
           <button onclick="filterByMenu('watch_later');togglePerdeMenu(false)"><i class="fa-solid fa-bookmark"></i><span><b>İzleme Listem</b><small>Sıradaki seçimlerin</small></span></button>
           <button onclick="filterByMenu('watched');togglePerdeMenu(false)"><i class="fa-solid fa-circle-check"></i><span><b>İzlediklerim</b><small>İzleme geçmişin</small></span></button>
           <button onclick="filterByMenu('favorite');togglePerdeMenu(false)"><i class="fa-solid fa-heart"></i><span><b>Favorilerim</b><small>Seçtiklerin</small></span></button>
@@ -202,37 +201,6 @@
 
             <!-- Library Items Grid -->
             <div id="library-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
-        </section>
-
-        <!-- SECTOR NEWS TAB -->
-        <section id="tab-news" class="hidden space-y-6">
-            <div class="perde-news-hero">
-                <div><span class="perde-news-kicker"><i class="fa-solid fa-satellite-dish"></i> PERDE · SEKTÖRÜN NABZI</span><h1>Sinema ve dizi dünyasından haberler</h1><p>Türkiye'den ve dünyadan güncel yapımlar, fragmanlar ve sektör gelişmeleri.</p></div>
-                <button type="button" class="perde-news-refresh" onclick="loadPerdeNews(true)"><i class="fa-solid fa-rotate"></i> Haberleri yenile</button>
-            </div>
-            <div class="perde-news-toolbar">
-                <div id="perde-news-filters" class="perde-news-filters" role="group" aria-label="Haber kategorileri">
-                    <button type="button" class="is-active" data-news-filter="all">Tümü</button>
-                    <button type="button" data-news-filter="tr">Türk Sineması &amp; Dizileri</button>
-                    <button type="button" data-news-filter="film">Filmler</button>
-                    <button type="button" data-news-filter="series">Diziler</button>
-                    <button type="button" data-news-filter="actors">Oyuncular</button>
-                    <button type="button" data-news-filter="industry">Sektör</button>
-                    <button type="button" data-news-filter="trailers">Fragmanlar</button>
-                </div>
-                <span id="perde-news-updated" class="perde-news-updated">Haber akışı hazırlanıyor</span>
-            </div>
-            <div id="perde-news-featured" class="perde-news-featured" aria-live="polite"><div class="perde-news-loading"><i class="fa-solid fa-spinner fa-spin"></i> Haberler yükleniyor…</div></div>
-            <div id="perde-news-grid" class="perde-news-grid"></div>
-            <div id="perde-news-empty" class="perde-news-empty hidden">Bu kategoride henüz haber bulunamadı.</div>
-            <div id="perde-news-modal" class="perde-news-modal" role="dialog" aria-modal="true" aria-labelledby="perde-news-modal-title" aria-hidden="true">
-                <div class="perde-news-modal-backdrop" data-news-close></div>
-                <article class="perde-news-modal-panel">
-                    <button type="button" class="perde-news-modal-close" data-news-close aria-label="Pencereyi kapat"><i class="fa-solid fa-xmark"></i></button>
-                    <div id="perde-news-modal-content"></div>
-                </article>
-            </div>
-            <p class="perde-news-disclaimer">Haber başlıkları ve kısa açıklamalar ilgili yayınlardan alınır. Tüm haklar orijinal yayıncılarına aittir; haberin tamamı için kaynak bağlantısını kullanabilirsin.</p>
         </section>
 
         <!-- TRAILERS TAB -->
@@ -494,7 +462,6 @@
     </footer>
 
     <!-- JAVASCRIPT LOGIC -->
-    <script src="./js/app.js?v=sector-news-1"></script>
-    <script src="./js/news.js?v=perde-news-1"></script>
+    <script src="./js/app.js"></script>
 </body>
 </html>
