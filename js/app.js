@@ -611,6 +611,30 @@
         let personalRecommendationRequest = 0;
         let personalRecommendationRefreshCycle = 0;
         let personalRecommendationPreviousIds = new Set();
+        const PERDE_RECOMMENDATION_PREFS_KEY = 'perde_recommendation_preferences_v1';
+        function getPersonalRecommendationPreferences() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(PERDE_RECOMMENDATION_PREFS_KEY) || '{}') || {};
+                return { dismissedIds:Array.isArray(saved.dismissedIds)?saved.dismissedIds:[], dislikedGenreIds:Array.isArray(saved.dislikedGenreIds)?saved.dislikedGenreIds.map(Number).filter(Number.isFinite):[], history:Array.isArray(saved.history)?saved.history.filter(entry=>entry&&entry.id):[] };
+            } catch (error) { return { dismissedIds:[], dislikedGenreIds:[], history:[] }; }
+        }
+        function savePersonalRecommendationPreferences(preferences) {
+            localStorage.setItem(PERDE_RECOMMENDATION_PREFS_KEY,JSON.stringify({
+                dismissedIds:[...new Set(preferences.dismissedIds||[])].slice(-300),
+                dislikedGenreIds:[...new Set((preferences.dislikedGenreIds||[]).map(Number).filter(Number.isFinite))],
+                history:(preferences.history||[]).slice(-150)
+            }));
+        }
+        function dismissPersonalRecommendation(id) {
+            const item=fetchedOnlineResults.find(entry=>String(entry.id)===String(id));
+            const preferences=getPersonalRecommendationPreferences();
+            if(!preferences.dismissedIds.includes(String(id)))preferences.dismissedIds.push(String(id));
+            if(item&&Array.isArray(item.genreIds))preferences.dislikedGenreIds.push(...item.genreIds);
+            savePersonalRecommendationPreferences(preferences);
+            showToast('Bu yapım önerilerinden çıkarıldı.');
+            renderPersonalRecommendations();
+        }
+        function markPersonalRecommendationWatched(id) { updateMovieStatus(id,'watched'); }
         function scrollPersonalRecommendations(direction) {
             const rail = document.getElementById('perde-personal-recommendations');
             if (!rail) return;
@@ -624,6 +648,12 @@
             const requestId = ++personalRecommendationRequest;
             const refreshCycle = personalRecommendationRefreshCycle++;
             const previousRecommendationIds = personalRecommendationPreviousIds;
+            const preferences = getPersonalRecommendationPreferences();
+            const dismissedIds = new Set(preferences.dismissedIds.map(String));
+            const dislikedGenreIds = new Set(preferences.dislikedGenreIds.map(Number));
+            const historyIds = new Set(preferences.history.map(entry => String(entry.id)));
+            const historyCount = document.getElementById('perde-recommendation-history-count');
+            if (historyCount) historyCount.textContent = preferences.history.length + ' farklı öneri';
             const seeds = movies.filter(item => item.status === 'watched' || item.favorite)
                 .sort((a,b) => Number(Boolean(b.favorite))-Number(Boolean(a.favorite)) ||
                     (Number(b.perdeRating)||0)-(Number(a.perdeRating)||0) ||
@@ -682,12 +712,14 @@
                     if (!title) return;
                     const candidateGenres = new Set((item.genre_ids || []).map(Number));
                     const genreMatches = [...candidateGenres].filter(id => genreIds.has(id)).length;
+                    const dislikedGenreMatches = [...candidateGenres].filter(id => dislikedGenreIds.has(id)).length;
                     const vote = Number(item.vote_average) || 0;
-                    const score = (genreMatches * 3 * seedWeight) + (vote / 10);
+                    const score = (genreMatches * 3 * seedWeight) + (vote / 10) - (dislikedGenreMatches * 2.5);
                     const existing = ranked.get(key);
                     if (existing) {
                         existing.score += score;
                         existing.genreMatches = Math.max(existing.genreMatches,genreMatches);
+                        existing.genreIds = [...new Set([...(existing.genreIds || []),...candidateGenres])];
                     } else {
                         ranked.set(key,{
                             id:'tmdb-' + mediaType + '-' + item.id, tmdbId:item.id, source:'recommendation',
@@ -697,15 +729,32 @@
                             backdrop:item.backdrop_path?'https://image.tmdb.org/t/p/w1280'+item.backdrop_path:'',
                             overview:item.overview||'Bu yapım için henüz konu özeti bulunmuyor.',
                             director:'Bilinmiyor', country:'Bilinmiyor', runtime:'Bilinmiyor', cast:[], trailerUrl:'',
-                            score,genreMatches
+                            score,genreMatches,genreIds:[...candidateGenres]
                         });
                     }
                 });
-                const candidates = [...ranked.values()].filter(item => !archiveHas(item))
+                const candidates = [...ranked.values()].filter(item => !archiveHas(item) && !dismissedIds.has(String(item.id)))
                     .sort((a,b) => b.score-a.score || (Number(b.imdb)||0)-(Number(a.imdb)||0));
-                const freshCandidates = candidates.filter(item => !previousRecommendationIds.has(item.id));
-                const recommendations = (freshCandidates.length >= Math.min(3,candidates.length) ? freshCandidates : candidates).slice(0,6);
-                personalRecommendationPreviousIds = new Set(recommendations.map(item => item.id));
+                const freshCandidates = candidates.filter(item => !historyIds.has(String(item.id)) && !previousRecommendationIds.has(item.id));
+                const pool = freshCandidates.length >= Math.min(3,candidates.length) ? freshCandidates : candidates;
+                const recommendations = [];
+                const remaining = [...pool];
+                while (remaining.length && recommendations.length < 6) {
+                    let bestIndex=0,bestScore=-Infinity;
+                    remaining.forEach((candidate,index)=>{
+                        const candidateGenres=candidate.genreIds||[];
+                        const covered=new Set(recommendations.flatMap(entry=>entry.genreIds||[]));
+                        const newGenres=candidateGenres.filter(id=>!covered.has(id)).length;
+                        const repeatedGenres=candidateGenres.length-newGenres;
+                        const diversityScore=candidate.score+(newGenres*1.35)-(repeatedGenres*0.65);
+                        if(diversityScore>bestScore){bestScore=diversityScore;bestIndex=index;}
+                    });
+                    recommendations.push(remaining.splice(bestIndex,1)[0]);
+                }
+                personalRecommendationPreviousIds=new Set(recommendations.map(item=>item.id));
+                preferences.history=[...preferences.history,...recommendations.map(item=>({id:String(item.id),title:String(item.title||''),shownAt:new Date().toISOString()}))];
+                savePersonalRecommendationPreferences(preferences);
+                if(historyCount)historyCount.textContent=preferences.history.length+' farklı öneri';
                 recommendations.forEach(item => {
                     if (!fetchedOnlineResults.some(existing => String(existing.tmdbId || '') === String(item.tmdbId))) fetchedOnlineResults.push(item);
                 });
@@ -741,7 +790,7 @@
                     const id = escapeProviderText(item.id), title = escapeProviderText(item.title), poster = escapeProviderText(item.poster);
                     const rawOverview = String(item.overview || '').trim();
                     const overview = escapeProviderText(rawOverview ? (rawOverview.length > 190 ? rawOverview.slice(0,187).trimEnd() + '…' : rawOverview) : 'Bu yapım için henüz konu özeti bulunmuyor.');
-                    return '<article class="perde-personal-card"><div class="perde-personal-poster-wrap"><button type="button" class="perde-personal-poster" onclick="openDetailModal(\'' + id + '\')" aria-label="' + title + ' detaylarını aç"><img src="' + poster + '" alt="' + title + ' afişi" loading="lazy"><span><i class="fa-solid fa-star"></i> ' + escapeProviderText(item.imdb) + '</span></button><button type="button" class="perde-personal-details" onclick="openDetailModal(\'' + id + '\')"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Detaylar</span></button></div><div class="perde-personal-card-copy"><button type="button" onclick="openDetailModal(\'' + id + '\')">' + title + '</button><small>' + escapeProviderText(item.year || 'Yıl bilinmiyor') + ' · ' + (item.type === 'tv' ? 'Dizi' : 'Film') + '</small><p class="perde-personal-overview">' + overview + '</p><div class="perde-recommendation-providers" id="perde-recommendation-providers-' + item.type + '-' + escapeProviderText(item.tmdbId) + '"></div><div class="perde-personal-actions"><button type="button" class="perde-personal-add" onclick="addSimilarProduction(\'' + id + '\', this)"><i class="fa-solid fa-plus"></i> İzleme listeme ekle</button><button type="button" class="perde-personal-link" onclick="openDetailModal(\'' + id + '\', \'tr_sub\', true)"><i class="fa-solid fa-play"></i> Fragmanı izle</button></div></div></article>';
+                    return '<article class="perde-personal-card"><div class="perde-personal-poster-wrap"><button type="button" class="perde-personal-poster" onclick="openDetailModal(\'' + id + '\')" aria-label="' + title + ' detaylarını aç"><img src="' + poster + '" alt="' + title + ' afişi" loading="lazy"><span><i class="fa-solid fa-star"></i> ' + escapeProviderText(item.imdb) + '</span></button><button type="button" class="perde-personal-details" onclick="openDetailModal(\'' + id + '\')"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Detaylar</span></button></div><div class="perde-personal-card-copy"><button type="button" onclick="openDetailModal(\'' + id + '\')">' + title + '</button><small>' + escapeProviderText(item.year || 'Yıl bilinmiyor') + ' · ' + (item.type === 'tv' ? 'Dizi' : 'Film') + '</small><p class="perde-personal-overview">' + overview + '</p><div class="perde-recommendation-providers" id="perde-recommendation-providers-' + item.type + '-' + escapeProviderText(item.tmdbId) + '"></div><div class="perde-personal-actions"><button type="button" class="perde-personal-add" onclick="addSimilarProduction(\'' + id + '\', this)"><i class="fa-solid fa-plus"></i> İzleme listeme ekle</button><button type="button" class="perde-personal-watched" onclick="markPersonalRecommendationWatched(\'' + id + '\')"><i class="fa-solid fa-circle-check"></i> İzledim</button><button type="button" class="perde-personal-link" onclick="openDetailModal(\'' + id + '\', \'tr_sub\', true)"><i class="fa-solid fa-play"></i> Fragmanı izle</button><button type="button" class="perde-personal-dismiss" onclick="dismissPersonalRecommendation(\'' + id + '\')" aria-label="Bu öneriyi gösterme"><i class="fa-solid fa-thumbs-down"></i> İlgimi çekmedi</button></div></div></article>';
                 }).join('');
                 recommendations.forEach(item => loadRecommendationProviders(item));
             } catch (error) {
