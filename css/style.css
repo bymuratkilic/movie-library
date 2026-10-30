@@ -2917,3 +2917,84 @@ html.dark .perde-editor-picks-section{background:radial-gradient(ellipse at 0% 4
  .perde-editor-picks-grid>.perde-editor-landscape-card{flex-basis:clamp(245px,78vw,330px);width:clamp(245px,78vw,330px)}
  .perde-editor-landscape-info h3{font-size:18px}
 }
+
+
+/* KINOZ unified dark experience — header, footer and every inner page */
+html.dark{background:#05070d!important}
+html.dark body{background-color:#05070d!important;background-image:radial-gradient(ellipse at 12% 0%,rgba(35,75,180,.13),transparent 34%),radial-gradient(ellipse at 92% 22%,rgba(27,62,145,.09),transparent 30%)!important;color:#edf2ff!important}
+html.dark main,html.dark #app,html.dark .main-content,html.dark .page-content{color:#edf2ff}
+html.dark .perde-site-header{position:relative;background:linear-gradient(180deg,rgba(7,12,24,.97),rgba(5,8,16,.94))!important;border:1px solid #1e2d4c!important;border-top:0!important;box-shadow:0 12px 36px rgba(0,0,0,.32),0 1px 0 rgba(92,130,230,.12)!important;backdrop-filter:blur(18px)}
+html.dark .perde-header-inner{background:transparent!important}
+html.dark .perde-brand-mark,html.dark .perde-footer-mark{background:linear-gradient(145deg,#1b3470,#101c3c)!important;color:#91adff!important;border:1px solid #34539a!important;box-shadow:0 0 24px rgba(57,103,230,.16)}
+html.dark .perde-brand-name,html.dark .perde-footer-brand{color:#f4f6ff!important}
+html.dark .perde-brand-name span,html.dark .perde-footer-brand>span:last-child span{color:#7f9fff!important}
+html.dark .perde-brand-eyebrow,html.dark .perde-brand-tagline{color:#8997b7!important}
+html.dark .perde-header-actions{color:#dce6ff}
+html.dark .perde-icon-action,html.dark .mobile-admin-shortcut{background:#0e1830!important;border:1px solid #263b68!important;color:#b9ccff!important;box-shadow:0 5px 16px rgba(0,0,0,.2)}
+html.dark .perde-icon-action:hover,html.dark .mobile-admin-shortcut:hover{background:#172b55!important;border-color:#527cff!important;color:#fff!important}
+html.dark .perde-primary-nav{background:rgba(8,14,28,.8)!important;border:1px solid #1d2d4c!important;border-radius:14px}
+html.dark .perde-primary-nav .nav-btn{color:#9eabc7!important;background:transparent!important;border-color:transparent!important}
+html.dark .perde-primary-nav .nav-btn:hover{color:#e5edff!important;background:#111e39!important}
+html.dark .perde-primary-nav .nav-btn.active{color:#fff!important;background:linear-gradient(135deg,#315bd4,#1b3d9d)!important;border-color:#527cff!important;box-shadow:0 5px 18px rgba(48,91,214,.28)}
+html.dark #tab-dashboard,html.dark #tab-library,html.dark #tab-stats,html.dark #tab-profile,html.dark #tab-detail,html.dark #tab-collections{color:#eaf0ff}
+html.dark #tab-library .glass-panel,html.dark #tab-stats .glass-panel,html.dark #tab-profile .glass-panel,html.dark #tab-detail .glass-panel{background:linear-gradient(145deg,#0e1629,#090f1c)!important;border:1px solid #223354!important;color:#eaf0ff!important;box-shadow:0 14px 38px rgba(0,0,0,.24)!important}
+html.dark .detail-page-toolbar{display:flex;align-items:center;gap:14px;padding:12px 0 16px;border-bottom:1px solid #1e2e4c;color:#90a0c2!important}
+html.dark .detail-page-label,html.dark .perde-profile-kicker{color:#86a4ff!important;letter-spacing:.16em}
+html.dark .detail-back-button{background:#101a31!important;border:1px solid #293e69!important;border-radius:10px;color:#dce6ff!important;padding:9px 13px;transition:background .2s,border-color .2s}
+html.dark .detail-back-button:hover{background:#192d56!important;border-color:#527cff!important}
+html.dark .perde-profile-hero,html.dark .perde-profile-section,html.dark .perde-achievements-section{background:radial-gradient(ellipse at 0% 0%,rgba(43,83,185,.18),transparent 55%),linear-gradient(145deg,#0e172b,#090f1c)!important;border:1px solid #223557!important;border-radius:20px!important;color:#edf2ff!important;box-shadow:0 14px 38px rgba(0,0,0,.24)!important}
+html.dark .perde-profile-avatar{background:linear-gradient(145deg,#1d3d88,#14234b)!important;border:1px solid #4266b6!important;color:#a9c0ff!important;box-shadow:0 0 30px rgba(57,104,232,.18)}
+html.dark .perde-profile-intro h2,html.dark .perde-profile-section-head h3{color:#f4f6ff!important}
+html.dark .perde-profile-intro p,html.dark .perde-profile-section-head p,html.dark .perde-profile-section>p{color:#9aa8c5!important}
+html.dark .perde-profile-name-edit label,html.dark .perde-profile-highlights span,html.dark .perde-achievement-grid{color:#b5c1da!important}
+html.dark .perde-profile-name-edit input{background:#080f1e!important;border:1px solid #2b4069!important;color:#f3f6ff!important}
+html.dark .perde-profile-name-edit button,html.dark .perde-profile-share{background:linear-gradient(135deg,#315bd4,#1d409f)!important;border:1px solid #527cff!important;color:#fff!important;box-shadow:0 8px 22px rgba(40,83,210,.2)}
+html.dark .perde-profile-highlights>*,html.dark .perde-profile-top-grid>*,html.dark .perde-profile-favorite-grid>*{background:#0b1426!important;border:1px solid #223455!important;color:#eaf0ff!important;border-radius:14px}
+html.dark .perde-profile-section-head>strong{color:#9db5ff!important;background:#14244a!important;border:1px solid #2e4a86!important;border-radius:99px;padding:7px 11px}
+html.dark .perde-achievement-grid>*,html.dark .perde-achievement-card{background:linear-gradient(145deg,#111d36,#0b1425)!important;border:1px solid #263b62!important;color:#dce6ff!important}
+html.dark .perde-site-footer{position:relative;margin-top:44px;background:radial-gradient(ellipse at 10% 0%,rgba(37,75,174,.18),transparent 38%),linear-gradient(180deg,#090f1c,#05080f)!important;border-top:1px solid #26395e!important;color:#aab7d1!important;box-shadow:0 -18px 50px rgba(0,0,0,.2)}
+html.dark .perde-footer-inner{background:transparent!important}
+html.dark .perde-footer-about p,html.dark .perde-footer-note,html.dark .perde-footer-year{color:#8795b2!important}
+html.dark .perde-footer-links h3,html.dark .perde-footer-kicker{color:#819fff!important;letter-spacing:.15em}
+html.dark .perde-footer-links button{display:block;color:#aab8d4!important;transition:color .2s,transform .2s}
+html.dark .perde-footer-links button:hover{color:#fff!important;transform:translateX(3px)}
+html.dark .perde-footer-signoff strong{color:#f1f5ff!important}
+html.dark .perde-footer-line{background:linear-gradient(90deg,#527cff,transparent)!important}
+html.dark .ml-section-heading>button,html.dark .ml-watchlist-actions>button{color:#b9ccff!important;border:1px solid #2a4070!important;background:#101a31!important;border-radius:9px;padding:8px 11px}
+html.dark .ml-section-heading>button:hover,html.dark .ml-watchlist-actions>button:hover{background:#1a2e58!important;border-color:#527cff!important}
+html.dark .ml-section-kicker{color:#86a4ff!important}
+html.dark .ml-watchlist-rail,html.dark .ml-catalog-grid{scrollbar-color:#2e4b89 #0a1120}
+html.dark .ml-watchlist-rail::-webkit-scrollbar,html.dark .ml-catalog-grid::-webkit-scrollbar{height:7px}
+html.dark .ml-watchlist-rail::-webkit-scrollbar-thumb,html.dark .ml-catalog-grid::-webkit-scrollbar-thumb{background:#2c477f;border-radius:20px}
+html.dark .ml-archive-stats{background:linear-gradient(145deg,#0e172a,#090f1b)!important;border:1px solid #223354!important;border-radius:16px;color:#eaf0ff!important;box-shadow:0 12px 30px rgba(0,0,0,.2)}
+html.dark .ml-archive-stats>div{background:transparent!important;border-color:#1d2e4d!important}
+html.dark .ml-archive-stats strong{color:#91adff!important}
+html.dark .ml-archive-stats span{color:#95a3c0!important}
+html.dark .input-field,html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),html.dark select,html.dark textarea{background:#080f1e!important;border:1px solid #293d62!important;color:#edf2ff!important;box-shadow:inset 0 1px 2px rgba(0,0,0,.22)}
+html.dark .input-field:focus,html.dark input:focus,html.dark select:focus,html.dark textarea:focus{border-color:#527cff!important;box-shadow:0 0 0 3px rgba(82,124,255,.14)!important;outline:none}
+html.dark option{background:#0b1426;color:#edf2ff}
+html.dark button:not(.perde-editor-feature-open):not(.perde-editor-picks-arrow):not(.nav-btn):not(.detail-back-button):not(.perde-icon-action):not(.perde-profile-share):not(.perde-profile-name-edit button):not(.mobile-admin-shortcut){transition:background-color .18s,border-color .18s,color .18s}
+html.dark .border-light-border,html.dark .border-gray-200,html.dark .border-slate-200{border-color:#223354!important}
+html.dark .text-light-muted,html.dark .text-gray-500,html.dark .text-slate-500{color:#8e9dbb!important}
+html.dark .text-gray-700,html.dark .text-slate-700,html.dark .text-gray-800,html.dark .text-slate-800{color:#dce5f7!important}
+html.dark .bg-white,html.dark .bg-gray-50,html.dark .bg-slate-50{background-color:#0d1629!important;color:#eaf0ff!important}
+html.dark .bg-gray-100,html.dark .bg-slate-100{background-color:#111d34!important;color:#dce6ff!important}
+html.dark .hover\:bg-gray-100:hover,html.dark .hover\:bg-slate-100:hover{background-color:#1a2b4d!important}
+html.dark .modal-content,html.dark .modal-box,html.dark [role="dialog"]>div{background:linear-gradient(145deg,#0e172b,#080e1a)!important;color:#edf2ff!important;border:1px solid #293d62!important;box-shadow:0 25px 80px rgba(0,0,0,.58)!important}
+html.dark .modal-content h1,html.dark .modal-content h2,html.dark .modal-content h3,html.dark [role="dialog"] h1,html.dark [role="dialog"] h2,html.dark [role="dialog"] h3{color:#f4f6ff!important}
+html.dark .modal-content p,html.dark [role="dialog"] p{color:#aab7d1}
+html.dark .modal-content label,html.dark [role="dialog"] label{color:#c2cde2}
+html.dark .toast,html.dark #toast-container>div{background:#101a31!important;color:#eaf0ff!important;border:1px solid #2a4070!important;box-shadow:0 12px 32px rgba(0,0,0,.38)!important}
+html.dark table,html.dark th,html.dark td{border-color:#243657!important;color:#dce6f8}
+html.dark th{background:#111d35!important;color:#a9beff!important}
+html.dark hr{border-color:#223354!important}
+html.dark a:not(.perde-brand){color:#91adff}
+html.dark a:not(.perde-brand):hover{color:#c4d4ff}
+html.dark ::selection{background:#315bd4!important;color:#fff!important}
+@media(max-width:767px){
+ html.dark .perde-site-header{border-left:0!important;border-right:0!important;border-radius:0 0 16px 16px}
+ html.dark .perde-primary-nav{overflow-x:auto;scrollbar-width:none}
+ html.dark .perde-primary-nav::-webkit-scrollbar{display:none}
+ html.dark .perde-site-footer{margin-top:30px}
+ html.dark .perde-footer-inner{gap:24px}
+}
