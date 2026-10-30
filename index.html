@@ -65,7 +65,7 @@
                     <button type="button" onclick="toggleTheme()" id="theme-toggle-btn" class="perde-icon-action" title="Tema Değiştir" aria-label="Tema değiştir">
                         <i class="fa-solid fa-sun dark:inline hidden"></i><i class="fa-solid fa-moon dark:hidden inline"></i>
                     </button>
-                    <button type="button" onclick="openAddMovieModal()" class="perde-add-action">
+                    <button type="button" onclick="openAddMovieModal()" class="perde-add-action admin-only-control">
                         <i class="fa-solid fa-plus" aria-hidden="true"></i><span>Yapım Ekle</span>
                     </button>
                 </div>
@@ -296,7 +296,7 @@
                     <h2 class="text-xl font-bold dark:text-white text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-user-shield text-indigo-500"></i> Yönetici Paneli
                     </h2>
-                    <p class="text-xs dark:text-clean-muted text-light-muted">Sistem ayarları, veri yedekleme ve toplu arşiv yönetimi</p>
+                    <p class="text-xs dark:text-clean-muted text-light-muted">Yönetici oturumu açık. Arşiv değişiklikleri yalnızca yönetici tarafından yapılabilir.</p>
                 </div>
                 <button onclick="lockAdminSession()" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all">
                     <i class="fa-solid fa-lock mr-1"></i> Paneli Kilitle
