@@ -1499,6 +1499,7 @@
                         '<div><input id="trailer-url-input" type="url" value="' + escapeTrailerField(m.trailerUrl || '') + '" placeholder="YouTube bağlantısını yapıştırın">' +
                         '<button type="button" onclick="saveTrailerUrl(\'' + safeId + '\')"><i class="fa-solid fa-link"></i> Kaydet</button></div>' +
                         '<small>Bağlantı bu yapımın arşiv kaydına ve yerel verilerine kaydedilir.</small></div>' +
+                      '<div class="perde-trailer-close-wrap"><button type="button" class="perde-trailer-close-button" onclick="closeModal(\'detail-modal\')"><i class="fa-solid fa-xmark"></i> Pencereyi Kapat</button></div>' +
                     '</section></div>';
 
                 if (modal) {
