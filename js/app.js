@@ -1900,13 +1900,11 @@
             if (countRoot) countRoot.textContent = unlocked + ' / ' + definitions.length + ' rozet';
             root.innerHTML = definitions.map(item => {
                 const earned = item.value >= item.target;
-                const progress = Math.min(100, Math.round(item.value / item.target * 100));
-                return '<article class="perde-achievement-card ' + (earned ? 'is-earned' : 'is-locked') + '">' +
+                return '<article class="perde-achievement-card ' + (earned ? 'is-earned' : 'is-locked') + '" title="' + item.description + ' · ' + (earned ? 'Kazanıldı' : item.value + ' / ' + item.target + ' ' + item.unit) + '" aria-label="' + item.title + ': ' + (earned ? 'Kazanıldı' : item.value + ' / ' + item.target + ' ' + item.unit) + '">' +
                     '<span class="perde-achievement-icon"><i class="fa-solid ' + item.icon + '"></i></span>' +
-                    '<span class="perde-achievement-copy"><strong>' + item.title + '</strong><small>' + item.description + '</small>' +
-                    '<span class="perde-achievement-progress"><i style="width:' + progress + '%"></i></span>' +
-                    '<em>' + (earned ? 'Kazanıldı' : item.value + ' / ' + item.target + ' ' + item.unit) + '</em></span>' +
-                    '<i class="fa-solid ' + (earned ? 'fa-circle-check' : 'fa-lock') + ' perde-achievement-status" aria-label="' + (earned ? 'Kazanıldı' : 'Kilitli') + '"></i></article>';
+                    '<strong class="perde-achievement-name">' + item.title + '</strong>' +
+                    (earned ? '<i class="fa-solid fa-circle-check perde-achievement-status" aria-label="Kazanıldı"></i>' : '') +
+                    '</article>';
             }).join('');
         }
 
