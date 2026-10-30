@@ -5,7 +5,7 @@
   const safeUrl = value => { try { const u = new URL(value); return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : '#'; } catch (_) { return '#'; } };
   const dateLabel = value => { const d = new Date(value); return Number.isNaN(d.getTime()) ? '' : new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'long',year:'numeric'}).format(d); };
   const categoryLabel = item => item.categoryLabel || ({tr:'YERLİ',world:'DÜNYA',series:'DİZİ',trailers:'FRAGMAN'}[item.category] || 'SİNEMA');
-  const filtered = () => state.items.filter(item => state.filter === 'all' || item.category === state.filter || (state.filter === 'tr' && item.category === 'tr'));
+  const filtered = () => state.items.filter(item => state.filter === 'all' || (state.filter === 'tr' && ['tr','series'].includes(item.category)) || item.category === state.filter);
   function card(item) {
     const url = safeUrl(item.link), image = safeUrl(item.image);
     return '<article class="perde-news-card">' +
