@@ -92,6 +92,7 @@ assert.match(app, /Number\(b\.perdeRating\)/, 'Personal recommendations must pri
 assert.match(app, /genreMatches \* 3 \* seedWeight/, 'Recommendation ranking must use genre affinity and seed preference');
 assert.doesNotMatch(app, /perde-recommendation-reason/, 'Recommendation cards must not show recommendation explanations');
 assert.match(app, /personalRecommendationRefreshCycle/, 'Recommendation refresh must rotate recommendation pages');
+assert.match(app, /'\/similar\?' \+ params\.toString\(\)/, 'Refresh must combine similar titles to widen its recommendation pool');
 assert.match(app, /previousRecommendationIds\.has\(item\.id\)/, 'Refresh must prioritize titles not shown in the previous result');
 assert.match(app, /Fragmanı izle/, 'Recommendation cards must include a trailer popup action');
 assert.match(app, /Detaylar/, 'Recommendation cards must include a details action');

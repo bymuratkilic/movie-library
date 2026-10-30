@@ -645,16 +645,19 @@
                 if (!tmdbId) return [];
                 const recommendationPage = ((refreshCycle + seedIndex * 2) % 5) + 1;
                 const params = new URLSearchParams({api_key:apiKey,language:'tr-TR',page:String(recommendationPage)});
-                const [detailResponse,recommendationResponse] = await Promise.all([
+                const [detailResponse,recommendationResponse,similarResponse] = await Promise.all([
                     fetch(base + mediaType + '/' + encodeURIComponent(tmdbId) + '?' + params.toString()),
-                    fetch(base + mediaType + '/' + encodeURIComponent(tmdbId) + '/recommendations?' + params.toString())
+                    fetch(base + mediaType + '/' + encodeURIComponent(tmdbId) + '/recommendations?' + params.toString()),
+                    fetch(base + mediaType + '/' + encodeURIComponent(tmdbId) + '/similar?' + params.toString())
                 ]);
-                if (!recommendationResponse.ok) return [];
+                if (!recommendationResponse.ok && !similarResponse.ok) return [];
                 const details = detailResponse.ok ? await detailResponse.json() : {};
-                const recommendations = await recommendationResponse.json();
+                const recommendations = recommendationResponse.ok ? await recommendationResponse.json() : {results:[]};
+                const similar = similarResponse.ok ? await similarResponse.json() : {results:[]};
                 const genreIds = new Set((details.genres || []).map(genre => Number(genre.id)).filter(Boolean));
                 const seedWeight = 1 + (seed.favorite ? 1.5 : 0) + (Math.max(0,Math.min(10,Number(seed.perdeRating)||0)) / 10);
-                return (recommendations.results || []).map(item => ({item,mediaType,genreIds,seedWeight}));
+                const combinedResults = [...(recommendations.results || []), ...(similar.results || [])];
+                return combinedResults.map(item => ({item,mediaType,genreIds,seedWeight}));
             });
             try {
                 const groups = await Promise.all(requests);
