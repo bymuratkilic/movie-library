@@ -1567,3 +1567,15 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
  .perde-watch-provider img{width:18px;height:18px;flex-basis:18px}
  .perde-watch-credit{margin-left:auto}
 }
+
+
+/* Detail page enrichment */
+.perde-detail-series-meta { display:flex; flex-wrap:wrap; gap:8px; margin:-5px 0 18px; }
+.perde-detail-series-meta[hidden] { display:none; }
+.perde-detail-series-meta span { display:inline-flex; align-items:center; gap:5px; padding:7px 10px; border:1px solid var(--ml-border); border-radius:7px; background:var(--ml-surface-muted); color:var(--ml-muted); font-size:10px; }
+.perde-detail-series-meta span b { color:var(--ml-text); font-size:12px; }
+.perde-imdb-cast-grid { grid-template-columns:repeat(auto-fill,minmax(175px,1fr)); }
+.perde-imdb-cast-card { min-width:0; transition:border-color .18s ease, transform .18s ease, background .18s ease; }
+.perde-imdb-cast-card:hover { border-color:var(--ml-accent); background:var(--ml-surface-muted); transform:translateY(-2px); }
+.perde-imdb-cast-card img { flex:0 0 42px; width:42px; height:42px; }
+@media (max-width:767px) { .perde-detail-series-meta { gap:6px; } .perde-detail-series-meta span { padding:6px 8px; font-size:9px; } .perde-imdb-cast-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; } .perde-imdb-cast-card { padding:7px; gap:7px; } .perde-imdb-cast-card img { width:34px; height:34px; flex-basis:34px; } .perde-imdb-cast-card b { font-size:9px; } }
