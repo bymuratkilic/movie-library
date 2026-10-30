@@ -916,9 +916,9 @@
                     const yearNode = document.getElementById(metaId + '-year');
                     const genreNode = document.getElementById(metaId + '-genres');
                     const durationNode = document.getElementById(metaId + '-duration');
-                    const needsMetadata = !movie.year || !Array.isArray(movie.genres) || !movie.genres.length ||
+                    const needsMetadata = !movie.year || ['—', 'Bilinmiyor'].includes(String(movie.year).trim()) || !Array.isArray(movie.genres) || !movie.genres.length ||
                         (movie.type === 'tv'
-                            ? !(Number(movie.number_of_seasons || movie.seasons) || Number(movie.number_of_episodes || movie.episodes))
+                            ? !(Number(movie.number_of_seasons || movie.seasons) && Number(movie.number_of_episodes || movie.episodes))
                             : !movie.runtime || ['Bilinmiyor', 'Süre bilgisi yok', '—'].includes(String(movie.runtime).trim()));
                     if (!needsMetadata) return;
                     loadHomeCardMetadata(movie).then(meta => {
