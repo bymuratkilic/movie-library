@@ -1526,3 +1526,23 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .ml-diary-history li p{margin:7px 0 0}
 .ml-diary-empty-state{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
 @media(max-width:640px){.ml-diary-panel{padding:15px}.ml-diary-fields{grid-template-columns:1fr}.ml-diary-empty-state{align-items:flex-start;flex-direction:column}}
+
+
+/* Türkiye streaming availability */
+.perde-watch-providers{margin:22px 0;padding:18px;border:1px solid var(--ml-border);border-radius:14px;background:var(--ml-surface)}
+.perde-watch-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+.perde-watch-heading>div>span{display:block;color:var(--ml-accent);font-size:9px;font-weight:800;letter-spacing:.15em}
+.perde-watch-heading h3{margin:4px 0 0;color:var(--ml-text);font-size:16px;font-weight:800}
+.perde-watch-region{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid var(--ml-border);border-radius:8px;color:var(--ml-muted);font-size:10px;font-weight:700;white-space:nowrap}
+.perde-watch-loading,.perde-watch-empty{padding:12px 0;color:var(--ml-muted);font-size:11px;line-height:1.6}
+.perde-watch-loading i{margin-right:7px;color:var(--ml-accent)}
+.perde-watch-group+.perde-watch-group{margin-top:16px;padding-top:14px;border-top:1px solid var(--ml-border)}
+.perde-watch-group h4{display:flex;align-items:center;gap:7px;margin:0 0 10px;color:var(--ml-text);font-size:11px;font-weight:800}
+.perde-watch-group h4 i{color:var(--ml-accent)}
+.perde-watch-list{display:flex;flex-wrap:wrap;gap:9px}
+.perde-watch-provider{display:flex;align-items:center;gap:8px;min-width:0;padding:7px 10px;border:1px solid var(--ml-border);border-radius:9px;background:var(--ml-bg);color:var(--ml-text);font-size:10px;font-weight:700}
+.perde-watch-provider img{width:25px;height:25px;flex:0 0 25px;border-radius:6px;object-fit:cover}
+.perde-watch-more{display:inline-flex;align-items:center;gap:7px;margin-top:15px;color:var(--ml-accent);font-size:10px;font-weight:800}
+.perde-watch-credit{margin:12px 0 0;color:var(--ml-muted);font-size:9px}
+.perde-watch-credit a{color:var(--ml-accent);text-decoration:underline;text-underline-offset:2px}
+@media(max-width:640px){.perde-watch-providers{padding:14px}.perde-watch-heading h3{font-size:14px}.perde-watch-provider{gap:6px;padding:6px 8px}}
