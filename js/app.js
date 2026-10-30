@@ -1180,6 +1180,15 @@
                 const durationMeta = m.type === 'tv' ? seriesMeta : runtime;
                 const overview = String(m.overview || '').trim();
                 const previewText = overview.length > 190 ? overview.slice(0, 187).trimEnd() + '…' : overview;
+                if (containerId === 'editor-picks-grid') {
+                    const featureOverview = safe(previewText || 'Bu yapım için henüz kısa bir açıklama eklenmemiş.');
+                    const featurePoster = safe(m.backdrop || m.poster || '');
+                    return '<article class="ml-catalog-card ml-home-poster-card perde-editor-landscape-card" role="button" tabindex="0" aria-label="' + title + ' detaylarını aç" onclick="openDetailModal(\\'' + id + '\\')" onkeydown="if(event.key===\\'Enter\\'||event.key===\\' \\'){event.preventDefault();openDetailModal(\\'' + id + '\\')}">' +
+                        '<div class="ml-catalog-poster"><img src="' + featurePoster + '" alt="' + title + ' görseli" loading="lazy" onerror="handleHomePosterError(this)"><div class="perde-editor-landscape-shade"></div>' +
+                        '<span class="perde-editor-landscape-type">' + type + '</span>' + (m.favorite ? '<span class="ml-catalog-favorite"><i class="fa-solid fa-heart"></i></span>' : '') +
+                        '<div class="perde-editor-landscape-info"><span class="perde-editor-landscape-kicker">EDİTÖRÜN SEÇİMİ</span><h3>' + title + '</h3><div class="perde-editor-landscape-meta"><span><i class="fa-solid fa-star"></i> IMDb ' + safe(m.imdb || '—') + '</span><span>' + safe(m.year || '—') + '</span><span>' + safe(genres || type) + '</span></div><p>' + featureOverview + '</p><span class="perde-editor-landscape-cta">Detayları keşfet <i class="fa-solid fa-arrow-right"></i></span></div>' +
+                        '<span class="perde-editor-landscape-hint"><i class="fa-solid fa-circle-info"></i> Üzerine gel</span></div></article>';
+                }
                 const posterInfo = '<div class="ml-home-poster-info">' +
                     '<h3 title="' + title + '">' + title + '</h3>' +
                     '<div class="ml-home-poster-facts"><span class="ml-home-poster-rating"><i class="fa-solid fa-star"></i> ' + (containerId === 'hidden-gems-grid' ? 'TMDB ' : 'IMDb ') + safe(m.imdb || '—') + '</span>' +
