@@ -131,3 +131,10 @@ assert.match(app, /perde-personal-dismiss/, 'Recommendation cards must expose a 
 assert.match(html, /perde-recommendation-history-count/, 'The recommendation section must show its history count');
 assert.match(css, /\.perde-personal-watched/, 'Watched recommendation action must be styled');
 assert.match(css, /\.perde-personal-dismiss/, 'Dismiss recommendation action must be styled');
+
+
+assert.match(css, /PERDE homepage visual system refresh/, 'The unified homepage visual refresh must be present');
+assert.match(css, /\.perde-site-header\s*\{/, 'The homepage refresh must style the editorial site header');
+assert.match(css, /#ml-featured-hero\s*\{/, 'The homepage refresh must refine the featured hero');
+assert.match(css, /\.ml-archive-stats\s*\{\s*display:grid/s, 'Homepage collection statistics must use a responsive card layout');
+assert.match(css, /@media\(max-width:767px\)[\s\S]*\.ml-archive-stats\s*\{\s*grid-template-columns:repeat\(2/, 'Homepage stats must remain responsive on mobile');
