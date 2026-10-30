@@ -16,7 +16,7 @@
             const average = rated.length
                 ? (rated.reduce((sum, item) => sum + Number(item.perdeRating), 0) / rated.length).toFixed(1)
                 : '—';
-            const options = Array.from({ length: 10 }, (_, index) => {
+            const options = '<option value="" ' + (!current ? 'selected' : '') + ' disabled>Puan seç</option>' + Array.from({ length: 10 }, (_, index) => {
                 const value = index + 1;
                 return '<option value="' + value + '" ' + (current === value ? 'selected' : '') + '>' + value + ' / 10</option>';
             }).join('');
