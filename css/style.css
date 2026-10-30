@@ -7,9 +7,9 @@
   --ml-text: #242522;
   --ml-muted: #777b75;
   --ml-border: #e5e6e1;
-  --ml-accent: #147d78;
-  --ml-accent-soft: #e4f2ef;
-  --ml-success: #32765b;
+  --ml-accent: #315bd4;
+  --ml-accent-soft: #eaf0ff;
+  --ml-success: #247a62;
   --ml-danger: #a44c5a;
   --ml-shadow: 0 4px 18px rgba(25, 30, 25, .045);
 }
@@ -3081,4 +3081,121 @@ html.dark #detail-modal-content input{background:#080f1e!important;border:1px so
  html.dark .perde-primary-nav #nav-admin{margin-left:0}
  html.dark .perde-imdb-detail{border-radius:14px!important}
  html.dark .perde-imdb-content{padding:18px 14px!important}
+}
+
+
+/* KINOZ LIGHT — blue identity on a bright, clean canvas */
+html.light{color-scheme:light;--ml-bg:#f5f7fc;--ml-surface:#ffffff;--ml-surface-muted:#edf2fb;--ml-text:#17233d;--ml-muted:#687894;--ml-border:#dce5f4;--ml-accent:#315bd4;--ml-accent-soft:#eaf0ff;--ml-shadow:0 8px 24px rgba(31,64,130,.07)}
+html.light,html.light body{background:#f5f7fc!important;color:#17233d!important}
+html.light body{background-image:radial-gradient(ellipse at 8% 0%,rgba(75,119,231,.075),transparent 32%),radial-gradient(ellipse at 96% 18%,rgba(72,117,223,.045),transparent 30%)!important}
+html.light .perde-site-header{background:rgba(255,255,255,.94)!important;border:1px solid #dce5f4!important;border-top:0!important;box-shadow:0 8px 28px rgba(31,64,130,.08)!important;backdrop-filter:blur(18px)}
+html.light .perde-header-inner,html.light .perde-header-main{background:transparent!important}
+html.light .perde-brand,html.light .perde-brand-name{color:#17233d!important}
+html.light .perde-brand-mark{background:linear-gradient(145deg,#eaf0ff,#dbe6ff)!important;color:#315bd4!important;border:1px solid #c4d4fb!important;box-shadow:0 5px 16px rgba(49,91,212,.12)}
+html.light .perde-brand-eyebrow,html.light .perde-brand-tagline{color:#71809c!important}
+html.light .perde-header-actions .perde-icon-action,html.light .mobile-admin-shortcut{background:#f1f5ff!important;border:1px solid #d6e1f8!important;color:#315bd4!important}
+html.light .perde-header-actions .perde-icon-action:hover,html.light .mobile-admin-shortcut:hover{background:#e4ecff!important;border-color:#9eb7f5!important}
+html.light .perde-header-actions .perde-add-action{background:linear-gradient(135deg,#4774ed,#284fc2)!important;border:1px solid #4774ed!important;color:#fff!important;box-shadow:0 7px 18px rgba(49,91,212,.2)}
+html.light .perde-primary-nav{display:flex;gap:5px;padding:7px;background:#edf2fc!important;border:1px solid #dce5f4!important;border-radius:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+html.light .perde-primary-nav .nav-btn{background:transparent!important;border:1px solid transparent!important;border-radius:8px!important;color:#63728e!important}
+html.light .perde-primary-nav .nav-btn i{color:#7893d4!important}
+html.light .perde-primary-nav .nav-btn:hover,html.light .perde-primary-nav .nav-btn.is-inactive:hover{background:#e1eaff!important;border-color:#c8d8fb!important;color:#2349ad!important}
+html.light .perde-primary-nav .nav-btn.is-active{background:linear-gradient(135deg,#4774ed,#284fc2)!important;border:1px solid #4774ed!important;color:#fff!important;box-shadow:0 5px 14px rgba(49,91,212,.2)!important}
+html.light .perde-primary-nav .nav-btn.is-active i{color:#fff!important}
+html.light .ml-section-kicker,html.light .detail-page-label,html.light .perde-profile-kicker{color:#315bd4!important}
+html.light .ml-section-heading h2,html.light .ml-catalog-meta h3,html.light .ml-home-poster-info h3{color:#17233d!important}
+html.light .ml-section-heading p,html.light .ml-catalog-sub,html.light .ml-catalog-status{color:#687894!important}
+html.light .ml-section-heading>button,html.light .ml-watchlist-actions>button,html.light .detail-back-button{background:#edf2ff!important;border:1px solid #d4e0fb!important;color:#315bd4!important;border-radius:9px}
+html.light .ml-section-heading>button:hover,html.light .ml-watchlist-actions>button:hover,html.light .detail-back-button:hover{background:#e1eaff!important;border-color:#a9bff3!important}
+html.light .glass-panel,html.light .ml-catalog-section:not(.perde-editor-picks-section),html.light .ml-stat-card,html.light .ml-dashboard-card{background:#fff!important;border-color:#dfe7f4!important;color:#17233d!important;box-shadow:0 8px 24px rgba(31,64,130,.055)!important}
+html.light .ml-catalog-card,html.light .ml-home-poster-card{background:#fff!important;border-color:#e0e7f3!important;color:#17233d!important}
+html.light .ml-archive-stats{background:linear-gradient(145deg,#fff,#f3f6fd)!important;border:1px solid #dce5f4!important;color:#17233d!important;box-shadow:0 8px 22px rgba(31,64,130,.06)}
+html.light .ml-archive-stats strong{color:#315bd4!important}
+html.light input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),html.light select,html.light textarea,html.light .input-field{background:#fff!important;border:1px solid #d4def0!important;color:#17233d!important}
+html.light input:focus,html.light select:focus,html.light textarea:focus{border-color:#527cff!important;box-shadow:0 0 0 3px rgba(82,124,255,.12)!important;outline:none}
+html.light input::placeholder,html.light textarea::placeholder{color:#91a0b8!important}
+html.light .perde-imdb-detail{overflow:hidden;border:1px solid #dce5f4!important;border-radius:20px!important;background:#fff!important;box-shadow:0 18px 48px rgba(31,64,130,.1)!important}
+html.light .perde-imdb-hero{background:#eaf0ff!important;border-bottom:1px solid #dce5f4!important}
+html.light .perde-imdb-backdrop{opacity:.27!important;filter:saturate(.82) brightness(1.12)!important}
+html.light .perde-imdb-hero-shade{background:linear-gradient(90deg,rgba(246,249,255,.98) 0%,rgba(246,249,255,.91) 42%,rgba(239,244,255,.62) 72%,rgba(239,244,255,.28) 100%),linear-gradient(0deg,rgba(245,248,255,.96),transparent 78%)!important}
+html.light .perde-imdb-hero-top,html.light .perde-imdb-brand{color:#29447f!important}
+html.light .perde-imdb-brand span,html.light .perde-imdb-kicker{color:#315bd4!important}
+html.light .perde-imdb-type{background:#e4ecff!important;border:1px solid #c5d5fa!important;color:#315bd4!important}
+html.light .perde-imdb-hero-copy h2{color:#152440!important;text-shadow:0 2px 18px rgba(255,255,255,.7)!important}
+html.light .perde-imdb-genres span{background:rgba(255,255,255,.84)!important;border:1px solid #d5e0f4!important;color:#405475!important}
+html.light .perde-imdb-content{background:#fff!important;color:#17233d!important}
+html.light .perde-imdb-main{color:#17233d!important}
+html.light .perde-imdb-poster{border:1px solid #d5e0f4!important;box-shadow:0 12px 28px rgba(31,64,130,.12)!important}
+html.light .perde-film-credits{background:linear-gradient(145deg,#f8faff,#edf2fc)!important;border:1px solid #dce5f4!important;color:#263957!important;box-shadow:0 8px 22px rgba(31,64,130,.05)!important}
+html.light .perde-film-credits h3{color:#1d3155!important;border-bottom-color:#dce5f4!important}
+html.light .perde-film-credits h3 i{background:#e3ebff!important;color:#315bd4!important}
+html.light .perde-film-credits dt{color:#71809a!important}
+html.light .perde-film-credits dd,html.light .perde-country-name{color:#263957!important}
+html.light .perde-country-item{background:#fff!important;border-color:#dce5f4!important}
+html.light .perde-imdb-score{background:linear-gradient(145deg,#eaf0ff,#dce7ff)!important;border:1px solid #c4d5fb!important;color:#1d3671!important}
+html.light .perde-imdb-score strong{color:#244fc4!important}
+html.light .perde-imdb-score span{color:#61749a!important}
+html.light .perde-imdb-fav{background:#f0f4fd!important;border:1px solid #dce5f4!important;color:#31528f!important}
+html.light .perde-imdb-fav.is-favorite{background:#fff0f5!important;border-color:#f3c7d8!important;color:#bd4773!important}
+html.light .perde-rating-panel,html.light .perde-rating-card,html.light .perde-detail-series-meta{background:#f4f7fd!important;border:1px solid #dce5f4!important;color:#263957!important}
+html.light .perde-rating-panel h3,html.light .perde-rating-card h3{color:#1d3155!important}
+html.light .perde-rating-panel p,html.light .perde-rating-card p{color:#687894!important}
+html.light .perde-imdb-overview{color:#4f607b!important}
+html.light .perde-watch-providers{background:linear-gradient(145deg,#f8faff,#eef3fc)!important;border:1px solid #dce5f4!important;color:#263957!important}
+html.light .perde-watch-heading h3{color:#1d3155!important}
+html.light .perde-watch-heading>div>span,html.light .perde-watch-region{color:#315bd4!important}
+html.light .perde-watch-loading{color:#71809a!important}
+html.light .perde-watch-provider,html.light .perde-provider-card{background:#fff!important;border:1px solid #dce5f4!important;color:#263957!important}
+html.light .perde-imdb-actions{border-top:1px solid #dce5f4!important}
+html.light .perde-imdb-action-btn{background:#edf2ff!important;border:1px solid #d4e0fb!important;color:#315bd4!important}
+html.light .perde-imdb-action-btn:hover{background:#e0eaff!important;border-color:#9eb7f5!important}
+html.light .perde-detail-add-to-list{background:linear-gradient(135deg,#4774ed,#284fc2)!important;border:1px solid #4774ed!important;color:#fff!important;box-shadow:0 8px 20px rgba(49,91,212,.18)!important}
+html.light .perde-similar{background:#f6f8fd!important;border-top:1px solid #dce5f4!important}
+html.light .perde-similar h3{color:#1d3155!important}
+html.light .perde-similar-card{background:#fff!important;border:1px solid #dce5f4!important;color:#263957!important}
+html.light .perde-similar-title{color:#1d3155!important}
+html.light .perde-similar-info small{color:#71809a!important}
+html.light .perde-similar-add{background:#edf2ff!important;border-color:#d4e0fb!important;color:#315bd4!important}
+html.light .perde-imdb-play{background:linear-gradient(135deg,#4774ed,#284fc2)!important;border:1px solid #4774ed!important;color:#fff!important}
+html.light #detail-modal>div,html.light #detail-modal-content{background:#fff!important;border:1px solid #dce5f4!important;color:#17233d!important}
+html.light #detail-modal-content h3{color:#1d3155!important}
+html.light #detail-modal-content p{color:#5f708d!important}
+html.light #detail-modal-content button:not(.perde-imdb-play){background:#edf2ff!important;border:1px solid #d4e0fb!important;color:#315bd4!important}
+html.light #detail-modal-content input{background:#fff!important;border:1px solid #d4def0!important;color:#17233d!important}
+html.light .perde-profile-hero,html.light .perde-profile-section,html.light .perde-achievements-section{background:linear-gradient(145deg,#fff,#f1f5fd)!important;border:1px solid #dce5f4!important;color:#17233d!important;box-shadow:0 10px 28px rgba(31,64,130,.06)!important}
+html.light .perde-profile-avatar{background:linear-gradient(145deg,#e3ebff,#cfdcff)!important;border:1px solid #b9ccf5!important;color:#315bd4!important}
+html.light .perde-profile-intro h2,html.light .perde-profile-section-head h3{color:#1d3155!important}
+html.light .perde-profile-intro p,html.light .perde-profile-section-head p{color:#687894!important}
+html.light .perde-profile-name-edit input{background:#fff!important;border:1px solid #d4def0!important;color:#17233d!important}
+html.light .perde-profile-name-edit button,html.light .perde-profile-share{background:linear-gradient(135deg,#4774ed,#284fc2)!important;border:1px solid #4774ed!important;color:#fff!important}
+html.light .perde-profile-highlights>*,html.light .perde-profile-top-grid>*,html.light .perde-profile-favorite-grid>*{background:#fff!important;border:1px solid #dce5f4!important;color:#263957!important}
+html.light .perde-profile-section-head>strong{color:#315bd4!important;background:#eaf0ff!important;border:1px solid #d4e0fb!important}
+html.light .perde-achievement-grid>*,html.light .perde-achievement-card{background:linear-gradient(145deg,#f8faff,#edf2fc)!important;border:1px solid #dce5f4!important;color:#263957!important}
+html.light .perde-site-footer,html.light footer{background:linear-gradient(180deg,#edf2fc,#e7eefb)!important;color:#536584!important;border-top:1px solid #d4def0!important;box-shadow:0 -10px 30px rgba(31,64,130,.04)!important}
+html.light .perde-footer-inner{background:transparent!important}
+html.light .perde-footer-brand{color:#1d3155!important}
+html.light .perde-footer-about p,html.light .perde-footer-note,html.light .perde-footer-year{color:#71809a!important}
+html.light .perde-footer-links h3,html.light .perde-footer-kicker{color:#315bd4!important}
+html.light .perde-footer-links button{color:#526584!important}
+html.light .perde-footer-links button:hover{color:#244fc4!important}
+html.light .perde-footer-signoff strong{color:#1d3155!important}
+html.light .perde-footer-line{background:linear-gradient(90deg,#4774ed,transparent)!important}
+html.light .modal-content,html.light .modal-box,html.light [role="dialog"]>div{background:#fff!important;color:#17233d!important;border:1px solid #dce5f4!important;box-shadow:0 20px 60px rgba(31,64,130,.16)!important}
+html.light .modal-content h1,html.light .modal-content h2,html.light .modal-content h3,html.light [role="dialog"] h1,html.light [role="dialog"] h2,html.light [role="dialog"] h3{color:#1d3155!important}
+html.light .modal-content p,html.light [role="dialog"] p{color:#687894!important}
+html.light .toast,html.light #toast-container>div{background:#fff!important;color:#263957!important;border:1px solid #dce5f4!important;box-shadow:0 10px 30px rgba(31,64,130,.12)!important}
+html.light table,html.light th,html.light td{border-color:#dce5f4!important;color:#405475}
+html.light th{background:#edf2fc!important;color:#31528f!important}
+html.light .text-blue-500,html.light .text-blue-400{color:#315bd4!important}
+html.light .bg-blue-600,html.light .bg-indigo-600{background:#315bd4!important}
+html.light .border-light-border{border-color:#dce5f4!important}
+html.light .text-light-muted{color:#71809a!important}
+html.light .bg-slate-50{background:#f1f5fc!important}
+html.light .bg-white{background:#fff!important}
+html.light .perde-editor-picks-section{background:radial-gradient(ellipse at 0% 45%,rgba(49,91,212,.12),transparent 43%),radial-gradient(ellipse at 100% 0%,rgba(49,91,212,.07),transparent 38%),#fff!important;border-color:#dce5f4!important}
+@media(max-width:767px){
+ html.light .perde-site-header{border-left:0!important;border-right:0!important;border-radius:0 0 16px 16px}
+ html.light .perde-primary-nav{overflow-x:auto;scrollbar-width:none}
+ html.light .perde-primary-nav::-webkit-scrollbar{display:none}
+ html.light .perde-site-footer{margin-top:30px}
 }
