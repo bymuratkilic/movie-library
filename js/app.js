@@ -839,6 +839,43 @@
         let featuredHeroTimer = null;
 
 
+
+
+        function togglePerdeMenu(force) {
+            const panel = document.getElementById('perde-menu-panel');
+            const trigger = document.querySelector('.perde-menu-trigger');
+            if (!panel) return;
+            const shouldOpen = typeof force === 'boolean' ? force : panel.classList.contains('hidden');
+            panel.classList.toggle('hidden', !shouldOpen);
+            if (trigger) {
+                trigger.setAttribute('aria-expanded', String(shouldOpen));
+                trigger.setAttribute('aria-label', shouldOpen ? 'Menüyü kapat' : 'Menüyü aç');
+                trigger.innerHTML = '<i class="fa-solid ' + (shouldOpen ? 'fa-xmark' : 'fa-bars') + '"></i>';
+            }
+        }
+
+        function openPerdeSearch() {
+            const overlay = document.getElementById('perde-search-overlay');
+            if (!overlay) return;
+            togglePerdeMenu(false);
+            overlay.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+            window.setTimeout(() => document.getElementById('header-search-input')?.focus(), 40);
+        }
+
+        function closePerdeSearch() {
+            const overlay = document.getElementById('perde-search-overlay');
+            if (overlay) overlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                closePerdeSearch();
+                togglePerdeMenu(false);
+            }
+        });
+
         function syncHeaderSearch(value) {
             const librarySearch = document.getElementById('search-input');
             if (librarySearch) librarySearch.value = value;
