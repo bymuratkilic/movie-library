@@ -1526,30 +1526,3 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .ml-diary-history li p{margin:7px 0 0}
 .ml-diary-empty-state{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
 @media(max-width:640px){.ml-diary-panel{padding:15px}.ml-diary-fields{grid-template-columns:1fr}.ml-diary-empty-state{align-items:flex-start;flex-direction:column}}
-
-/* Admin diary and recommendation approval UI */
-.admin-status-select{min-width:125px;padding:7px 9px;border-radius:8px;font-size:11px}
-.admin-control-btn{display:inline-flex;align-items:center;justify-content:center;padding:7px 10px;margin:2px;border:1px solid rgba(100,116,139,.3);border-radius:8px;font-size:10px;font-weight:700}
-.admin-diary-editor{display:grid;gap:12px;padding:16px;margin:8px 12px 14px;background:rgba(100,116,139,.06);border:1px solid rgba(100,116,139,.18);border-radius:10px}
-.admin-diary-editor label{display:grid;gap:6px;font-size:11px;font-weight:700;color:#94a3b8}
-.admin-diary-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.admin-diary-editor .input-field{width:100%;padding:9px 10px;border:1px solid rgba(100,116,139,.25);border-radius:8px;background:transparent;color:inherit;font-size:12px}
-.admin-pending-list{display:grid;gap:9px}
-.admin-pending-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid rgba(100,116,139,.2);border-radius:10px}
-.admin-pending-item>div:first-child{display:grid;gap:4px;min-width:0}
-.admin-pending-item strong{font-size:12px}.admin-pending-item small,.admin-pending-empty{font-size:10px;color:#94a3b8}
-.admin-pending-actions{display:flex;gap:6px;flex-shrink:0}
-.admin-approve-btn,.admin-reject-btn{padding:7px 10px;border-radius:7px;font-size:10px;font-weight:800}
-.admin-approve-btn{background:#059669;color:white}.admin-reject-btn{background:rgba(244,63,94,.12);color:#f43f5e}
-.perde-similar-status.is-pending{color:#d69e2e}
-@media(max-width:640px){.admin-diary-fields{grid-template-columns:1fr}.admin-pending-item{align-items:flex-start;flex-direction:column}.admin-pending-actions{width:100%}.admin-pending-actions button{flex:1}}
-
-
-/* Visitor mode: public pages are read-only. Editing controls appear only in an admin session. */
-html:not(.admin-mode) .admin-only-control,
-html:not(.admin-mode) .perde-imdb-fav,
-html:not(.admin-mode) .perde-imdb-delete,
-html:not(.admin-mode) .perde-similar-add,
-html:not(.admin-mode) #trailer-url-input,
-html:not(.admin-mode) #trailer-url-input + button { display: none !important; }
-html.admin-mode .admin-only-control { display: inline-flex; }

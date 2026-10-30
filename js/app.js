@@ -200,7 +200,6 @@
         }
 
         function saveToLocalStorage() {
-            if (!requireAdminAccess()) return;
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(movies));
             } catch (e) {
@@ -340,12 +339,6 @@
         }
 
         // Admin Panel Logic & Security
-        function requireAdminAccess() {
-            if (isAdminLoggedIn) return true;
-            showToast('Bu işlem yalnızca yönetici tarafından yapılabilir.');
-            return false;
-        }
-
         function getAdminPassword() {
             return localStorage.getItem(ADMIN_PASS_KEY) || 'admin123';
         }
@@ -364,7 +357,6 @@
             const inputPass = document.getElementById('admin-password-input').value;
             if (inputPass === getAdminPassword()) {
                 isAdminLoggedIn = true;
-                document.documentElement.classList.add('admin-mode');
                 closeModal('admin-auth-modal');
                 document.getElementById('admin-password-input').value = '';
                 showToast('Yönetici girişi başarılı!');
@@ -376,7 +368,6 @@
 
         function lockAdminSession() {
             isAdminLoggedIn = false;
-            document.documentElement.classList.remove('admin-mode');
             switchTab('dashboard');
             showToast('Yönetici oturumu kapatıldı.');
         }
@@ -400,37 +391,30 @@
             showToast('Yönetici şifresi güncellendi.');
         }
 
-        function adminEscape(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-        function renderAdminDiaryEditor(id) {
-            const m=movies.find(x=>String(x.id)===String(id)), box=document.getElementById('admin-diary-'+id); if(!m||!box)return;
-            const hist=Array.isArray(m.watchHistory)?m.watchHistory:[], last=hist[hist.length-1]||{}; box.classList.toggle('hidden'); if(box.classList.contains('hidden'))return;
-            box.innerHTML='<div class="admin-diary-editor"><div class="admin-diary-fields"><label>İzleme tarihi<input id="admin-date-'+id+'" type="date" value="'+adminEscape(last.date||m.watchedAt||'')+'" class="input-field"></label><label>Kişisel puan<input id="admin-rating-'+id+'" type="number" min="1" max="10" step="0.5" value="'+adminEscape(last.rating??m.personalRating??'')+'" class="input-field"></label></div><label>Kısa yorum<textarea id="admin-review-'+id+'" rows="3" maxlength="500" class="input-field">'+adminEscape(last.review??m.personalReview??'')+'</textarea></label><button onclick="saveAdminDiaryEntry(\''+id+'\')" class="admin-control-btn">Günlük kaydını kaydet</button>'+(hist.length?'<p>Toplam '+hist.length+' izleme kaydı</p><ol>'+hist.slice().reverse().map(x=>'<li>'+adminEscape(x.date||'Tarih yok')+(x.rating?' · '+adminEscape(x.rating)+'/10':'')+(x.review?' — '+adminEscape(x.review):'')+'</li>').join('')+'</ol>':'')+'</div>';
-        }
-        function saveAdminDiaryEntry(id) {
-            const m=movies.find(x=>String(x.id)===String(id)); if(!m)return;
-            const date=document.getElementById('admin-date-'+id)?.value||new Date().toISOString().slice(0,10), raw=document.getElementById('admin-rating-'+id)?.value??'', rating=raw===''?'':Number(raw), review=(document.getElementById('admin-review-'+id)?.value||'').trim();
-            if(rating!==''&&(!Number.isFinite(rating)||rating<1||rating>10)){showToast('Kişisel puan 1 ile 10 arasında olmalıdır.');return;}
-            if(!Array.isArray(m.watchHistory))m.watchHistory=[]; const entry={date,rating,review}; if(m.watchHistory.length)m.watchHistory[m.watchHistory.length-1]=entry;else m.watchHistory.push(entry);
-            m.watchedAt=date;m.personalRating=rating;m.personalReview=review;saveToLocalStorage();renderAdminTable();showToast('Kişisel sinema günlüğü güncellendi.');
-        }
-        function setAdminMovieStatus(id,status) {
-            const m=movies.find(x=>String(x.id)===String(id));if(!m)return;const prev=m.status;m.status=status;
-            if(status==='watched'&&prev!=='watched'){const today=new Date().toISOString().slice(0,10);m.watchedAt=today;if(!Array.isArray(m.watchHistory))m.watchHistory=[];m.watchHistory.push({date:today,rating:'',review:''});}
-            saveToLocalStorage();renderAdminTable();renderDashboard();renderLibrary();showToast('Yapım durumu güncellendi.');
-        }
-        function approveSimilarSuggestion(id) {
-            const list=getPendingSuggestions(), item=list.find(x=>x.requestId===id);if(!item)return;
-            const exists=movies.some(x=>(x.tmdbId&&String(x.tmdbId)===String(item.tmdbId))||((x.title||'').trim().toLocaleLowerCase('tr')===(item.title||'').trim().toLocaleLowerCase('tr')&&String(x.year||'')===String(item.year||'')));
-            if(!exists){const saved={...item,id:'movie-'+Date.now(),source:'local',status:'watch_later',favorite:false};delete saved.requestId;delete saved.requestedAt;delete saved.inList;movies.unshift(saved);saveToLocalStorage();renderDashboard();renderLibrary();}
-            savePendingSuggestions(list.filter(x=>x.requestId!==id));renderAdminTable();showToast(exists?'Yapım zaten arşivde; talep kapatıldı.':'Talep onaylandı ve izleme listesine eklendi.');
-        }
-        function rejectSimilarSuggestion(id) {savePendingSuggestions(getPendingSuggestions().filter(x=>x.requestId!==id));renderAdminTable();showToast('Yapım ekleme talebi reddedildi.');}
         function renderAdminTable() {
-            const tbody=document.getElementById('admin-table-body');if(!tbody)return;
-            tbody.innerHTML=movies.map(m=>`<tr><td class="py-2.5 px-3 font-bold">${adminEscape(m.title)}</td><td class="py-2.5 px-3">${adminEscape(m.type)}</td><td class="py-2.5 px-3">${adminEscape(m.year)}</td><td class="py-2.5 px-3">${adminEscape(m.imdb)}</td><td class="py-2.5 px-3"><select class="input-field admin-status-select" onchange="setAdminMovieStatus('${adminEscape(m.id)}',this.value)"><option value="watched" ${m.status==='watched'?'selected':''}>İzledim</option><option value="watch_later" ${m.status==='watch_later'?'selected':''}>İzleyeceğim</option></select></td><td class="py-2.5 px-3 text-right"><button onclick="renderAdminDiaryEditor('${adminEscape(m.id)}')" class="admin-control-btn">Günlük</button><button onclick="deleteMovie('${adminEscape(m.id)}')" class="text-rose-500 px-2 py-1"><i class="fa-solid fa-trash"></i></button></td></tr><tr><td colspan="6" class="p-0"><div id="admin-diary-${adminEscape(m.id)}" class="hidden"></div></td></tr>`).join('');
-            const pending=getPendingSuggestions(), box=document.getElementById('admin-pending-list'), count=document.getElementById('admin-pending-count');if(count)count.textContent=pending.length+' talep';
-            if(box)box.innerHTML=pending.length?pending.map(x=>`<article class="admin-pending-item"><div><strong>${adminEscape(x.title)}</strong><small>${adminEscape(x.year||'Yıl yok')} · ${x.type==='tv'?'Dizi':'Film'} · ${adminEscape(x.imdb||'—')} IMDb</small></div><div class="admin-pending-actions"><button onclick="approveSimilarSuggestion('${adminEscape(x.requestId)}')" class="admin-approve-btn">Onayla</button><button onclick="rejectSimilarSuggestion('${adminEscape(x.requestId)}')" class="admin-reject-btn">Reddet</button></div></article>`).join(''):'<p class="admin-pending-empty">Onay bekleyen yapım talebi bulunmuyor.</p>';
+            const tbody = document.getElementById('admin-table-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = movies.map(m => `
+                <tr class="hover:dark:bg-clean-hover hover:bg-slate-50 transition-colors">
+                    <td class="py-2.5 px-3 font-bold dark:text-white text-slate-900">${m.title}</td>
+                    <td class="py-2.5 px-3 uppercase text-[10px] text-blue-500 font-semibold">${m.type}</td>
+                    <td class="py-2.5 px-3 text-slate-400">${m.year}</td>
+                    <td class="py-2.5 px-3 text-amber-500 font-bold">${m.imdb}</td>
+                    <td class="py-2.5 px-3">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${m.status === 'watched' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}">
+                            ${m.status === 'watched' ? 'İzlendi' : 'İzlenecek'}
+                        </span>
+                    </td>
+                    <td class="py-2.5 px-3 text-right">
+                        <button onclick="deleteMovie('${m.id}')" class="text-rose-500 hover:text-rose-700 px-2 py-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
         }
+
         function exportArchiveJSON() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(movies, null, 2));
             const dlAnchorElem = document.createElement('a');
@@ -441,7 +425,6 @@
         }
 
         function importArchiveJSON(event) {
-            if (!requireAdminAccess()) return;
             const fileReader = new FileReader();
             fileReader.onload = function (e) {
                 try {
@@ -466,7 +449,6 @@
         }
 
         function resetToDefaultArchive() {
-            if (!requireAdminAccess()) return;
             if (confirm('Tüm yapımlarınız silinecek ve varsayılan listeye dönülecektir. Emin misiniz?')) {
                 movies = [...onlineCatalog];
                 saveToLocalStorage();
@@ -862,7 +844,6 @@
         }
 
         function saveTrailerUrl(id) {
-            if (!requireAdminAccess()) return;
             const input = document.getElementById('trailer-url-input');
             const entered = (input?.value || '').trim();
             const videoId = getYouTubeVideoId(entered);
@@ -937,7 +918,8 @@
                                 <div class="perde-imdb-rating-row"><div class="perde-imdb-score"><strong>${m.imdb || '—'}</strong><span>IMDb</span></div><button onclick="toggleFavorite('${m.id}')" class="perde-imdb-fav ${m.favorite ? 'is-favorite' : ''}"><i class="fa-solid fa-heart"></i> ${m.favorite ? 'Favorilerde' : 'Favorilere Ekle'}</button></div>
                                 <p class="perde-imdb-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p>
                                 
-                                <div class="perde-imdb-actions"><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
+                                <div class="perde-imdb-actions"><label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
+                                ${renderPersonalDiary(m)}
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
                             </div>
                         </section>
@@ -1033,7 +1015,7 @@
                             <button class="perde-similar-title" onclick="openDetailModal('${item.id}')">${esc(item.title)}</button>
                             <small>${item.year || 'Yıl bilinmiyor'}</small>
                             <div class="perde-similar-status ${item.inList ? 'is-added' : 'is-missing'}">${item.inList ? '<i class="fa-solid fa-check"></i> Listemde' : '<i class="fa-solid fa-circle-info"></i> Listemde Yok'}</div>
-                            ${item.inList || !isAdminLoggedIn ? '' : `<button class="perde-similar-add" onclick="addSimilarProduction('${item.id}', this)"><i class="fa-solid fa-plus"></i> Arşive Ekle</button>`}
+                            ${item.inList ? '' : `<button class="perde-similar-add" onclick="addSimilarProduction('${item.id}', this)"><i class="fa-solid fa-plus"></i> Listeme Ekle</button>`}
                         </div>
                     </article>
                 `).join('');
@@ -1042,19 +1024,34 @@
             }
         }
 
-        const PENDING_SUGGESTIONS_KEY = 'perde_pending_suggestions_v1';
-        function getPendingSuggestions() { try { const v = JSON.parse(localStorage.getItem(PENDING_SUGGESTIONS_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch(e) { return []; } }
-        function savePendingSuggestions(items) { if (!requireAdminAccess()) return; localStorage.setItem(PENDING_SUGGESTIONS_KEY, JSON.stringify(items)); }
         function addSimilarProduction(id, button) {
-            if (!requireAdminAccess()) return;
-            const item = fetchedOnlineResults.find(x => x.id === id); if (!item) return;
-            const exists = movies.some(x => (x.tmdbId && String(x.tmdbId) === String(item.tmdbId)) || ((x.title||'').trim().toLocaleLowerCase('tr') === (item.title||'').trim().toLocaleLowerCase('tr') && String(x.year||'') === String(item.year||''));
-            if (exists) { button.outerHTML = '<span class="perde-similar-status is-added">Listemde</span>'; return; }
-            const pending = getPendingSuggestions(); const duplicate = pending.some(x => String(x.tmdbId||'') === String(item.tmdbId||'') || ((x.title||'').trim().toLocaleLowerCase('tr') === (item.title||'').trim().toLocaleLowerCase('tr') && String(x.year||'') === String(item.year||''));
-            if (!duplicate) { pending.push({ ...item, requestId:'request-'+Date.now(), requestedAt:new Date().toISOString() }); savePendingSuggestions(pending); }
-            button.outerHTML = '<span class="perde-similar-status is-pending"><i class="fa-solid fa-clock"></i> Onay Bekliyor</span>'; showToast(duplicate ? 'Bu yapım zaten onay bekliyor.' : 'Ekleme talebin yönetici onayına gönderildi.');
-        }        function toggleFavorite(id) {
-            if (!requireAdminAccess()) return;
+            const item = fetchedOnlineResults.find(existing => existing.id === id);
+            if (!item) return;
+            const alreadyAdded = movies.some(existing =>
+                (existing.tmdbId && String(existing.tmdbId) === String(item.tmdbId)) ||
+                ((existing.title || '').trim().toLocaleLowerCase('tr') === (item.title || '').trim().toLocaleLowerCase('tr') &&
+                 String(existing.year || '') === String(item.year || ''))
+            );
+            if (alreadyAdded) {
+                button.outerHTML = '<span class="perde-similar-status is-added"><i class="fa-solid fa-check"></i> Listemde</span>';
+                return;
+            }
+
+            // Arşivde en yeni kayıt olarak en başa ekle.
+            const saved = { ...item, id: 'movie-' + Date.now(), source: 'local', status: 'watch_later', favorite: false };
+            delete saved.inList;
+            movies.unshift(saved);
+            saveToLocalStorage();
+
+            // Dashboard ve kütüphane, uygulamanın gerçek render fonksiyonlarıyla yenilenir.
+            renderDashboard();
+            renderLibrary();
+            showToast('Yapım izleme listene eklendi.');
+            button.outerHTML = '<span class="perde-similar-status is-added"><i class="fa-solid fa-check"></i> Listeye Eklendi</span>';
+        }
+
+
+        function toggleFavorite(id) {
             let m = movies.find(x => x.id === id);
             if (!m) {
                 const catalogItem = onlineCatalog.find(x => x.id === id) || fetchedOnlineResults.find(x => x.id === id);
@@ -1073,7 +1070,6 @@
         }
 
         function updateMovieStatus(id, newStatus) {
-            if (!requireAdminAccess()) return;
             let m = movies.find(x => x.id === id);
             if (!m) {
                 const catalogItem = onlineCatalog.find(x => x.id === id) || fetchedOnlineResults.find(x => x.id === id);
@@ -1145,7 +1141,6 @@
         }
 
         function deleteMovie(id) {
-            if (!requireAdminAccess()) return;
             movies = movies.filter(x => x.id !== id);
             saveToLocalStorage();
             closeModal('detail-modal');
@@ -1410,7 +1405,6 @@
         }
 
         function openAddMovieModal() {
-            if (!requireAdminAccess()) return;
             document.getElementById('add-modal').classList.remove('hidden');
             document.getElementById('add-search-input').value = '';
             handleCatalogSearch('');
