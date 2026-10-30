@@ -82,11 +82,11 @@ assert.ok(config.includes('darkMode'), 'Tailwind dark-mode configuration must re
 
 console.log('My Library static smoke checks passed.');
 
-assert.match(app, /function\\s+toggleHomeCardPreview\\s*\\(/, 'Homepage poster quick preview toggle must exist');
+assert.match(app, /function\s+toggleHomeCardPreview\s*\(/, 'Homepage poster quick preview toggle must exist');
 assert.match(app, /ml-home-poster-preview/, 'Homepage cards must render a synopsis preview');
 assert.match(app, /aria-expanded=.*toggleHomeCardPreview/, 'Preview toggle must expose its expanded state');
-assert.match(css, /\\.ml-home-poster-preview/, 'Homepage synopsis preview styles must exist');
-assert.match(css, /\\.ml-home-poster-card\\.is-preview-open/, 'Touch users must be able to open the preview explicitly');
+assert.match(css, /\.ml-home-poster-preview/, 'Homepage synopsis preview styles must exist');
+assert.match(css, /\.ml-home-poster-card\.is-preview-open/, 'Touch users must be able to open the preview explicitly');
 
 assert.match(app, /Number\(b\.perdeRating\)/, 'Personal recommendations must prioritize the user's Perde ratings');
 assert.match(app, /genreMatches \* 3 \* seedWeight/, 'Recommendation ranking must use genre affinity and seed preference');
@@ -105,7 +105,7 @@ assert.match(app, /popupOnly = false/, 'Trailer popup mode must avoid opening an
 assert.match(html, /onclick="renderPersonalRecommendations\(\)"/, 'Users must be able to refresh personal recommendations');
 assert.match(css, /\.ml-recommendation-refresh/, 'Recommendation refresh control must be styled');
 
-assert.match(app, /function\\s+loadRecommendationProviders\\s*\\(/, 'Personal recommendation cards must load Turkish streaming availability');
+assert.match(app, /function\s+loadRecommendationProviders\s*\(/, 'Personal recommendation cards must load Turkish streaming availability');
 assert.match(app, /perde-recommendation-providers-/, 'Recommendation cards must include a streaming provider slot');
 assert.match(app, /data\.results && data\.results\.TR/, 'Recommendation availability must be scoped to Türkiye');
 assert.match(app, /provider\.logo_path && list\.findIndex/, 'Recommendation cards must render provider logos only');
