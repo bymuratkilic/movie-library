@@ -802,6 +802,12 @@
                 console.warn('Sinema vitrini yüklenemedi:',error);
             }
         }
+        function selectCinemaShowcaseItem(id){
+            const selected=cinemaShowcaseCache.find(item=>String(item.id)===String(id));
+            if(!selected)return;
+            cinemaShowcaseCache=[selected,...cinemaShowcaseCache.filter(item=>String(item.id)!==String(id))];
+            paintCinemaShowcase(cinemaShowcaseCache);
+        }
         function paintCinemaShowcase(items){
             const feature=document.getElementById('perde-cinema-feature'),rail=document.getElementById('perde-cinema-rail');
             if(!feature||!rail)return;
@@ -809,7 +815,7 @@
             if(!items.length){feature.innerHTML='<div class="perde-cinema-loading">Arşivine yapım eklediğinde vitrin burada oluşacak.</div>';rail.innerHTML='';return;}
             const lead=items[0];
             feature.innerHTML='<img class="perde-cinema-backdrop" src="'+safe(lead.backdrop||lead.poster||'')+'" alt="" onerror="this.style.display=\'none\'"><div class="perde-cinema-overlay"></div><div class="perde-cinema-feature-copy"><span class="perde-cinema-feature-tag"><i class="fa-solid fa-star"></i> '+(lead.source==='archive'?'ARŞİVİNDEN SEÇİLDİ':'TMDB HAFTANIN KEŞFİ')+'</span><h3>'+safe(lead.title)+'</h3><div class="perde-cinema-meta"><span>'+safe(lead.year||'Yıl bilgisi yok')+'</span><span>'+(lead.type==='tv'?'DİZİ':lead.type==='doc'?'BELGESEL':'FİLM')+'</span><span><i class="fa-solid fa-star"></i> '+safe(lead.imdb||'—')+'</span></div><p>'+safe((lead.overview||'Bu yapımı daha yakından keşfet.').slice(0,230))+'</p><button type="button" onclick="openDetailModal(\''+safe(lead.id).replace(/'/g,'')+'\')">Yapımı keşfet <i class="fa-solid fa-arrow-right"></i></button></div>';
-            rail.innerHTML=items.slice(1).map(item=>'<button type="button" class="perde-cinema-card" onclick="openDetailModal(\''+safe(item.id).replace(/'/g,'')+'\')" aria-label="'+safe(item.title)+' detaylarını aç"><span class="perde-cinema-card-image"><img src="'+safe(item.poster||item.backdrop||'')+'" alt="'+safe(item.title)+'" loading="lazy"><span>'+(item.source==='archive'?'ARŞİV':'KEŞİF')+'</span></span><strong>'+safe(item.title)+'</strong><small>'+safe(item.year||'—')+' · '+(item.type==='tv'?'Dizi':'Film')+' · ★ '+safe(item.imdb||'—')+'</small></button>').join('');
+            rail.innerHTML=items.slice(1).map(item=>'<button type="button" class="perde-cinema-card" onclick="selectCinemaShowcaseItem(\''+safe(item.id).replace(/'/g,'')+'\')" aria-label="'+safe(item.title)+' yapımını manşette göster"><span class="perde-cinema-card-image"><img src="'+safe(item.poster||item.backdrop||'')+'" alt="'+safe(item.title)+'" loading="lazy"><span>'+(item.source==='archive'?'ARŞİV':'KEŞİF')+'</span></span><strong>'+safe(item.title)+'</strong><small>'+safe(item.year||'—')+' · '+(item.type==='tv'?'Dizi':'Film')+' · ★ '+safe(item.imdb||'—')+'</small></button>').join('');
             const count=document.getElementById('perde-cinema-count');if(count)count.textContent=items.length+' yapım · Arşiv + TMDB';
         }
 
