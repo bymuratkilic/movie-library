@@ -156,7 +156,7 @@
         <!-- DASHBOARD TAB -->
         <section id="tab-dashboard" class="space-y-8">
             <div class="ml-home-feature-row"><section id="ml-featured-hero" class="ml-featured-hero" aria-label="Öne çıkan yapım"></section><section id="ml-todays-pick" class="ml-todays-pick" aria-label="Bugün ne izlesem önerisi"></section></div>
-            <section class="ml-catalog-section ml-personal-recommendations"><div class="ml-section-heading"><div><span class="ml-section-kicker">İZLEME ZEVKİNE GÖRE</span><h2>Sana Özel Seçkiler</h2><p>Favorilerin, izlediklerin ve kendi Perde Puanlarınla şekillenen öneriler.</p></div><div class="ml-recommendation-actions"><span class="ml-recommendation-note"><i class="fa-solid fa-wand-magic-sparkles"></i> Kişiselleştirilmiş</span><button type="button" class="ml-recommendation-refresh" onclick="renderPersonalRecommendations()" aria-label="Önerileri yenile"><i class="fa-solid fa-rotate"></i> Yenile</button><span id="perde-recommendation-history-count" class="ml-recommendation-history-count">0 farklı öneri</span></div></div><div class="perde-recommendation-carousel"><button type="button" class="perde-recommendation-arrow" onclick="scrollPersonalRecommendations(-1)" aria-label="Önceki öneriler"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><div id="perde-personal-recommendations" class="perde-personal-recommendation-grid" role="region" aria-label="Sana özel film ve dizi önerileri" tabindex="0"><p class="perde-recommendation-loading"><i class="fa-solid fa-spinner fa-spin"></i> Sana uygun yapımlar hazırlanıyor…</p></div><button type="button" class="perde-recommendation-arrow" onclick="scrollPersonalRecommendations(1)" aria-label="Sonraki öneriler"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div></section>
+            <section class="ml-catalog-section ml-personal-recommendations"><div class="ml-section-heading"><div><span class="ml-section-kicker">İZLEME ZEVKİNE GÖRE</span><h2>Sana Özel Seçkiler</h2><p>Favorilerin, izlediklerin ve izleme geçmişin ve favorilerinle şekillenen öneriler.</p></div><div class="ml-recommendation-actions"><span class="ml-recommendation-note"><i class="fa-solid fa-wand-magic-sparkles"></i> Kişiselleştirilmiş</span><button type="button" class="ml-recommendation-refresh" onclick="renderPersonalRecommendations()" aria-label="Önerileri yenile"><i class="fa-solid fa-rotate"></i> Yenile</button><span id="perde-recommendation-history-count" class="ml-recommendation-history-count">0 farklı öneri</span></div></div><div class="perde-recommendation-carousel"><button type="button" class="perde-recommendation-arrow" onclick="scrollPersonalRecommendations(-1)" aria-label="Önceki öneriler"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><div id="perde-personal-recommendations" class="perde-personal-recommendation-grid" role="region" aria-label="Sana özel film ve dizi önerileri" tabindex="0"><p class="perde-recommendation-loading"><i class="fa-solid fa-spinner fa-spin"></i> Sana uygun yapımlar hazırlanıyor…</p></div><button type="button" class="perde-recommendation-arrow" onclick="scrollPersonalRecommendations(1)" aria-label="Sonraki öneriler"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div></section>
             <section class="ml-catalog-section perde-cinema-showcase" aria-label="Sinema Vitrini">
                 <div class="perde-cinema-heading"><div><span class="perde-cinema-kicker"><i class="fa-solid fa-clapperboard"></i> PERDE'DEN ÖZEL SEÇKİ</span><h2>Sinema Vitrini</h2><p>Arşivinden seçilen favoriler ve keşfedilmeyi bekleyen yeni hikâyeler.</p></div><button type="button" class="perde-cinema-refresh" onclick="renderCinemaShowcase(true)"><i class="fa-solid fa-arrows-rotate"></i> Seçkiyi yenile</button></div>
                 <div id="perde-cinema-feature" class="perde-cinema-feature" aria-live="polite"><div class="perde-cinema-loading"><i class="fa-solid fa-spinner fa-spin"></i> Vitrin hazırlanıyor…</div></div>
@@ -284,40 +284,7 @@
                 <span id="stats-updated-label" class="text-[10px] dark:text-clean-muted text-light-muted">Arşiv verilerine göre</span>
             </div>
 
-            <section class="perde-year-panel">
-                <div class="perde-year-heading">
-                    <div><span>PERDE · YEAR IN REVIEW</span><h2 id="perde-year-heading-title">Yıllık Sinema Özetin</h2><p>Seçtiğin yıldaki izleme alışkanlıkların ve öne çıkan yapımların.</p></div>
-                    <div class="perde-year-actions"><label for="perde-year-select">Yıl</label><select id="perde-year-select" onchange="renderYearInReview()"></select><button id="perde-year-share" type="button" onclick="sharePerdeYearReview()"><i class="fa-solid fa-share-nodes"></i> Özeti paylaş</button></div>
-                </div>
-                <div id="perde-year-review" aria-live="polite"></div>
-            </section>
-
-            <div id="personal-stats-kpis" class="perde-stats-kpi-grid" aria-live="polite"></div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
-                    <div><h3 class="text-sm font-bold dark:text-white text-slate-900"><i class="fa-solid fa-chart-pie text-blue-500 mr-2"></i>Tür Dağılımı</h3><p class="text-[10px] dark:text-clean-muted text-light-muted mt-1">Arşivindeki yapımların türlere göre dağılımı.</p></div>
-                    <div class="relative max-w-xs mx-auto h-64"><canvas id="genreDoughnutChart"></canvas></div>
-                    <div id="stats-top-genres" class="perde-stats-inline-list"></div>
-                </div>
-                <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
-                    <div><h3 class="text-sm font-bold dark:text-white text-slate-900"><i class="fa-solid fa-chart-column text-emerald-500 mr-2"></i>Koleksiyon Durumu</h3><p class="text-[10px] dark:text-clean-muted text-light-muted mt-1">İzlediklerin, izleme listen ve favorilerin.</p></div>
-                    <div class="relative max-w-xs mx-auto h-64"><canvas id="statusBarChart"></canvas></div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
-                    <div><h3 class="text-sm font-bold dark:text-white text-slate-900"><i class="fa-solid fa-calendar-days text-violet-500 mr-2"></i>Aylık İzleme Aktivitesi</h3><p class="text-[10px] dark:text-clean-muted text-light-muted mt-1">Son 12 ayda arşivine kaydedilmiş izleme kayıtları.</p></div>
-                    <div class="relative h-64"><canvas id="monthlyWatchChart"></canvas></div>
-                    <p class="text-[9px] dark:text-clean-muted text-light-muted">Geçmiş kayıt bulunmayan dönemler sıfır gösterilir. Tekrar izlemeler ayrı kayıt olarak sayılır.</p>
-                </div>
-                <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
-                    <div><h3 class="text-sm font-bold dark:text-white text-slate-900"><i class="fa-solid fa-trophy text-amber-500 mr-2"></i>En Yüksek Perde Puanları</h3><p class="text-[10px] dark:text-clean-muted text-light-muted mt-1">Kendi verdiğin puanlara göre ilk 5 yapım.</p></div>
-                    <div id="stats-top-rated" class="perde-stats-ranking"></div>
-                </div>
-            </div>
-        </section>
+            
 
         <!-- PERSONAL PROFILE TAB -->
         <section id="tab-profile" class="hidden space-y-6">
@@ -332,10 +299,7 @@
                 <button type="button" class="perde-profile-share" onclick="sharePerdeProfile()"><i class="fa-solid fa-share-nodes"></i><span>Özetimi paylaş</span></button>
             </div>
             <div id="perde-profile-highlights" class="perde-profile-highlights"></div>
-            <section class="perde-profile-section perde-achievements-section">
-                <div class="perde-profile-section-head"><div><span>PERDE · BAŞARIMLAR</span><h3>Sinema Yolculuğun</h3><p>İzleme, puanlama ve koleksiyon hedeflerini tamamladıkça rozet kazan.</p></div><strong id="perde-achievement-count">0 / 10 rozet</strong></div>
-                <div id="perde-achievements" class="perde-achievement-grid" aria-live="polite"></div>
-            </section>
+
             <div class="perde-profile-section">
                 <div class="perde-profile-section-head"><div><span>İLK 10</span><h3>En Sevdiğim Yapımlar</h3><p>İzlediğin yapımlar arasından IMDb puanı en yüksek 10 yapım.</p></div></div>
                 <div id="perde-profile-top-ten" class="perde-profile-top-grid"></div>
