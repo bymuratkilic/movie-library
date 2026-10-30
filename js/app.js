@@ -1011,28 +1011,26 @@
         function renderWatchProviderResult(result, movie) {
             const container = document.getElementById('perde-watch-providers');
             if (!container) return;
-            if (!result) {
-                container.innerHTML = '<div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div><p class="perde-watch-empty">Bu yapım için Türkiye’de yayın platformu bilgisi bulunamadı.</p><p class="perde-watch-credit">Yayın bilgileri JustWatch kaynaklıdır.</p>';
+            const providers = result
+                ? [...(result.flatrate || []), ...(result.free || []), ...(result.ads || []), ...(result.rent || []), ...(result.buy || [])]
+                : [];
+            const uniqueProviders = providers.filter((provider, index, list) =>
+                list.findIndex(item => item.provider_id === provider.provider_id) === index
+            );
+            const heading = '<span class="perde-watch-label">NEREDE YAYINLANIYOR?</span>';
+            if (!uniqueProviders.length) {
+                container.innerHTML = '<div class="perde-watch-single-line">' + heading +
+                    '<span class="perde-watch-empty">Türkiye için yayın bilgisi bulunamadı</span></div>';
                 return;
             }
-            const sections = [
-                ['Abonelik kapsamında', 'fa-play-circle', result.flatrate],
-                ['Ücretsiz', 'fa-gift', result.free],
-                ['Reklamlı ücretsiz', 'fa-rectangle-ad', result.ads],
-                ['Kirala', 'fa-ticket', result.rent],
-                ['Satın al', 'fa-bag-shopping', result.buy]
-            ];
-            const markup = sections.map(group => {
-                const providers = Array.isArray(group[2]) ? group[2] : [];
-                if (!providers.length) return '';
-                return '<div class="perde-watch-group"><h4><i class="fa-solid ' + group[1] + '"></i>' + group[0] + '</h4><div class="perde-watch-list">' +
-                    providers.map(provider => '<div class="perde-watch-provider"><img src="https://image.tmdb.org/t/p/w92' + provider.logo_path + '" alt="" loading="lazy" onerror="this.style.display=\'none\'"><span>' + escapeProviderText(provider.provider_name) + '</span></div>').join('') +
-                    '</div></div>';
-            }).join('');
-            container.innerHTML = '<div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div>' +
-                (markup || '<p class="perde-watch-empty">Bu yapım için şu anda listelenmiş bir izleme seçeneği bulunamadı.</p>') +
-                (result.link ? '<a class="perde-watch-more" href="' + escapeProviderText(result.link) + '" target="_blank" rel="noopener noreferrer">TMDB’de görüntüle <i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') +
-                '<p class="perde-watch-credit">Yayın verileri JustWatch tarafından sağlanır · <a href="https://www.justwatch.com/tr" target="_blank" rel="noopener noreferrer">JustWatch</a></p>';
+            const providerMarkup = uniqueProviders.map(provider =>
+                '<span class="perde-watch-provider" title="' + escapeProviderText(provider.provider_name) + '">' +
+                (provider.logo_path ? '<img src="https://image.tmdb.org/t/p/w92' + provider.logo_path + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+                '<span>' + escapeProviderText(provider.provider_name) + '</span></span>'
+            ).join('');
+            container.innerHTML = '<div class="perde-watch-single-line">' + heading +
+                '<div class="perde-watch-list">' + providerMarkup + '</div>' +
+                '<a class="perde-watch-credit" href="https://www.justwatch.com/tr" target="_blank" rel="noopener noreferrer" title="Yayın verileri JustWatch kaynaklıdır">JustWatch</a></div>';
         }
 
         async function loadSimilarProductions(movie) {
