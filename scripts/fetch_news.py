@@ -7,12 +7,13 @@ from urllib.parse import urlparse
 import feedparser
 FEEDS = [
     ("https://www.dizifilmdergisiturkiye.com/rss/sinema.xml", "tr", "Türk Sineması"),
-    ("https://www.dizifilmdergisiturkiye.com/rss/diziler.xml", "series", "Türk Dizileri"),
+    ("https://www.dizifilmdergisiturkiye.com/rss/diziler.xml", "trseries", "Türk Dizileri"),
     ("https://www.dizifilmdergisiturkiye.com/rss/fragman.xml", "trailers", "Fragmanlar"),
     ("https://www.dizifilmdergisiturkiye.com/rss/gundem.xml", "tr", "Sektör Gündemi"),
     ("https://www.beyazperde.com/rss/haberler.xml", "tr", "Beyazperde"),
     ("https://altyazi.net/feed/", "tr", "Altyazı"),
     ("https://variety.com/feed/", "world", "Variety"),
+    ("https://variety.com/v/tv/feed/", "series", "Yabancı Diziler"),
     ("https://deadline.com/feed/rss/", "world", "Deadline"),
     ("https://www.hollywoodreporter.com/feed/", "world", "The Hollywood Reporter"),
 ]
