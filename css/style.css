@@ -3596,3 +3596,113 @@ html.light .perde-menu-grid>button:hover{
   .perde-menu-grid{grid-template-columns:1fr}
   .perde-menu-grid>button{min-height:52px}
 }
+
+
+/* PERDE Tasarım Aşaması 3 — film ve dizi afişleri */
+.ml-catalog-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--ml-border);
+  border-radius: 13px;
+  background: var(--ml-surface);
+  color: var(--ml-text);
+  -webkit-tap-highlight-color: transparent;
+}
+.ml-catalog-poster {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  aspect-ratio: 2 / 3;
+  background: var(--ml-surface-muted);
+}
+.ml-catalog-poster > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  backface-visibility: hidden;
+}
+.ml-catalog-card:focus-visible {
+  outline: 2px solid var(--ml-accent);
+  outline-offset: 4px;
+}
+.ml-catalog-type,
+.ml-catalog-rating,
+.ml-catalog-favorite {
+  z-index: 2;
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+.ml-catalog-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ml-catalog-meta h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-width: 0;
+}
+.ml-catalog-sub {
+  min-width: 0;
+  overflow: hidden;
+}
+.ml-catalog-genre {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ml-home-poster-card {
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 13px !important;
+  background: #101216 !important;
+}
+.ml-home-poster-card .ml-catalog-poster {
+  border-radius: 12px 12px 0 0;
+}
+.ml-home-poster-card .ml-catalog-poster > img {
+  object-fit: cover;
+}
+.ml-home-poster-card .ml-home-poster-info {
+  text-wrap: pretty;
+}
+.ml-home-poster-card .ml-home-poster-preview {
+  overflow: hidden;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ml-catalog-card:hover .ml-catalog-poster > img {
+    transform: scale(1.045);
+  }
+}
+@media (max-width: 767px) {
+  .ml-catalog-card { border-radius: 11px; }
+  .ml-catalog-poster { aspect-ratio: 2 / 3; }
+  .ml-catalog-type,
+  .ml-catalog-rating {
+    top: 8px;
+    min-height: 22px;
+    padding-inline: 6px;
+    font-size: 8px;
+  }
+  .ml-catalog-type { left: 8px; }
+  .ml-catalog-rating { right: 8px; }
+  .ml-catalog-meta {
+    min-height: 104px;
+    padding: 10px 9px 9px;
+  }
+  .ml-catalog-meta h3 { font-size: 10px; line-height: 1.45; }
+  .ml-catalog-sub { margin-top: 6px; font-size: 8px; }
+  .ml-catalog-status { margin-top: 8px; padding-top: 7px; font-size: 8px; }
+  .ml-home-poster-card { border-radius: 11px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ml-catalog-card,
+  .ml-catalog-poster > img,
+  .ml-home-poster-card {
+    transition: none !important;
+  }
+}
