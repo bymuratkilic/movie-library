@@ -33,76 +33,50 @@
     <!-- PERDE: Kompakt film kartları ve yenilenmiş detay penceresi -->
     
 
-    <link rel="stylesheet" href="./css/style.css?v=editor-headline-slider-1">
+    <link rel="stylesheet" href="./css/style.css?v=compact-header-1">
 </head>
 <body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
 
     <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
 
-    <!-- MODERN SITE HEADER -->
+    <!-- PERDE COMPACT HEADER -->
     <header class="perde-site-header">
-        <div class="perde-header-inner">
-            <div class="perde-header-main">
-                <button type="button" class="perde-brand" onclick="switchTab('dashboard')" aria-label="Ana sayfaya dön">
-                    <span class="perde-brand-mark" aria-hidden="true">
-                        <svg viewBox="0 0 48 48" role="img">
-                            <rect x="5" y="8" width="38" height="32" rx="9" fill="currentColor" opacity=".14"/>
-                            <path d="M12 8v32M36 8v32M5 17h38M5 31h38" fill="none" stroke="currentColor" stroke-width="2" opacity=".55"/>
-                            <path d="m20 19 12 6-12 6z" fill="currentColor"/>
-                        </svg>
-                    </span>
-                    <span class="perde-brand-copy">
-                        <span class="perde-brand-eyebrow">MY PERSONAL COLLECTION</span>
-                        <span class="perde-brand-name">Perde<span>.</span></span>
-                        <span class="perde-brand-tagline">Kişisel film ve dizi arşivim</span>
-                    </span>
-                </button>
-                <div class="perde-header-actions">
-                    <button type="button" onclick="openAdminAuthModal()" id="mobile-admin-shortcut" class="mobile-admin-shortcut" title="Yönetim Paneli" aria-label="Yönetim Paneli">
-                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Yönetim</span>
-                    </button>
-                    <button type="button" onclick="toggleTheme()" id="theme-toggle-btn" class="perde-icon-action" title="Tema Değiştir" aria-label="Tema değiştir">
-                        <i class="fa-solid fa-sun dark:inline hidden"></i><i class="fa-solid fa-moon dark:hidden inline"></i>
-                    </button>
-                    <button type="button" onclick="openAddMovieModal()" class="perde-add-action">
-                        <i class="fa-solid fa-plus" aria-hidden="true"></i><span>Yapım Ekle</span>
-                    </button>
-                </div>
-            </div>
-            <nav class="perde-primary-nav" aria-label="Ana menü">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn"><i class="fa-solid fa-grid-2"></i>Genel Bakış</button>
-                <button onclick="switchTab('library')" id="nav-library" class="nav-btn"><i class="fa-solid fa-film"></i>Kütüphane</button>
-                <button onclick="switchTab('trailers')" id="nav-trailers" class="nav-btn"><i class="fa-brands fa-youtube"></i>Fragmanlar</button>
-                <button onclick="filterByMenu('watched')" id="nav-watched" class="nav-btn"><i class="fa-solid fa-circle-check"></i>İzlediklerim</button>
-                <button onclick="filterByMenu('watch_later')" id="nav-watch_later" class="nav-btn"><i class="fa-solid fa-bookmark"></i>İzleme Listem</button>
-                <button onclick="filterByMenu('favorite')" id="nav-favorite" class="nav-btn"><i class="fa-solid fa-heart"></i>Favorilerim</button>
-                <button onclick="switchTab('stats')" id="nav-stats" class="nav-btn"><i class="fa-solid fa-chart-pie"></i>Analizler</button>
-                <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn"><i class="fa-solid fa-user-astronaut"></i>Profilim</button>
-                <button onclick="openAdminAuthModal()" id="nav-admin" class="nav-btn"><i class="fa-solid fa-sliders"></i>Yönetim</button>
-            </nav>
+      <div class="perde-header-inner perde-header-compact">
+        <button type="button" class="perde-brand" onclick="switchTab('dashboard')" aria-label="Perde ana sayfa">
+          <span class="perde-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="9" fill="currentColor" opacity=".14"/><path d="M12 8v32M36 8v32M5 17h38M5 31h38" fill="none" stroke="currentColor" stroke-width="2" opacity=".55"/><path d="m20 19 12 6-12 6z" fill="currentColor"/></svg></span>
+          <span class="perde-brand-copy"><span class="perde-brand-name">Perde<span>.</span></span><span class="perde-brand-tagline">Kişisel sinema arşivin</span></span>
+        </button>
+        <div class="perde-header-actions">
+          <button type="button" class="perde-icon-action" onclick="openPerdeSearch()" aria-label="Ara" title="Ara"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <button type="button" class="perde-icon-action" onclick="toggleTheme()" id="theme-toggle-btn" title="Tema değiştir" aria-label="Tema değiştir"><i class="fa-solid fa-sun dark:inline hidden"></i><i class="fa-solid fa-moon dark:hidden inline"></i></button>
+          <button type="button" class="perde-add-action" onclick="openAddMovieModal()"><i class="fa-solid fa-plus"></i><span>Yapım Ekle</span></button>
+          <button type="button" class="perde-icon-action perde-menu-trigger" onclick="togglePerdeMenu()" aria-label="Menüyü aç" aria-expanded="false" aria-controls="perde-menu-panel"><i class="fa-solid fa-bars"></i></button>
         </div>
+      </div>
+      <div id="perde-menu-panel" class="perde-menu-panel hidden">
+        <div class="perde-menu-heading"><span>KEŞFET &amp; KOLEKSİYON</span><button type="button" onclick="togglePerdeMenu(false)" aria-label="Menüyü kapat"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="perde-menu-grid">
+          <button onclick="switchTab('dashboard');togglePerdeMenu(false)"><i class="fa-solid fa-house"></i><span><b>Ana Sayfa</b><small>Perde vitrini</small></span></button>
+          <button onclick="switchTab('library');togglePerdeMenu(false)"><i class="fa-solid fa-film"></i><span><b>Kütüphane</b><small>Tüm yapımlar</small></span></button>
+          <button onclick="switchTab('trailers');togglePerdeMenu(false)"><i class="fa-brands fa-youtube"></i><span><b>Fragmanlar</b><small>Yeni keşifler</small></span></button>
+          <button onclick="filterByMenu('watch_later');togglePerdeMenu(false)"><i class="fa-solid fa-bookmark"></i><span><b>İzleme Listem</b><small>Sıradaki seçimlerin</small></span></button>
+          <button onclick="filterByMenu('watched');togglePerdeMenu(false)"><i class="fa-solid fa-circle-check"></i><span><b>İzlediklerim</b><small>İzleme geçmişin</small></span></button>
+          <button onclick="filterByMenu('favorite');togglePerdeMenu(false)"><i class="fa-solid fa-heart"></i><span><b>Favorilerim</b><small>Seçtiklerin</small></span></button>
+          <button onclick="switchTab('stats');togglePerdeMenu(false)"><i class="fa-solid fa-chart-pie"></i><span><b>Analizler</b><small>İzleme istatistiklerin</small></span></button>
+          <button onclick="switchTab('profile');togglePerdeMenu(false)"><i class="fa-solid fa-user"></i><span><b>Profilim</b><small>Kişisel sinema profilin</small></span></button>
+          <button onclick="openAdminAuthModal();togglePerdeMenu(false)"><i class="fa-solid fa-shield-halved"></i><span><b>Yönetim</b><small>Arşiv yönetimi</small></span></button>
+        </div>
+      </div>
     </header>
-
-    <!-- MOBILE STREAMING NAVIGATION -->
-    <nav id="mobile-bottom-nav" class="md:hidden hidden fixed bottom-0 inset-x-0 z-40 flex items-stretch justify-around" aria-label="Mobil ana menü">
-        <button type="button" onclick="switchTab('dashboard')" aria-label="Ana sayfa">
-            <i class="fa-solid fa-house"></i><span>Ana Sayfa</span>
-        </button>
-        <button type="button" onclick="switchTab('library'); document.getElementById('search-input')?.focus()" aria-label="Ara ve kütüphane">
-            <i class="fa-solid fa-magnifying-glass"></i><span>Ara</span>
-        </button>
-        <button type="button" onclick="filterByMenu('watched')" aria-label="İzlediklerim">
-            <i class="fa-solid fa-circle-check"></i><span>İzledim</span>
-        </button>
-        <button type="button" onclick="filterByMenu('watch_later')" aria-label="İzleyeceklerim">
-            <i class="fa-solid fa-bookmark"></i><span>Listem</span>
-        </button>
-        <button type="button" onclick="filterByMenu('favorite')" aria-label="Favorilerim">
-            <i class="fa-solid fa-heart"></i><span>Favoriler</span>
-        </button>
-    </nav>
-
+    <div id="perde-search-overlay" class="perde-search-overlay hidden" role="dialog" aria-modal="true" aria-label="Perde'de ara">
+      <div class="perde-search-backdrop" onclick="closePerdeSearch()"></div>
+      <div class="perde-search-dialog">
+        <div class="perde-search-top"><span><i class="fa-solid fa-magnifying-glass"></i> PERDE'DE ARA</span><button type="button" onclick="closePerdeSearch()" aria-label="Aramayı kapat"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="perde-search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="header-search-input" type="search" placeholder="Film, dizi veya oyuncu ara..." autocomplete="off" oninput="syncHeaderSearch(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();openHeaderSearch();closePerdeSearch()}if(event.key==='Escape')closePerdeSearch()"><kbd>ESC</kbd></div>
+        <p class="perde-search-hint">Aradığın yapımı bulmak için yazmaya başla. Enter ile sonuçlara git.</p>
+      </div>
+    </div>
     <!-- MAIN CONTENT -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-auto w-full">
 
@@ -124,12 +98,6 @@
                     <button onclick="setCategoryFilter('doc')" id="cat-doc" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold dark:bg-clean-card bg-white dark:text-clean-muted text-light-muted border dark:border-clean-border border-light-border hover:border-blue-500 transition-all">
                         <i class="fa-solid fa-earth-americas text-emerald-500 mr-1.5"></i>Belgeseller
                     </button>
-                </div>
-
-                <div class="ml-category-search" role="search">
-                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                    <input type="search" id="header-search-input" placeholder="Film, dizi veya oyuncu ara..." autocomplete="off" oninput="syncHeaderSearch(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();openHeaderSearch()}">
-                    <button type="button" onclick="openHeaderSearch()" aria-label="Ara"><i class="fa-solid fa-arrow-right"></i></button>
                 </div>
 
                 <!-- Sub-Menu: Top Rated (IMDb) -->
@@ -523,6 +491,6 @@
     </footer>
 
     <!-- JAVASCRIPT LOGIC -->
-    <script src="./js/app.js?v=home-rows-fix-1"></script>
+    <script src="./js/app.js?v=compact-header-1"></script>
 </body>
 </html>
