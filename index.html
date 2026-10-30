@@ -225,6 +225,13 @@
             <div id="perde-news-featured" class="perde-news-featured" aria-live="polite"><div class="perde-news-loading"><i class="fa-solid fa-spinner fa-spin"></i> Haberler yükleniyor…</div></div>
             <div id="perde-news-grid" class="perde-news-grid"></div>
             <div id="perde-news-empty" class="perde-news-empty hidden">Bu kategoride henüz haber bulunamadı.</div>
+            <div id="perde-news-modal" class="perde-news-modal" role="dialog" aria-modal="true" aria-labelledby="perde-news-modal-title" aria-hidden="true">
+                <div class="perde-news-modal-backdrop" data-news-close></div>
+                <article class="perde-news-modal-panel">
+                    <button type="button" class="perde-news-modal-close" data-news-close aria-label="Pencereyi kapat"><i class="fa-solid fa-xmark"></i></button>
+                    <div id="perde-news-modal-content"></div>
+                </article>
+            </div>
             <p class="perde-news-disclaimer">Haber başlıkları ve kısa açıklamalar ilgili yayınlardan alınır. Tüm haklar orijinal yayıncılarına aittir; haberin tamamı için kaynak bağlantısını kullanabilirsin.</p>
         </section>
 
