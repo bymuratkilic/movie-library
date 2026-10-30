@@ -1,13 +1,14 @@
 (() => {
-  const state = { items: [], filter: 'all', loaded: false, loading: false, lastFocus: null };
+  const state = { items: [], filter: 'all', loaded: false, loading: false, lastFocus: null, activeIndex: 0 };
   const $ = id => document.getElementById(id);
   const esc = value => String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const safeUrl = value => { try { const u = new URL(value); return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : '#'; } catch (_) { return '#'; } };
   const dateLabel = value => { const d = new Date(value); return Number.isNaN(d.getTime()) ? '' : new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'long',year:'numeric'}).format(d); };
   const categoryLabel = item => item.categoryLabel || ({tr:'YERLİ SİNEMA',trseries:'TÜRK DİZİLERİ',film:'DÜNYA SİNEMASI',world:'DÜNYA',series:'YABANCI DİZİLER',actors:'OYUNCULAR',industry:'SEKTÖR',trailers:'FRAGMAN'}[item.category] || 'SİNEMA');
   const filtered = () => state.items.filter(item => state.filter === 'all' || (state.filter === 'tr' && ['tr','trseries'].includes(item.category)) || (state.filter === 'series' && ['series','trseries'].includes(item.category)) || (state.filter === 'film' && ['film','world'].includes(item.category)) || item.category === state.filter);
-  function openArticle(item) {
+  function openArticle(item, index) {
     if (!item) return;
+    if (Number.isInteger(index)) state.activeIndex = index;
     const modal = $('perde-news-modal'), content = $('perde-news-modal-content');
     if (!modal || !content) return;
     const image = safeUrl(item.image), url = safeUrl(item.link);
@@ -20,6 +21,7 @@
       '<p class="perde-news-modal-summary">' + esc(item.summary || 'Haberin ayrıntıları için orijinal kaynağı ziyaret edebilirsin.') + '</p>' +
       (originalTitle || originalSummary ? '<details class="perde-news-original"><summary>Orijinal yayın metnini gör</summary>' + (originalTitle ? '<h3>' + esc(originalTitle) + '</h3>' : '') + (originalSummary ? '<p>' + esc(originalSummary) + '</p>' : '') + '</details>' : '') +
       (url !== '#' ? '<a class="perde-news-modal-source" href="' + url + '" target="_blank" rel="noopener noreferrer">Orijinal habere git <i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') +
+      '<div class="perde-news-modal-navigation"><button type="button" data-news-step="-1" ' + (state.activeIndex <= 0 ? 'disabled' : '') + '><i class="fa-solid fa-chevron-left"></i> Önceki haber</button><span>' + (state.activeIndex + 1) + ' / ' + filtered().length + '</span><button type="button" data-news-step="1" ' + (state.activeIndex >= filtered().length - 1 ? 'disabled' : '') + '>Sonraki haber <i class="fa-solid fa-chevron-right"></i></button></div>' +
       '<p class="perde-news-modal-note">Bu pencere haberin kısa özetini gösterir. Haberin tamamı orijinal yayıncıda yer alır.</p></div>';
     state.lastFocus = document.activeElement;
     modal.classList.add('is-open');
@@ -82,8 +84,10 @@
   document.addEventListener('click', event => {
     const close = event.target.closest('[data-news-close]');
     if (close) { closeArticle(); return; }
+    const step = event.target.closest('[data-news-step]');
+    if (step) { const list = filtered(); const next = state.activeIndex + Number(step.dataset.newsStep); if (next >= 0 && next < list.length) openArticle(list[next], next); return; }
     const opener = event.target.closest('[data-news-open]');
-    if (opener) { event.preventDefault(); const item = filtered()[Number(opener.dataset.newsOpen)]; openArticle(item); return; }
+    if (opener) { event.preventDefault(); const index = Number(opener.dataset.newsOpen); const item = filtered()[index]; openArticle(item, index); return; }
     const filter = event.target.closest('[data-news-filter]');
     if (!filter) return;
     state.filter = filter.dataset.newsFilter || 'all';
@@ -94,6 +98,7 @@
     const modal = $('perde-news-modal');
     if (!modal || !modal.classList.contains('is-open')) return;
     if (event.key === 'Escape') { closeArticle(); return; }
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { const list = filtered(); const next = state.activeIndex + (event.key === 'ArrowRight' ? 1 : -1); if (next >= 0 && next < list.length) { event.preventDefault(); openArticle(list[next], next); } return; }
     if (event.key === 'Tab') {
       const focusable = [...modal.querySelectorAll('button:not([disabled]),a[href],summary')];
       if (!focusable.length) return;
@@ -104,7 +109,7 @@
   });
   document.addEventListener('keydown', event => {
     const card = event.target.closest && event.target.closest('.perde-news-card[data-news-open]');
-    if (card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); const item = filtered()[Number(card.dataset.newsOpen)]; openArticle(item); }
+    if (card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); const index = Number(card.dataset.newsOpen); const item = filtered()[index]; openArticle(item, index); }
   });
   document.addEventListener('DOMContentLoaded', () => {
     const filters = $('perde-news-filters');
