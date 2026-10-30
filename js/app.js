@@ -6,6 +6,21 @@
         let fetchedOnlineResults = [];
         let comparisonSelection = [];
 
+        function scrollDetailCast(direction) {
+            const track = document.getElementById('perde-detail-cast-grid');
+            if (track) track.scrollBy({ left: direction * track.clientWidth * 0.8, behavior: 'smooth' });
+        }
+
+        function updateDetailCastArrows() {
+            const track = document.getElementById('perde-detail-cast-grid');
+            if (!track) return;
+            const hasOverflow = track.scrollWidth > track.clientWidth + 4;
+            const prev = track.parentElement.querySelector('.perde-cast-prev');
+            const next = track.parentElement.querySelector('.perde-cast-next');
+            if (prev) prev.hidden = !hasOverflow || track.scrollLeft <= 4;
+            if (next) next.hidden = !hasOverflow || track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+        }
+
         function getPerdeRatedMovies() {
             return movies.filter(item => Number.isFinite(Number(item.perdeRating)) && Number(item.perdeRating) >= 1 && Number(item.perdeRating) <= 10);
         }
@@ -1460,7 +1475,7 @@
                                     <button type="button" onclick="addToComparison('${m.id}')" class="perde-imdb-action-btn"><i class="fa-solid fa-scale-balanced"></i> Karşılaştırmaya ekle</button>
                                     ${detailIsInArchive ? `<label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button>` : `<button type="button" class="perde-detail-add-to-list" onclick="addSimilarProduction('${m.id}', this)"><i class="fa-solid fa-plus"></i><span>Listeme Ekle</span><small>İzleme listene kaydet</small></button>`}
                                 </div>
-                                <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
+                                <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-cast-carousel"><button type="button" class="perde-cast-arrow perde-cast-prev" onclick="scrollDetailCast(-1)" aria-label="Önceki oyuncular" hidden><i class="fa-solid fa-chevron-left"></i></button><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div><button type="button" class="perde-cast-arrow perde-cast-next" onclick="scrollDetailCast(1)" aria-label="Sonraki oyuncular" hidden><i class="fa-solid fa-chevron-right"></i></button></div></div>
                             </div>
                         </section>
                         <section class="perde-similar" aria-label="Benzer yapımlar">
@@ -1474,6 +1489,9 @@
                 loadWatchProviders(m);
                 enrichDetailFromTmdb(m);
 
+                updateDetailCastArrows();
+                const castTrack = document.getElementById('perde-detail-cast-grid');
+                if (castTrack) castTrack.addEventListener('scroll', updateDetailCastArrows, { passive: true });
                 if (m.cast && m.cast.length > 0) {
                     m.cast.forEach((c, idx) => {
                         const imgId = `actor-img-${m.id}-${idx}`;
@@ -1575,6 +1593,7 @@
                         return '<button onclick="openActorBio(\'' + jsName + '\')" class="perde-imdb-cast-card"><img id="actor-img-' + movie.id + '-' + index + '" src="' + esc(avatar) + '" alt="' + esc(name) + '" loading="lazy"><span><b>' + esc(name) + '</b><small>' + esc(person.role || 'Oyuncu') + '</small></span></button>';
                     }).join('');
                 }
+                updateDetailCastArrows();
                 if (!movie.trailerUrl) {
                     const trailer = (videos.results || []).find(video => video.site === 'YouTube' && video.type === 'Trailer' && video.official) || (videos.results || []).find(video => video.site === 'YouTube' && video.type === 'Trailer');
                     if (trailer && trailer.key) { movie.trailerUrl = 'https://www.youtube.com/watch?v=' + trailer.key; if (movies.some(item => item.id === movie.id)) saveToLocalStorage(); }
