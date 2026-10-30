@@ -3178,3 +3178,6 @@ html.dark .perde-cinema-card-image{border-color:#2a3b5e;background:#111a2c}
 .perde-detail-actions-danger .perde-imdb-delete{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--ml-muted);font-size:10px;font-weight:650;transition:color .18s ease,border-color .18s ease,background .18s ease}
 .perde-detail-actions-danger .perde-imdb-delete:hover{border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.07);color:#ef4444}
 @media(max-width:640px){.perde-detail-actions-panel{gap:10px;margin:16px 0 20px;padding:11px}.perde-detail-actions-main{display:grid;grid-template-columns:1fr;gap:8px}.perde-detail-actions-main .perde-imdb-action-btn{justify-content:flex-start}.perde-imdb-watch-label{justify-content:space-between}.perde-detail-actions-main .perde-detail-add-to-list{justify-content:flex-start}.perde-detail-actions-danger{justify-content:flex-start}}
+
+/* IMDb marka yazısı: sarı zemin üzerinde siyah IMDb harfleri */
+.perde-imdb-hero-rating .imdb-brand-badge .imdb-brand-word{background:#f5c518!important;color:#111!important;border:1px solid #111!important;}
