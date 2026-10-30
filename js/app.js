@@ -692,12 +692,12 @@
                 'turkey':['tr','Türkiye'],'türkiye':['tr','Türkiye'],'turkiye':['tr','Türkiye'],'south korea':['kr','Güney Kore'],'korea':['kr','Güney Kore'],'north korea':['kp','Kuzey Kore'],
                 'russia':['ru','Rusya'],'russian federation':['ru','Rusya'],'china':['cn','Çin'],'japan':['jp','Japonya'],'france':['fr','Fransa'],'germany':['de','Almanya'],'italy':['it','İtalya'],'spain':['es','İspanya'],'canada':['ca','Kanada'],'australia':['au','Avustralya'],'india':['in','Hindistan'],'brazil':['br','Brezilya'],'mexico':['mx','Meksika'],'ireland':['ie','İrlanda'],'scotland':['gb-sct','İskoçya'],'wales':['gb-wls','Galler'],'sweden':['se','İsveç'],'norway':['no','Norveç'],'denmark':['dk','Danimarka'],'finland':['fi','Finlandiya'],'netherlands':['nl','Hollanda'],'belgium':['be','Belçika'],'switzerland':['ch','İsviçre'],'austria':['at','Avusturya'],'poland':['pl','Polonya'],'ukraine':['ua','Ukrayna'],'greece':['gr','Yunanistan'],'portugal':['pt','Portekiz'],'new zealand':['nz','Yeni Zelanda'],'south africa':['za','Güney Afrika'],'iran':['ir','İran'],'iraq':['iq','Irak'],'israel':['il','İsrail'],'egypt':['eg','Mısır'],'argentina':['ar','Arjantin'],'chile':['cl','Şili'],'colombia':['co','Kolombiya'],'thailand':['th','Tayland'],'indonesia':['id','Endonezya'],'hong kong':['hk','Hong Kong'],'taiwan':['tw','Tayvan'],'czech republic':['cz','Çekya'],'czechia':['cz','Çekya'],'romania':['ro','Romanya'],'hungary':['hu','Macaristan'],'bulgaria':['bg','Bulgaristan'],'croatia':['hr','Hırvatistan'],'serbia':['rs','Sırbistan'],'iceland':['is','İzlanda'],'malta':['mt','Malta'],'luxembourg':['lu','Lüksemburg'],'uae':['ae','Birleşik Arap Emirlikleri'],'united arab emirates':['ae','Birleşik Arap Emirlikleri']
             };
-            const entries = String(value || '').split(/\\s*\\/\\s*|,\\s*/).map(part => part.trim()).filter(Boolean);
+            const entries = String(value || '').split(/\s*\\/\s*|,\s*/).map(part => part.trim()).filter(Boolean);
             if (!entries.length || entries.some(part => ['bilinmiyor','unknown','n/a'].includes(part.toLocaleLowerCase('tr-TR')))) {
                 return '<span class="perde-country-empty">Ülke bilgisi bulunmuyor</span>';
             }
             const countries = entries.map(entry => {
-                const prefixed = entry.match(/^([a-z]{2})\\s+(.+)$/i);
+                const prefixed = entry.match(/^([a-z]{2})\s+(.+)$/i);
                 const candidates = prefixed ? [prefixed[2].trim(), entry] : [entry];
                 for (const candidate of candidates) {
                     const key = candidate.toLocaleLowerCase('tr-TR');
