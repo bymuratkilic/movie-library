@@ -33,7 +33,7 @@
     <!-- PERDE: Kompakt film kartları ve yenilenmiş detay penceresi -->
     
 
-    <link rel="stylesheet" href="./css/style.css?v=compact-header-1">
+    <link rel="stylesheet" href="./css/style.css?v=library-nav-clean-1">
 </head>
 <body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
 
@@ -79,47 +79,6 @@
     </div>
     <!-- MAIN CONTENT -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-auto w-full">
-
-        <!-- CATEGORY & SUBMENU NAVIGATION BAR -->
-        <section id="category-navigation" class="mb-8 space-y-3">
-            <!-- Main Category Bar -->
-            <div class="flex items-center justify-between gap-2 overflow-x-auto pb-2 scrollbar-none border-b dark:border-clean-border border-light-border">
-                <div class="flex items-center space-x-2">
-                    <span class="text-[11px] font-bold uppercase tracking-wider dark:text-clean-muted text-light-muted mr-1 hidden sm:inline">Kategori:</span>
-                    <button onclick="setCategoryFilter('all')" id="cat-all" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-md transition-all">
-                        <i class="fa-solid fa-border-all mr-1.5"></i>Tüm Yapımlar
-                    </button>
-                    <button onclick="setCategoryFilter('movie')" id="cat-movie" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold dark:bg-clean-card bg-white dark:text-clean-muted text-light-muted border dark:border-clean-border border-light-border hover:border-blue-500 transition-all">
-                        <i class="fa-solid fa-clapperboard text-blue-500 mr-1.5"></i>Filmler
-                    </button>
-                    <button onclick="setCategoryFilter('tv')" id="cat-tv" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold dark:bg-clean-card bg-white dark:text-clean-muted text-light-muted border dark:border-clean-border border-light-border hover:border-blue-500 transition-all">
-                        <i class="fa-solid fa-tv text-purple-500 mr-1.5"></i>Diziler
-                    </button>
-                    <button onclick="setCategoryFilter('doc')" id="cat-doc" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold dark:bg-clean-card bg-white dark:text-clean-muted text-light-muted border dark:border-clean-border border-light-border hover:border-blue-500 transition-all">
-                        <i class="fa-solid fa-earth-americas text-emerald-500 mr-1.5"></i>Belgeseller
-                    </button>
-                </div>
-
-                <!-- Sub-Menu: Top Rated (IMDb) -->
-                <div class="flex items-center space-x-2 shrink-0">
-                    <button onclick="filterTopRated()" id="sub-top-rated" class="px-3 py-1.5 rounded-xl text-xs font-bold dark:bg-amber-500/10 bg-amber-50 text-amber-500 border border-amber-500/30 hover:bg-amber-500 hover:text-white transition-all flex items-center gap-1.5">
-                        <i class="fa-solid fa-trophy text-xs"></i>
-                        <span>En İyiler (IMDb Top)</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="ml-genre-menu">
-                <button type="button" class="ml-genre-toggle" onclick="toggleGenreMenu()" aria-expanded="false" aria-controls="genre-menu-panel">
-                    <span><i class="fa-solid fa-layer-group"></i> Kategoriler <small id="genre-total-count">0 tür</small></span>
-                    <i id="genre-menu-chevron" class="fa-solid fa-chevron-down"></i>
-                </button>
-                <div id="genre-menu-panel" class="ml-genre-panel hidden">
-                    <div class="ml-genre-panel-heading"><strong>Arşivindeki tüm kategoriler</strong><span>Tür seçerek yapımları listele</span></div>
-                    <div id="genre-menu-list" class="ml-genre-list"></div>
-                </div>
-            </div>
-        </section>
 
         <!-- DASHBOARD TAB -->
         <section id="tab-dashboard" class="space-y-8">
@@ -172,6 +131,18 @@
 
         <!-- LIBRARY TAB -->
         <section id="tab-library" class="hidden space-y-6">
+            <!-- Library category selector -->
+            <div class="ml-genre-menu">
+                <button type="button" class="ml-genre-toggle" onclick="toggleGenreMenu()" aria-expanded="false" aria-controls="genre-menu-panel">
+                    <span><i class="fa-solid fa-layer-group"></i> Kategoriler <small id="genre-total-count">0 tür</small></span>
+                    <i id="genre-menu-chevron" class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div id="genre-menu-panel" class="ml-genre-panel hidden">
+                    <div class="ml-genre-panel-heading"><strong>Arşivindeki tüm kategoriler</strong><span>Tür seçerek yapımları listele</span></div>
+                    <div id="genre-menu-list" class="ml-genre-list"></div>
+                </div>
+            </div>
+
             <!-- Filter & Search Panel -->
             <div class="glass-panel p-4 rounded-2xl space-y-3">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
