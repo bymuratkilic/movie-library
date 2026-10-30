@@ -3158,3 +3158,23 @@ html.dark .perde-cinema-card-image{border-color:#2a3b5e;background:#111a2c}
 .perde-story-foot span:first-child{color:var(--ml-accent)}
 .perde-story-foot i{margin-right:5px}
 @media(max-width:640px){.perde-story-panel{margin:18px 0;padding:18px 16px;border-radius:13px}.perde-story-panel:after{right:8px;top:-18px;font-size:135px}.perde-story-heading{margin-bottom:11px}.perde-imdb-overview{line-height:1.85!important;font-size:12px!important}.perde-story-foot{margin-top:15px}}
+
+
+/* Detail page action controls */
+.perde-detail-actions-panel{display:flex;flex-direction:column;gap:12px;margin:20px 0 24px;padding:14px;border:1px solid var(--ml-border);border-radius:14px;background:var(--ml-surface-muted)}
+.perde-detail-actions-main{display:flex;align-items:stretch;flex-wrap:wrap;gap:10px}
+.perde-detail-actions-main .perde-imdb-action-btn,.perde-detail-actions-main .perde-detail-add-to-list{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:0 15px;border:1px solid var(--ml-border);border-radius:10px;background:var(--ml-surface);color:var(--ml-text);font-size:11px;font-weight:750;transition:transform .18s ease,border-color .18s ease,background .18s ease}
+.perde-detail-actions-main .perde-imdb-action-btn:hover,.perde-detail-actions-main .perde-detail-add-to-list:hover{transform:translateY(-1px);border-color:var(--ml-accent);background:var(--ml-surface-muted)}
+.perde-detail-actions-main .perde-imdb-action-btn i{color:var(--ml-accent);font-size:14px}
+.perde-imdb-watch-label{display:flex;align-items:center;gap:12px;min-height:44px;padding:5px 7px 5px 12px;border:1px solid var(--ml-border);border-radius:10px;background:var(--ml-surface);color:var(--ml-text);font-size:11px;font-weight:700}
+.perde-watch-label-copy{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.perde-watch-label-copy i{color:var(--ml-accent)}
+.perde-imdb-watch-label select{min-width:125px;min-height:32px;padding:5px 28px 5px 9px;border:1px solid var(--ml-border);border-radius:7px;background:var(--ml-surface-muted);color:var(--ml-text);font-size:10px;font-weight:700}
+.perde-detail-actions-main .perde-detail-add-to-list{justify-content:flex-start;padding:7px 14px}
+.perde-detail-add-to-list>i{color:var(--ml-accent);font-size:15px}
+.perde-detail-add-to-list span{font-weight:800}
+.perde-detail-add-to-list small{padding-left:8px;border-left:1px solid var(--ml-border);color:var(--ml-muted);font-size:9px;font-weight:500}
+.perde-detail-actions-danger{display:flex;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--ml-border)}
+.perde-detail-actions-danger .perde-imdb-delete{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--ml-muted);font-size:10px;font-weight:650;transition:color .18s ease,border-color .18s ease,background .18s ease}
+.perde-detail-actions-danger .perde-imdb-delete:hover{border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.07);color:#ef4444}
+@media(max-width:640px){.perde-detail-actions-panel{gap:10px;margin:16px 0 20px;padding:11px}.perde-detail-actions-main{display:grid;grid-template-columns:1fr;gap:8px}.perde-detail-actions-main .perde-imdb-action-btn{justify-content:flex-start}.perde-imdb-watch-label{justify-content:space-between}.perde-detail-actions-main .perde-detail-add-to-list{justify-content:flex-start}.perde-detail-actions-danger{justify-content:flex-start}}
