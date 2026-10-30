@@ -88,7 +88,7 @@ assert.match(app, /aria-expanded=.*toggleHomeCardPreview/, 'Preview toggle must 
 assert.match(css, /\.ml-home-poster-preview/, 'Homepage synopsis preview styles must exist');
 assert.match(css, /\.ml-home-poster-card\.is-preview-open/, 'Touch users must be able to open the preview explicitly');
 
-assert.match(app, /Number\(b\.perdeRating\)/, 'Personal recommendations must prioritize the user's Perde ratings');
+assert.match(app, /Number\(b\.perdeRating\)/, 'Personal recommendations must prioritize the Perde ratings selected by the user');
 assert.match(app, /genreMatches \* 3 \* seedWeight/, 'Recommendation ranking must use genre affinity and seed preference');
 assert.doesNotMatch(app, /perde-recommendation-reason/, 'Recommendation cards must not show recommendation explanations');
 assert.match(app, /personalRecommendationRefreshCycle/, 'Recommendation refresh must rotate recommendation pages');
@@ -101,6 +101,13 @@ assert.match(app, /fa-solid fa-circle-info/, 'Recommendation details action must
 assert.match(app, /perde-personal-overview/, 'Recommendation cards must show a short production synopsis');
 assert.match(css, /\.perde-personal-details/, 'Prominent details action below posters must be styled');
 assert.match(css, /\.perde-personal-overview/, 'Recommendation synopsis must be compactly styled');
+assert.match(html, /class="perde-recommendation-carousel"/, 'Personal recommendations must use a horizontal carousel');
+assert.match(html, /scrollPersonalRecommendations\(-1\)/, 'Previous recommendation arrow must be available');
+assert.match(html, /scrollPersonalRecommendations\(1\)/, 'Next recommendation arrow must be available');
+assert.match(app, /function\s+scrollPersonalRecommendations\(direction\)/, 'Recommendation carousel arrows must scroll the rail');
+assert.match(css, /flex:0 0 clamp\(300px,34vw,370px\)/, 'Recommendation cards must remain on one horizontal row');
+assert.match(css, /height:6\.2em;min-height:6\.2em/, 'Recommendation synopsis blocks must have a consistent four-line height');
+assert.match(css, /-webkit-line-clamp:4/, 'Recommendation synopsis must be clamped to four lines');
 assert.match(app, /popupOnly = false/, 'Trailer popup mode must avoid opening an external tab');
 assert.match(html, /onclick="renderPersonalRecommendations\(\)"/, 'Users must be able to refresh personal recommendations');
 assert.match(css, /\.ml-recommendation-refresh/, 'Recommendation refresh control must be styled');
