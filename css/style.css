@@ -3273,7 +3273,7 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
 /* PERDE trailer popup: geniş mobil oynatıcı, tek panel ve arka plan kilidi */
 #detail-modal.perde-trailer-open{z-index:120;display:flex;align-items:center;justify-content:center;overflow-y:auto;overscroll-behavior:contain;padding:clamp(8px,2.5vw,28px)}
 #detail-modal.perde-trailer-open>div{width:min(1120px,100%);max-width:1120px;max-height:calc(100dvh - 32px);height:auto;margin:auto;overflow:hidden;border-radius:18px;display:flex;flex-direction:column;position:relative}
-#detail-modal.perde-trailer-open>#detail-modal-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;flex:1}
+#detail-modal.perde-trailer-open>div>#detail-modal-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;flex:1}
 #detail-modal.perde-trailer-open>div>button{position:sticky;top:8px;align-self:flex-end;margin:8px 8px -44px 0;flex:0 0 36px;z-index:30}
 .perde-trailer-popup{width:100%;background:var(--ml-surface);color:var(--ml-text)}
 .perde-trailer-player{position:relative;width:100%;aspect-ratio:16/9;max-height: min(62vh,680px);background:#05070c;overflow:hidden}
