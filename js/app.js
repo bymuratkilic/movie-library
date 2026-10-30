@@ -1690,7 +1690,7 @@
                             const data = await response.json();
                             results = (Array.isArray(data) ? data.slice(0, 8) : []).map(entry => {
                                 const show = entry.show || {};
-                                const summary = String(show.summary || '').replace(/<[^>]*>/g, ' ').replace(/\\s+/g, ' ').trim();
+                                const summary = String(show.summary || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
                                 return { id: 'tvmaze-' + show.id, title: show.name || q, type: 'tv', year: parseInt(String(show.premiered || '').slice(0, 4), 10) || '', director: 'Bilinmiyor', country: show.network && show.network.country ? show.network.country.name : 'Bilinmiyor', runtime: show.averageRuntime ? show.averageRuntime + ' dk' : 'Dizi', imdb: show.rating && show.rating.average ? show.rating.average.toFixed(1) : '—', status: 'watched', favorite: false, genres: Array.isArray(show.genres) ? show.genres : [], trailerUrl: '', poster: show.image && (show.image.original || show.image.medium) ? (show.image.original || show.image.medium) : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80', overview: summary || (show.name || q) + ' dizisi.', cast: [] };
                             });
                         }
@@ -1892,6 +1892,88 @@
             }
         }
 
+        function getPerdeWatchSessions(item) {
+            const history = Array.isArray(item.watchHistory) ? item.watchHistory : [];
+            const valid = history.map(entry => entry && entry.date ? String(entry.date).slice(0, 10) : '').filter(date => /^\d{4}-\d{2}-\d{2}$/.test(date));
+            if (valid.length) return valid;
+            return item.watchedAt && /^\d{4}-\d{2}-\d{2}/.test(String(item.watchedAt))
+                ? [String(item.watchedAt).slice(0, 10)] : [];
+        }
+
+        function renderYearInReview() {
+            const root = document.getElementById('perde-year-review');
+            const select = document.getElementById('perde-year-select');
+            if (!root || !select) return;
+            const currentYear = new Date().getFullYear();
+            const availableYears = new Set([currentYear]);
+            movies.forEach(item => getPerdeWatchSessions(item).forEach(date => availableYears.add(Number(date.slice(0, 4)))));
+            const years = [...availableYears].filter(Number.isFinite).sort((a,b) => b-a);
+            const selectedYear = years.includes(Number(select.value)) ? Number(select.value) : currentYear;
+            const heading = document.getElementById('perde-year-heading-title');
+            if (heading) heading.textContent = selectedYear + ' Sinema Özetin';
+            select.innerHTML = years.map(year => '<option value="' + year + '"' + (year === selectedYear ? ' selected' : '') + '>' + year + '</option>').join('');
+
+            const sessions = [];
+            movies.forEach(item => getPerdeWatchSessions(item).forEach(date => {
+                if (Number(date.slice(0, 4)) === selectedYear) sessions.push({ item, date });
+            }));
+            const uniqueItems = [...new Map(sessions.map(entry => [String(entry.item.id), entry.item])).values()];
+            const totalMinutes = sessions.reduce((sum, entry) => {
+                const match = String(entry.item.runtime || '').match(/(\d+)\s*(?:dk|min(?:ute)?s?)/i);
+                return sum + (match ? Number(match[1]) : 0);
+            }, 0);
+            const duration = totalMinutes
+                ? (Math.floor(totalMinutes / 60) ? Math.floor(totalMinutes / 60) + ' sa ' : '') + (totalMinutes % 60 ? totalMinutes % 60 + ' dk' : '')
+                : 'Süre bilgisi yok';
+            const genreCounts = {};
+            uniqueItems.forEach(item => {
+                const genres = Array.isArray(item.genres) ? item.genres : (typeof item.genres === 'string' ? item.genres.split(',') : []);
+                genres.map(value => String(value).trim()).filter(Boolean).forEach(genre => genreCounts[genre] = (genreCounts[genre] || 0) + 1);
+            });
+            const topGenre = Object.entries(genreCounts).sort((a,b) => b[1]-a[1])[0];
+            const kpis = [
+                { label:'İzleme seansı', value:sessions.length, icon:'fa-play' },
+                { label:'Farklı yapım', value:uniqueItems.length, icon:'fa-film' },
+                { label:'Toplam izleme süresi', value:duration, icon:'fa-clock' },
+                { label:'En çok izlenen tür', value:topGenre ? topGenre[0] : '—', icon:'fa-masks-theater' }
+            ];
+            const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+            const ranked = [...uniqueItems].sort((a,b) => {
+                const countA = sessions.filter(entry => String(entry.item.id) === String(a.id)).length;
+                const countB = sessions.filter(entry => String(entry.item.id) === String(b.id)).length;
+                return countB-countA || (Number(b.imdb)||0)-(Number(a.imdb)||0);
+            }).slice(0,5);
+            root.innerHTML = '<div class="perde-year-kpis">' + kpis.map(item => '<article><span><i class="fa-solid '+item.icon+'"></i></span><small>'+item.label+'</small><strong>'+safe(item.value)+'</strong></article>').join('') + '</div>' +
+                (sessions.length
+                    ? '<div class="perde-year-ranking"><div class="perde-year-subhead"><div><span>YILIN SEÇKİSİ</span><h3>En çok izlediklerin</h3></div><small>'+uniqueItems.length+' farklı yapım</small></div><div class="perde-year-list">'+ranked.map((item,index) => {
+                        const count = sessions.filter(entry => String(entry.item.id) === String(item.id)).length;
+                        return '<button type="button" class="perde-year-item" onclick="openDetailModal(\''+String(item.id).replace(/'/g,'')+'\')"><b class="perde-year-rank">'+String(index+1).padStart(2,'0')+'</b><img src="'+safe(item.poster||'')+'" alt="'+safe(item.title)+' afişi" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span><strong>'+safe(item.title)+'</strong><small>'+safe(item.year||'')+' · '+(item.type==='tv'?'Dizi':item.type==='doc'?'Belgesel':'Film')+'</small></span><em>'+count+' kez</em></button>';
+                    }).join('')+'</div>'
+                    : '<div class="perde-year-empty"><i class="fa-regular fa-calendar"></i><strong>'+selectedYear+' için tarihli izleme kaydı bulunamadı.</strong><span>Yapımları “İzlendi” olarak işaretlediğinde yıllık özetin burada oluşur.</span></div>');
+            const shareButton = document.getElementById('perde-year-share');
+            if (shareButton) shareButton.disabled = sessions.length === 0;
+            window.perdeYearSummary = sessions.length ? {
+                year:selectedYear, sessions:sessions.length, titles:uniqueItems.length, duration,
+                topGenre:topGenre ? topGenre[0] : 'Belirlenmedi',
+                topTitles:ranked.map(item => item.title)
+            } : null;
+        }
+
+        async function sharePerdeYearReview() {
+            const summary = window.perdeYearSummary;
+            if (!summary) { showToast('Paylaşılacak yıllık özet bulunamadı.'); return; }
+            const message = '🎬 Perde · '+summary.year+' Sinema Özetim\n'+summary.sessions+' izleme seansı · '+summary.titles+' farklı yapım\nİzleme süresi: '+summary.duration+'\nEn çok izlediğim tür: '+summary.topGenre+'\nYılın seçkisi: '+summary.topTitles.join(', ');
+            if (navigator.share) {
+                try { await navigator.share({ title:'Perde · '+summary.year+' Sinema Özeti', text:message }); }
+                catch (error) { if (error && error.name !== 'AbortError') showToast('Paylaşım açılamadı.'); }
+            } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                try { await navigator.clipboard.writeText(message); showToast('Yıllık özet panoya kopyalandı.'); }
+                catch (error) { showToast('Kopyalama başarısız oldu.'); }
+            } else {
+                window.prompt('Yıllık özetini kopyala:', message);
+            }
+        }
+
         function renderPersonalStats() {
             const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
             const watched = movies.filter(item => item.status === 'watched');
@@ -1967,6 +2049,7 @@
             const isDark = document.documentElement.classList.contains('dark');
             const textColor = isDark ? '#F8FAFC' : '#0F172A';
             const stats = renderPersonalStats();
+            renderYearInReview();
             const labels = Object.keys(stats.genreCounts);
             const dataValues = Object.values(stats.genreCounts);
 

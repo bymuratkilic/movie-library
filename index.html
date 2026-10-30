@@ -272,6 +272,14 @@
                 <span id="stats-updated-label" class="text-[10px] dark:text-clean-muted text-light-muted">Arşiv verilerine göre</span>
             </div>
 
+            <section class="perde-year-panel">
+                <div class="perde-year-heading">
+                    <div><span>PERDE · YEAR IN REVIEW</span><h2 id="perde-year-heading-title">Yıllık Sinema Özetin</h2><p>Seçtiğin yıldaki izleme alışkanlıkların ve öne çıkan yapımların.</p></div>
+                    <div class="perde-year-actions"><label for="perde-year-select">Yıl</label><select id="perde-year-select" onchange="renderYearInReview()"></select><button id="perde-year-share" type="button" onclick="sharePerdeYearReview()"><i class="fa-solid fa-share-nodes"></i> Özeti paylaş</button></div>
+                </div>
+                <div id="perde-year-review" aria-live="polite"></div>
+            </section>
+
             <div id="personal-stats-kpis" class="perde-stats-kpi-grid" aria-live="polite"></div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
