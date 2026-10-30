@@ -50,6 +50,12 @@ for (const fn of [
 assert.match(html, /perde-year-panel/, 'Annual cinema recap section must exist');
 assert.match(html, /perde-achievement-grid/, 'Personal achievements section must exist');
 assert.match(app, /perde-achievement-name/, 'Achievements must use compact icon labels');
+assert.match(app, /loadHomeCardMetadata/, 'Homepage cards must complete missing metadata');
+assert.match(app, /number_of_seasons/, 'Series cards must expose season metadata');
+assert.match(app, /number_of_episodes/, 'Series cards must expose episode metadata');
+assert.match(app, /meta\.genres\.slice\(0, 2\)/, 'Homepage cards must refresh missing genre labels');
+assert.match(app, /details\.runtime \? details\.runtime \+ ' dk'/, 'Movie cards must complete missing runtime labels');
+assert.match(app, /IMDb ' \+ safe\(m\.imdb \|\| '—'\)/, 'Homepage IMDb ratings must continue using the existing archive value');
 assert.match(css, /repeat\(5,minmax\(0,1fr\)\)/, 'Achievements must use a compact five-column grid');
 
 assert.match(app, /renderPerdeAchievements\(\);/, 'Profile must refresh achievements when rendered');
