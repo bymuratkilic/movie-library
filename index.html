@@ -138,6 +138,17 @@
                     </button>
                 </div>
             </div>
+
+            <div class="ml-genre-menu">
+                <button type="button" class="ml-genre-toggle" onclick="toggleGenreMenu()" aria-expanded="false" aria-controls="genre-menu-panel">
+                    <span><i class="fa-solid fa-layer-group"></i> Kategoriler <small id="genre-total-count">0 tür</small></span>
+                    <i id="genre-menu-chevron" class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div id="genre-menu-panel" class="ml-genre-panel hidden">
+                    <div class="ml-genre-panel-heading"><strong>Arşivindeki tüm kategoriler</strong><span>Tür seçerek yapımları listele</span></div>
+                    <div id="genre-menu-list" class="ml-genre-list"></div>
+                </div>
+            </div>
         </section>
 
         <!-- DASHBOARD TAB -->
