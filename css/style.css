@@ -2808,3 +2808,23 @@ main.max-w-7xl { max-width:1480px; padding-top:28px; }
  .perde-hidden-gems-grid>.ml-home-poster-card{flex-basis:clamp(132px,39vw,165px)}
  .perde-hidden-gems-arrow{flex-basis:28px;width:28px;height:28px;font-size:10px}
 }
+
+
+/* PERDE — Editor's Picks premium horizontal carousel */
+.perde-editor-picks-section{position:relative}
+.perde-editor-picks-section .ml-section-kicker{color:#c09a58}
+.perde-editor-picks-section .ml-section-kicker i{margin-right:5px}
+.perde-editor-picks-carousel{display:flex;align-items:center;gap:10px;min-width:0}
+.perde-editor-picks-grid{display:flex!important;flex:1 1 auto;gap:14px;min-width:0;overflow-x:auto;overflow-y:hidden;padding:5px 2px 14px;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.perde-editor-picks-grid::-webkit-scrollbar{display:none}
+.perde-editor-picks-grid>.ml-home-poster-card{flex:0 0 clamp(145px,17%,190px);min-width:0;scroll-snap-align:start}
+.perde-editor-picks-grid>.ml-home-poster-card .ml-catalog-poster{border:1px solid rgba(198,157,83,.2);box-shadow:0 8px 24px rgba(0,0,0,.10)}
+.perde-editor-picks-grid>.ml-home-poster-card:hover .ml-catalog-poster{border-color:rgba(198,157,83,.7);box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.perde-editor-picks-arrow{display:flex;flex:0 0 34px;width:34px;height:34px;align-items:center;justify-content:center;border:1px solid color-mix(in srgb,#c09a58 42%,var(--ml-border));border-radius:50%;background:var(--ml-surface);color:var(--ml-text);transition:all .18s ease}
+.perde-editor-picks-arrow:hover{border-color:#c09a58;background:color-mix(in srgb,#c09a58 13%,var(--ml-surface));color:#b18b4e;transform:translateY(-1px)}
+@media(max-width:767px){
+ .perde-editor-picks-carousel{gap:6px}
+ .perde-editor-picks-grid{gap:10px}
+ .perde-editor-picks-grid>.ml-home-poster-card{flex-basis:clamp(132px,39vw,165px)}
+ .perde-editor-picks-arrow{flex-basis:28px;width:28px;height:28px;font-size:10px}
+}
