@@ -2332,9 +2332,11 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 
 
 /* Streaming availability on personalized recommendation cards */
-.perde-recommendation-providers{display:flex;align-items:center;flex-wrap:wrap;gap:5px;min-height:22px;margin-top:2px}
-.perde-recommendation-provider-label{color:var(--ml-muted);font-size:7px;font-weight:900;letter-spacing:.09em;margin-right:2px}
-.perde-recommendation-provider{display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:3px 6px;border:1px solid var(--ml-border);border-radius:5px;background:var(--ml-surface-muted);color:var(--ml-text);font-size:8px;font-weight:700;line-height:1.2}
-.perde-recommendation-provider img{width:14px;height:14px;flex:0 0 14px;border-radius:3px;object-fit:cover}
-.perde-recommendation-provider span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.perde-recommendation-provider-empty{color:var(--ml-muted);font-size:8px;line-height:1.35}
+.perde-recommendation-providers{display:flex;align-items:center;flex-wrap:wrap;gap:6px;min-height:22px;margin-top:2px}
+.perde-recommendation-provider{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;overflow:hidden;border:1px solid var(--ml-border);border-radius:6px;background:var(--ml-surface-muted)}
+.perde-recommendation-provider img{width:100%;height:100%;object-fit:cover}
+.perde-personal-actions{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:3px}
+.perde-personal-add,.perde-personal-link{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:6px 8px;border:1px solid var(--ml-border);border-radius:7px;color:var(--ml-accent);font-size:9px;font-weight:800;line-height:1.25;transition:background .18s ease,border-color .18s ease}
+.perde-personal-add:hover,.perde-personal-link:hover{background:var(--ml-surface-muted);border-color:var(--ml-accent)}
+.perde-personal-link{color:var(--ml-muted)}
+@media(max-width:560px){.perde-personal-actions{gap:5px}.perde-personal-add,.perde-personal-link{padding:6px 7px;font-size:8px}}
