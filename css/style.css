@@ -1343,8 +1343,8 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .ml-todays-kicker { display:flex; align-items:center; gap:7px; color:var(--ml-accent); font-size:9px; font-weight:850; letter-spacing:.12em; }
 .ml-todays-random { color:var(--ml-muted); font-size:9px; white-space:nowrap; }
 .ml-todays-main { display:grid; grid-template-columns:minmax(92px,36%) minmax(0,1fr); gap:13px; flex:1; min-height:0; padding:0; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; }
-.ml-todays-poster { min-width:0; min-height:0; overflow:hidden; border-radius:9px; background:var(--ml-surface-muted); }
-.ml-todays-poster img { display:block; width:100%; height:100%; min-height:0; object-fit:cover; }
+.ml-todays-poster { min-width:0; min-height:0; overflow:hidden; border-radius:9px; background:linear-gradient(145deg,var(--ml-surface-muted) 0%,var(--ml-accent-soft) 52%,var(--ml-surface) 100%); }
+.ml-todays-poster img { display:block; width:100%; height:100%; min-height:0; padding:6px; object-fit:contain; filter:drop-shadow(0 8px 16px rgba(0,0,0,.2)); }
 .ml-todays-content { display:flex; flex-direction:column; align-items:flex-start; min-width:0; min-height:0; }
 .ml-todays-content h2 { display:-webkit-box; margin:1px 0 9px; overflow:hidden; color:var(--ml-text); font:800 clamp(15px,1.35vw,20px)/1.2 Manrope,sans-serif; letter-spacing:-.04em; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
 .ml-todays-meta { display:flex; flex-wrap:wrap; align-items:center; gap:7px; color:var(--ml-muted); font-size:10px; font-weight:700; }
@@ -1352,7 +1352,7 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .ml-todays-meta i { color:#e5b94f; }
 .ml-todays-type { padding:3px 6px; border-radius:5px; background:var(--ml-accent-soft); color:var(--ml-accent); }
 .ml-todays-genres { display:-webkit-box; max-width:100%; margin-top:8px; overflow:hidden; color:var(--ml-accent); font-size:10px; font-weight:700; line-height:1.4; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
-.ml-todays-overview { display:-webkit-box; margin:9px 0 0; overflow:hidden; color:var(--ml-muted); font-size:11px; line-height:1.65; -webkit-line-clamp:4; -webkit-box-orient:vertical; }
+.ml-todays-overview { display:-webkit-box; margin:10px 0 0; overflow:hidden; color:var(--ml-text); font-size:14px; line-height:1.65; -webkit-line-clamp:5; -webkit-box-orient:vertical; }
 .ml-todays-credits { margin-top:auto; padding-top:8px; color:var(--ml-muted); font-size:9px; line-height:1.4; }
 .ml-todays-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:12px; padding-top:11px; border-top:1px solid var(--ml-border); color:var(--ml-muted); font-size:9px; font-weight:700; }
 .ml-todays-footer>span:first-child { color:var(--ml-accent); }
@@ -1367,7 +1367,7 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
   .ml-home-feature-row #ml-featured-hero,.ml-home-feature-row #ml-featured-hero .ml-featured-slide .ml-featured-copy { min-height:360px !important; }
   .ml-todays-card,.ml-todays-empty { padding:13px; }
   .ml-todays-main { grid-template-columns:minmax(78px,34%) minmax(0,1fr); gap:9px; }
-  .ml-todays-overview { -webkit-line-clamp:3; }
+  .ml-todays-overview { -webkit-line-clamp:4; font-size:13px; }
 }
 @media(max-width:767px) {
   .ml-home-feature-row { grid-template-columns:minmax(0,1fr); gap:14px; }
@@ -1376,13 +1376,13 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
   .ml-todays-pick { width:min(100%,430px); justify-self:center; }
   .ml-todays-card,.ml-todays-empty { padding:16px; }
   .ml-todays-content h2 { font-size:18px; }
-  .ml-todays-overview { -webkit-line-clamp:5; font-size:12px; }
+  .ml-todays-overview { -webkit-line-clamp:6; font-size:14px; }
 }
 @media(max-width:390px) {
   .ml-home-feature-row #ml-featured-hero,.ml-home-feature-row #ml-featured-hero .ml-featured-slide .ml-featured-copy { min-height:450px !important; }
   .ml-todays-card,.ml-todays-empty { padding:13px; }
   .ml-todays-main { grid-template-columns:minmax(86px,35%) minmax(0,1fr); gap:10px; }
-  .ml-todays-overview { -webkit-line-clamp:4; font-size:11px; }
+  .ml-todays-overview { -webkit-line-clamp:5; font-size:13px; }
 }
 
 
