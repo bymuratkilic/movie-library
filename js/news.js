@@ -1,16 +1,46 @@
 (() => {
-  const state = { items: [], filter: 'all', loaded: false, loading: false };
+  const state = { items: [], filter: 'all', loaded: false, loading: false, lastFocus: null };
   const $ = id => document.getElementById(id);
   const esc = value => String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const safeUrl = value => { try { const u = new URL(value); return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : '#'; } catch (_) { return '#'; } };
   const dateLabel = value => { const d = new Date(value); return Number.isNaN(d.getTime()) ? '' : new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'long',year:'numeric'}).format(d); };
   const categoryLabel = item => item.categoryLabel || ({tr:'YERLİ SİNEMA',trseries:'TÜRK DİZİLERİ',film:'DÜNYA SİNEMASI',world:'DÜNYA',series:'YABANCI DİZİLER',actors:'OYUNCULAR',industry:'SEKTÖR',trailers:'FRAGMAN'}[item.category] || 'SİNEMA');
   const filtered = () => state.items.filter(item => state.filter === 'all' || (state.filter === 'tr' && ['tr','trseries'].includes(item.category)) || (state.filter === 'series' && ['series','trseries'].includes(item.category)) || (state.filter === 'film' && ['film','world'].includes(item.category)) || item.category === state.filter);
-  function card(item) {
-    const url = safeUrl(item.link), image = safeUrl(item.image);
-    return '<article class="perde-news-card">' +
-      (image !== '#' ? '<a class="perde-news-card-image" href="' + url + '" target="_blank" rel="noopener noreferrer"><img loading="lazy" src="' + image + '" alt="" onerror="this.parentElement.style.display=\'none\'"></a>' : '<a class="perde-news-card-image" href="' + url + '" target="_blank" rel="noopener noreferrer"></a>') +
-      '<div class="perde-news-card-copy"><span class="perde-news-tag">' + esc(categoryLabel(item)) + '</span><h3><a href="' + url + '" target="_blank" rel="noopener noreferrer">' + esc(item.title) + '</a></h3><p>' + esc(item.summary || '') + '</p><div class="perde-news-meta"><span>' + esc(item.source || '') + '</span><span>·</span><time>' + esc(dateLabel(item.published)) + '</time></div></div></article>';
+  function openArticle(item) {
+    if (!item) return;
+    const modal = $('perde-news-modal'), content = $('perde-news-modal-content');
+    if (!modal || !content) return;
+    const image = safeUrl(item.image), url = safeUrl(item.link);
+    const originalTitle = item.originalTitle && item.originalTitle !== item.title ? item.originalTitle : '';
+    const originalSummary = item.originalSummary && item.originalSummary !== item.summary ? item.originalSummary : '';
+    content.innerHTML = (image !== '#' ? '<div class="perde-news-modal-image"><img src="' + image + '" alt="" onerror="this.parentElement.remove()"></div>' : '') +
+      '<div class="perde-news-modal-copy"><span class="perde-news-tag">' + esc(categoryLabel(item)) + '</span>' +
+      '<h2 id="perde-news-modal-title">' + esc(item.title) + '</h2>' +
+      '<div class="perde-news-meta"><span>' + esc(item.source || '') + '</span><span>·</span><time>' + esc(dateLabel(item.published)) + '</time></div>' +
+      '<p class="perde-news-modal-summary">' + esc(item.summary || 'Haberin ayrıntıları için orijinal kaynağı ziyaret edebilirsin.') + '</p>' +
+      (originalTitle || originalSummary ? '<details class="perde-news-original"><summary>Orijinal yayın metnini gör</summary>' + (originalTitle ? '<h3>' + esc(originalTitle) + '</h3>' : '') + (originalSummary ? '<p>' + esc(originalSummary) + '</p>' : '') + '</details>' : '') +
+      (url !== '#' ? '<a class="perde-news-modal-source" href="' + url + '" target="_blank" rel="noopener noreferrer">Orijinal habere git <i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') +
+      '<p class="perde-news-modal-note">Bu pencere haberin kısa özetini gösterir. Haberin tamamı orijinal yayıncıda yer alır.</p></div>';
+    state.lastFocus = document.activeElement;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('perde-news-modal-open');
+    const close = modal.querySelector('.perde-news-modal-close');
+    if (close) close.focus();
+  }
+  function closeArticle() {
+    const modal = $('perde-news-modal');
+    if (!modal || !modal.classList.contains('is-open')) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.classList.remove('perde-news-modal-open');
+    if (state.lastFocus && typeof state.lastFocus.focus === 'function') state.lastFocus.focus();
+  }
+  function card(item, index) {
+    const image = safeUrl(item.image);
+    return '<article class="perde-news-card" data-news-open="' + index + '" tabindex="0" role="button" aria-label="' + esc(item.title) + '">' +
+      (image !== '#' ? '<div class="perde-news-card-image"><img loading="lazy" src="' + image + '" alt="" onerror="this.parentElement.style.display=\'none\'"></div>' : '<div class="perde-news-card-image"></div>') +
+      '<div class="perde-news-card-copy"><span class="perde-news-tag">' + esc(categoryLabel(item)) + '</span><h3>' + esc(item.title) + '</h3><p>' + esc(item.summary || '') + '</p><div class="perde-news-meta"><span>' + esc(item.source || '') + '</span><span>·</span><time>' + esc(dateLabel(item.published)) + '</time></div><span class="perde-news-read">Haberi incele <i class="fa-solid fa-arrow-right"></i></span></div></article>';
   }
   function render() {
     const items = filtered();
@@ -22,10 +52,10 @@
       grid.innerHTML = ''; if (empty) empty.classList.remove('hidden'); return;
     }
     if (empty) empty.classList.add('hidden');
-    const image = safeUrl(featured.image), url = safeUrl(featured.link);
-    hero.innerHTML = (image !== '#' ? '<a class="perde-news-feature-image" href="' + url + '" target="_blank" rel="noopener noreferrer"><img src="' + image + '" alt="" onerror="this.parentElement.style.display=\'none\'"></a>' : '<div class="perde-news-feature-image"></div>') +
-      '<div class="perde-news-feature-copy"><span class="perde-news-tag">ÖNE ÇIKAN · ' + esc(categoryLabel(featured)) + '</span><h2>' + esc(featured.title) + '</h2><p>' + esc(featured.summary || 'Haberin ayrıntıları için orijinal kaynağı ziyaret et.') + '</p><div class="perde-news-meta"><span>' + esc(featured.source || '') + '</span><span>·</span><time>' + esc(dateLabel(featured.published)) + '</time></div><a class="perde-news-read" href="' + url + '" target="_blank" rel="noopener noreferrer">Haberin tamamını oku <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
-    grid.innerHTML = items.slice(1).map(card).join('');
+    const image = safeUrl(featured.image);
+    hero.innerHTML = (image !== '#' ? '<div class="perde-news-feature-image"><img src="' + image + '" alt="" onerror="this.parentElement.style.display=\'none\'"></div>' : '<div class="perde-news-feature-image"></div>') +
+      '<div class="perde-news-feature-copy"><span class="perde-news-tag">ÖNE ÇIKAN · ' + esc(categoryLabel(featured)) + '</span><h2>' + esc(featured.title) + '</h2><p>' + esc(featured.summary || 'Haberin ayrıntıları için orijinal kaynağı ziyaret et.') + '</p><div class="perde-news-meta"><span>' + esc(featured.source || '') + '</span><span>·</span><time>' + esc(dateLabel(featured.published)) + '</time></div><button type="button" class="perde-news-read" data-news-open="0">Haberi incele <i class="fa-solid fa-arrow-right"></i></button></div>';
+    grid.innerHTML = items.slice(1).map((item, index) => card(item, index + 1)).join('');
   }
   async function load(force) {
     if (state.loading || (state.loaded && !force)) { render(); return; }
@@ -50,11 +80,31 @@
   }
   window.loadPerdeNews = load;
   document.addEventListener('click', event => {
-    const button = event.target.closest('[data-news-filter]');
-    if (!button) return;
-    state.filter = button.dataset.newsFilter || 'all';
-    document.querySelectorAll('[data-news-filter]').forEach(el => el.classList.toggle('is-active', el === button));
+    const close = event.target.closest('[data-news-close]');
+    if (close) { closeArticle(); return; }
+    const opener = event.target.closest('[data-news-open]');
+    if (opener) { event.preventDefault(); const item = filtered()[Number(opener.dataset.newsOpen)]; openArticle(item); return; }
+    const filter = event.target.closest('[data-news-filter]');
+    if (!filter) return;
+    state.filter = filter.dataset.newsFilter || 'all';
+    document.querySelectorAll('[data-news-filter]').forEach(el => el.classList.toggle('is-active', el === filter));
     render();
+  });
+  document.addEventListener('keydown', event => {
+    const modal = $('perde-news-modal');
+    if (!modal || !modal.classList.contains('is-open')) return;
+    if (event.key === 'Escape') { closeArticle(); return; }
+    if (event.key === 'Tab') {
+      const focusable = [...modal.querySelectorAll('button:not([disabled]),a[href],summary')];
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+  });
+  document.addEventListener('keydown', event => {
+    const card = event.target.closest && event.target.closest('.perde-news-card[data-news-open]');
+    if (card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); const item = filtered()[Number(card.dataset.newsOpen)]; openArticle(item); }
   });
   document.addEventListener('DOMContentLoaded', () => {
     const filters = $('perde-news-filters');
