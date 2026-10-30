@@ -200,6 +200,7 @@
         }
 
         function saveToLocalStorage() {
+            if (!requireAdminAccess()) return;
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(movies));
             } catch (e) {
@@ -339,6 +340,12 @@
         }
 
         // Admin Panel Logic & Security
+        function requireAdminAccess() {
+            if (isAdminLoggedIn) return true;
+            showToast('Bu işlem yalnızca yönetici tarafından yapılabilir.');
+            return false;
+        }
+
         function getAdminPassword() {
             return localStorage.getItem(ADMIN_PASS_KEY) || 'admin123';
         }
@@ -357,6 +364,7 @@
             const inputPass = document.getElementById('admin-password-input').value;
             if (inputPass === getAdminPassword()) {
                 isAdminLoggedIn = true;
+                document.documentElement.classList.add('admin-mode');
                 closeModal('admin-auth-modal');
                 document.getElementById('admin-password-input').value = '';
                 showToast('Yönetici girişi başarılı!');
@@ -368,6 +376,7 @@
 
         function lockAdminSession() {
             isAdminLoggedIn = false;
+            document.documentElement.classList.remove('admin-mode');
             switchTab('dashboard');
             showToast('Yönetici oturumu kapatıldı.');
         }
@@ -432,6 +441,7 @@
         }
 
         function importArchiveJSON(event) {
+            if (!requireAdminAccess()) return;
             const fileReader = new FileReader();
             fileReader.onload = function (e) {
                 try {
@@ -456,6 +466,7 @@
         }
 
         function resetToDefaultArchive() {
+            if (!requireAdminAccess()) return;
             if (confirm('Tüm yapımlarınız silinecek ve varsayılan listeye dönülecektir. Emin misiniz?')) {
                 movies = [...onlineCatalog];
                 saveToLocalStorage();
@@ -851,6 +862,7 @@
         }
 
         function saveTrailerUrl(id) {
+            if (!requireAdminAccess()) return;
             const input = document.getElementById('trailer-url-input');
             const entered = (input?.value || '').trim();
             const videoId = getYouTubeVideoId(entered);
@@ -1021,7 +1033,7 @@
                             <button class="perde-similar-title" onclick="openDetailModal('${item.id}')">${esc(item.title)}</button>
                             <small>${item.year || 'Yıl bilinmiyor'}</small>
                             <div class="perde-similar-status ${item.inList ? 'is-added' : 'is-missing'}">${item.inList ? '<i class="fa-solid fa-check"></i> Listemde' : '<i class="fa-solid fa-circle-info"></i> Listemde Yok'}</div>
-                            ${item.inList ? '' : `<button class="perde-similar-add" onclick="addSimilarProduction('${item.id}', this)"><i class="fa-solid fa-plus"></i> Listeme Ekle</button>`}
+                            ${item.inList || !isAdminLoggedIn ? '' : `<button class="perde-similar-add" onclick="addSimilarProduction('${item.id}', this)"><i class="fa-solid fa-plus"></i> Arşive Ekle</button>`}
                         </div>
                     </article>
                 `).join('');
@@ -1032,8 +1044,9 @@
 
         const PENDING_SUGGESTIONS_KEY = 'perde_pending_suggestions_v1';
         function getPendingSuggestions() { try { const v = JSON.parse(localStorage.getItem(PENDING_SUGGESTIONS_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch(e) { return []; } }
-        function savePendingSuggestions(items) { localStorage.setItem(PENDING_SUGGESTIONS_KEY, JSON.stringify(items)); }
+        function savePendingSuggestions(items) { if (!requireAdminAccess()) return; localStorage.setItem(PENDING_SUGGESTIONS_KEY, JSON.stringify(items)); }
         function addSimilarProduction(id, button) {
+            if (!requireAdminAccess()) return;
             const item = fetchedOnlineResults.find(x => x.id === id); if (!item) return;
             const exists = movies.some(x => (x.tmdbId && String(x.tmdbId) === String(item.tmdbId)) || ((x.title||'').trim().toLocaleLowerCase('tr') === (item.title||'').trim().toLocaleLowerCase('tr') && String(x.year||'') === String(item.year||''));
             if (exists) { button.outerHTML = '<span class="perde-similar-status is-added">Listemde</span>'; return; }
@@ -1041,6 +1054,7 @@
             if (!duplicate) { pending.push({ ...item, requestId:'request-'+Date.now(), requestedAt:new Date().toISOString() }); savePendingSuggestions(pending); }
             button.outerHTML = '<span class="perde-similar-status is-pending"><i class="fa-solid fa-clock"></i> Onay Bekliyor</span>'; showToast(duplicate ? 'Bu yapım zaten onay bekliyor.' : 'Ekleme talebin yönetici onayına gönderildi.');
         }        function toggleFavorite(id) {
+            if (!requireAdminAccess()) return;
             let m = movies.find(x => x.id === id);
             if (!m) {
                 const catalogItem = onlineCatalog.find(x => x.id === id) || fetchedOnlineResults.find(x => x.id === id);
@@ -1059,6 +1073,7 @@
         }
 
         function updateMovieStatus(id, newStatus) {
+            if (!requireAdminAccess()) return;
             let m = movies.find(x => x.id === id);
             if (!m) {
                 const catalogItem = onlineCatalog.find(x => x.id === id) || fetchedOnlineResults.find(x => x.id === id);
@@ -1130,6 +1145,7 @@
         }
 
         function deleteMovie(id) {
+            if (!requireAdminAccess()) return;
             movies = movies.filter(x => x.id !== id);
             saveToLocalStorage();
             closeModal('detail-modal');
@@ -1394,6 +1410,7 @@
         }
 
         function openAddMovieModal() {
+            if (!requireAdminAccess()) return;
             document.getElementById('add-modal').classList.remove('hidden');
             document.getElementById('add-search-input').value = '';
             handleCatalogSearch('');
