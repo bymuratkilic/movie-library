@@ -47,7 +47,7 @@ assert.match(app, /item\.title\.trim\(\)\.length > 0/, 'Imported/local archive e
 assert.match(app, /renderLibrary\(\);\s*renderAdminTable\(\);/, 'Import must refresh the library and admin views');
 assert.match(app, /my_library_theme/ , 'The new theme preference must be saved');
 assert.match(app, /localStorage\.getItem\(['"]perde_theme['"]\)/, 'The old theme preference must still be read');
-assert.match(app, /\['dashboard',\s*'library',\s*'detail',\s*'stats',\s*'admin'\]/, 'The detail page must be registered as a tab');
+assert.match(app, /\['dashboard',\s*'library',\s*'trailers',\s*'detail',\s*'stats',\s*'admin'\]/, 'The detail page must be registered as a tab');
 assert.match(html, /id="detail-page-content"/, 'The detail page content container must exist');
 assert.match(html, /\.\/js\/config\.js/, 'Tailwind configuration must still be loaded');
 assert.match(html, /\.\/js\/app\.js/, 'The main application script must still be loaded');
