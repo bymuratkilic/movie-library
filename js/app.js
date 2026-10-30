@@ -977,9 +977,8 @@
                     '</div></div>';
             };
             try {
-                if (watchProviderCache[cacheKey]) {
-                    const cached = watchProviderCache[cacheKey];
-                    renderWatchProviderResult(cached, movie);
+                if (Object.prototype.hasOwnProperty.call(watchProviderCache, cacheKey)) {
+                    renderWatchProviderResult(watchProviderCache[cacheKey], movie);
                     return;
                 }
                 let tmdbId = movie.tmdbId || (String(movie.id || '').match(/^tmdb-(?:movie|tv)-(.+)$/) || [])[1] || '';
@@ -1032,7 +1031,7 @@
             }).join('');
             container.innerHTML = '<div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div>' +
                 (markup || '<p class="perde-watch-empty">Bu yapım için şu anda listelenmiş bir izleme seçeneği bulunamadı.</p>') +
-                (result.link ? '<a class="perde-watch-more" href="' + escapeProviderText(result.link) + '" target="_blank" rel="noopener noreferrer">Tüm izleme seçeneklerini gör <i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') +
+                (result.link ? '<a class="perde-watch-more" href="' + escapeProviderText(result.link) + '" target="_blank" rel="noopener noreferrer">TMDB’de görüntüle <i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') +
                 '<p class="perde-watch-credit">Yayın verileri JustWatch tarafından sağlanır · <a href="https://www.justwatch.com/tr" target="_blank" rel="noopener noreferrer">JustWatch</a></p>';
         }
 
