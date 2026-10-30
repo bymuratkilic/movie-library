@@ -260,8 +260,15 @@
         }
 
         function initTheme() {
-            const savedTheme = localStorage.getItem('my_library_theme') || localStorage.getItem('perde_theme') || 'light';
-            document.documentElement.className = savedTheme;
+            let savedTheme = 'dark';
+            try {
+                savedTheme = localStorage.getItem('my_library_theme') || localStorage.getItem('perde_theme') || 'dark';
+            } catch (error) {
+                console.warn('Tema tercihi okunamadı; koyu tema kullanılacak.', error);
+            }
+            const root = document.documentElement;
+            root.classList.remove('light', 'dark');
+            root.classList.add(savedTheme === 'light' ? 'light' : 'dark');
         }
 
         let activeCategoryFilter = 'all';
