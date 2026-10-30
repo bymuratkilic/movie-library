@@ -143,7 +143,14 @@ tbody tr { border-color: var(--ml-border) !important; }
 .perde-imdb-delete { color: var(--ml-danger); }
 .perde-imdb-cast { border-top: 1px solid var(--ml-border); padding-top: 20px; }
 .perde-imdb-cast h3 { color: var(--ml-text); font-size: 14px; font-weight: 700; margin-bottom: 12px; }
-.perde-imdb-cast-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(165px,1fr)); gap: 9px; }
+.perde-cast-carousel { position: relative; display: flex; align-items: center; gap: 8px; }
+.perde-imdb-cast-grid { display: flex; flex: 1; min-width: 0; gap: 9px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 2px 1px 8px; }
+.perde-imdb-cast-grid::-webkit-scrollbar { display: none; }
+.perde-imdb-cast-card { flex: 0 0 calc((100% - 36px) / 5); min-width: 145px; scroll-snap-align: start; }
+.perde-cast-arrow { flex: 0 0 32px; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--ml-border); border-radius: 50%; background: var(--ml-surface); color: var(--ml-text); cursor: pointer; transition: .2s ease; }
+.perde-cast-arrow:hover { background: var(--ml-accent, #2563eb); color: #fff; border-color: transparent; }
+.perde-cast-arrow[hidden] { display: none; }
+@media (max-width: 640px) { .perde-imdb-cast-card { flex-basis: 78%; min-width: 0; } .perde-cast-carousel { gap: 5px; } .perde-cast-arrow { flex-basis: 28px; width: 28px; height: 28px; } }
 .perde-imdb-cast-card { display: flex; align-items: center; gap: 10px; text-align: left; padding: 9px; border: 1px solid var(--ml-border); border-radius: 9px; background: var(--ml-surface); color: var(--ml-text); }
 .perde-imdb-cast-card img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--ml-surface-muted); }
 .perde-imdb-cast-card b, .perde-imdb-cast-card small { display: block; }
