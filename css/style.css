@@ -1237,3 +1237,53 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
  .perde-film-credits dt { font-size:9px; }
  .perde-film-credits dd { font-size:11px; }
 }
+
+
+/* Film künyesi — refined editorial metadata card with native country flags. */
+.perde-film-credits {
+  position:relative; overflow:hidden; padding:18px 16px !important;
+  border:1px solid color-mix(in srgb,var(--ml-accent) 24%,var(--ml-border)) !important;
+  border-radius:15px !important;
+  background:linear-gradient(155deg,color-mix(in srgb,var(--ml-accent) 7%,var(--ml-surface)),var(--ml-surface-muted)) !important;
+  box-shadow:0 12px 28px rgba(0,0,0,.08);
+}
+.perde-film-credits:before {
+  content:""; position:absolute; inset:0 0 auto; height:3px;
+  background:linear-gradient(90deg,var(--ml-accent),color-mix(in srgb,var(--ml-accent) 12%,transparent));
+}
+.perde-film-credits h3 {
+  margin:0 0 15px !important; padding-bottom:12px;
+  border-bottom:1px solid var(--ml-border);
+  font-size:12px !important; letter-spacing:.09em !important; text-transform:uppercase;
+}
+.perde-film-credits h3 i {
+  display:grid; place-items:center; width:29px; height:29px;
+  border-radius:9px; background:var(--ml-accent-soft); font-size:12px;
+}
+.perde-film-credits dl { gap:0 !important; }
+.perde-film-credits dl>div {
+  display:grid; grid-template-columns:1fr; gap:5px !important;
+  padding:10px 0; border-bottom:1px solid color-mix(in srgb,var(--ml-border) 72%,transparent);
+}
+.perde-film-credits dl>div:last-child { border-bottom:0; padding-bottom:1px; }
+.perde-film-credits dt { font-size:9px !important; letter-spacing:.12em !important; }
+.perde-film-credits dd { font-size:12px !important; font-weight:650; }
+.perde-film-credits .perde-film-country-row { gap:7px !important; }
+.perde-film-country-list { display:flex; flex-wrap:wrap; gap:8px; }
+.perde-country-item {
+  display:inline-flex; align-items:center; gap:7px;
+  min-height:32px; padding:5px 9px;
+  border:1px solid var(--ml-border); border-radius:9px;
+  background:var(--ml-surface); box-shadow:0 2px 7px rgba(0,0,0,.04);
+}
+.perde-country-flag { font-size:19px; line-height:1; filter:saturate(1.08); }
+.perde-country-name { color:var(--ml-text); font-size:11px; font-weight:750; }
+.perde-country-empty { color:var(--ml-muted); font-size:11px; font-weight:500; }
+@media(max-width:767px) {
+ .perde-film-credits { padding:13px 11px !important; border-radius:12px !important; }
+ .perde-film-credits h3 { margin-bottom:9px !important; padding-bottom:9px; font-size:10px !important; }
+ .perde-film-credits dl>div { padding:7px 0; }
+ .perde-country-item { min-height:28px; padding:4px 6px; gap:5px; }
+ .perde-country-flag { font-size:16px; }
+ .perde-country-name { font-size:10px; }
+}
