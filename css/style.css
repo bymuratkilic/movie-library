@@ -1276,3 +1276,21 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .perde-similar-card span { display: block; padding: 8px; font-size: 10px; font-weight: 700; line-height: 1.4; }
 .perde-similar-loading,.perde-similar-empty { color: var(--ml-muted); font-size: 11px; padding: 10px 0; }
 @media (max-width: 767px) { .perde-similar { padding: 0 16px 22px; } .perde-similar-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; } }
+
+/* Benzer yapımlar — film detay sayfasıyla aynı görsel dil */
+.perde-similar { padding: 24px clamp(18px,3vw,32px) 30px; border-top: 1px solid var(--ml-border); }
+.perde-similar h3 { margin: 0 0 16px; color: var(--ml-text); font-size: 15px; font-weight: 750; letter-spacing: -.025em; }
+.perde-similar-grid { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 12px; }
+.perde-similar-card { min-width: 0; overflow: hidden; border: 1px solid var(--ml-border); border-radius: 10px; background: var(--ml-surface); color: var(--ml-text); }
+.perde-similar-poster { display: block; width: 100%; padding: 0; border: 0; background: var(--ml-surface-muted); cursor: pointer; }
+.perde-similar-poster img { display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; }
+.perde-similar-info { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding: 9px; }
+.perde-similar-title { padding: 0; border: 0; background: none; color: var(--ml-text); text-align: left; font-size: 11px; font-weight: 700; line-height: 1.4; cursor: pointer; }
+.perde-similar-info small { color: var(--ml-muted); font-size: 10px; }
+.perde-similar-status { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 700; }
+.perde-similar-status.is-added { color: #16a36a; }
+.perde-similar-status.is-missing { color: var(--ml-muted); }
+.perde-similar-add { display: inline-flex; align-items: center; gap: 5px; margin-top: 3px; padding: 6px 8px; border: 1px solid var(--ml-border); border-radius: 7px; background: var(--ml-surface-muted); color: var(--ml-text); font-size: 9px; font-weight: 700; cursor: pointer; }
+.perde-similar-add:hover { border-color: var(--ml-accent); color: var(--ml-accent); }
+.perde-similar-loading,.perde-similar-empty { color: var(--ml-muted); font-size: 11px; padding: 10px 0; }
+@media (max-width: 767px) { .perde-similar { padding: 20px 16px 22px; } .perde-similar-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; } }
