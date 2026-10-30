@@ -3268,3 +3268,48 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
  .perde-search-overlay{padding:12vh 12px 20px}
  .perde-search-dialog{padding:15px;border-radius:17px}
 }
+
+
+/* PERDE trailer popup: geniş mobil oynatıcı, tek panel ve arka plan kilidi */
+#detail-modal.perde-trailer-open{z-index:120;display:flex;align-items:center;justify-content:center;overflow-y:auto;overscroll-behavior:contain;padding:clamp(8px,2.5vw,28px)}
+#detail-modal.perde-trailer-open>div{width:min(1120px,100%);max-width:1120px;max-height:calc(100dvh - 32px);height:auto;margin:auto;overflow:hidden;border-radius:18px;display:flex;flex-direction:column;position:relative}
+#detail-modal.perde-trailer-open>#detail-modal-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;flex:1}
+#detail-modal.perde-trailer-open>div>button{position:sticky;top:8px;align-self:flex-end;margin:8px 8px -44px 0;flex:0 0 36px;z-index:30}
+.perde-trailer-popup{width:100%;background:var(--ml-surface);color:var(--ml-text)}
+.perde-trailer-player{position:relative;width:100%;aspect-ratio:16/9;max-height: min(62vh,680px);background:#05070c;overflow:hidden}
+.perde-trailer-player iframe{display:block;width:100%;height:100%;border:0}
+.perde-trailer-info{padding:clamp(16px,3vw,28px);border-top:1px solid var(--ml-border);background:var(--ml-surface)}
+.perde-trailer-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.perde-trailer-kicker{display:block;margin-bottom:7px;color:var(--ml-accent);font-size:9px;font-weight:900;letter-spacing:.16em}
+.perde-trailer-heading h2{margin:0;color:var(--ml-text);font-size:clamp(17px,2.4vw,24px);font-weight:850;line-height:1.25}
+.perde-trailer-heading p{margin:6px 0 0;color:var(--ml-muted);font-size:11px}
+.perde-trailer-status{flex:0 0 auto;padding:6px 9px;border:1px solid var(--ml-border);border-radius:999px;color:var(--ml-muted);font-size:9px;font-weight:750}
+.perde-trailer-overview{margin:16px 0 0;color:var(--ml-muted);font-size:12px;line-height:1.75}
+.perde-trailer-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}
+.perde-trailer-actions a,.perde-trailer-search-primary{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 12px;border:1px solid var(--ml-border);border-radius:9px;background:var(--ml-surface-muted);color:var(--ml-text);font-size:10px;font-weight:750;text-decoration:none}
+.perde-trailer-actions a:first-child,.perde-trailer-search-primary{border-color:#d92e36;background:#e62129;color:#fff}
+.perde-trailer-save{margin-top:18px;padding-top:16px;border-top:1px solid var(--ml-border)}
+.perde-trailer-save label{display:block;margin-bottom:8px;color:var(--ml-text);font-size:11px;font-weight:800}
+.perde-trailer-save>div{display:flex;gap:8px}
+.perde-trailer-save input{min-width:0;flex:1;height:40px;padding:0 12px;border:1px solid var(--ml-border);border-radius:9px;background:var(--ml-surface-muted);color:var(--ml-text);font-size:11px}
+.perde-trailer-save button{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 14px;border:0;border-radius:9px;background:var(--ml-accent);color:#fff;font-size:10px;font-weight:800;white-space:nowrap}
+.perde-trailer-save small{display:block;margin-top:7px;color:var(--ml-muted);font-size:9px;line-height:1.5}
+.perde-trailer-empty{display:flex;min-height:clamp(210px,45vw,440px);flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:28px;text-align:center;background:radial-gradient(ellipse at 50% 20%,rgba(230,33,41,.15),transparent 55%),#080d18;color:#fff}
+.perde-trailer-youtube{display:grid;width:54px;height:54px;place-items:center;border:1px solid rgba(255,255,255,.15);border-radius:16px;background:rgba(255,255,255,.07);color:#ff454d;font-size:26px}
+.perde-trailer-empty h3{margin:0;color:#fff;font-size:clamp(15px,2vw,20px);font-weight:850}
+.perde-trailer-empty p{max-width:480px;margin:0;color:#b8c3d7;font-size:11px;line-height:1.7}
+.perde-trailer-search-primary{min-height:39px;padding:0 15px;margin-top:3px}
+@media(max-width:640px){
+ #detail-modal.perde-trailer-open{align-items:flex-start;padding:7px}
+ #detail-modal.perde-trailer-open>div{width:100%;max-height:calc(100dvh - 14px);max-height:calc(100vh - 14px);border-radius:13px}
+ .perde-trailer-player{max-height:none;aspect-ratio:16/9}
+ .perde-trailer-info{padding:15px 13px}
+ .perde-trailer-heading{padding-right:31px;display:block}
+ .perde-trailer-status{display:inline-flex;margin-top:9px}
+ .perde-trailer-overview{margin-top:12px;font-size:11px}
+ .perde-trailer-actions{gap:6px;margin-top:13px}
+ .perde-trailer-actions a{min-height:34px;padding:0 9px;font-size:9px}
+ .perde-trailer-save>div{flex-direction:column}
+ .perde-trailer-save button{min-height:39px}
+}
+@media(max-width:380px){.perde-trailer-actions a{flex:1 1 calc(50% - 6px)}}
