@@ -903,7 +903,6 @@
         function renderPersonLinks(names) {
             return String(names || 'Bilinmiyor').split(',').map(name => name.trim()).filter(Boolean).map(name => {
                 const safe = escapeProviderText(name);
-                const jsName = name.replace(/\\\\/g, "\\\\\\\\").replace(/'/g, "\\\\'");
                 return '<button type="button" class="perde-person-inline-link" data-person-name="' + safe + '" onclick="openActorBio(this.dataset.personName)">' + safe + '</button>';
             }).join(', ') || 'Bilinmiyor';
         }
