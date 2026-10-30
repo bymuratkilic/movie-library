@@ -878,7 +878,7 @@
                     const role = escapeProviderText(item.profileRole || 'Ekip');
                     const score = item.vote_average ? Number(item.vote_average).toFixed(1) : '—';
                     const mediaId = 'tmdb-' + (item.media_type === 'tv' ? 'tv' : 'movie') + '-' + item.id;
-                    return '<button class="perde-person-credit" onclick="openDetailModal(\\'' + mediaId + '\\')"><span class="perde-person-credit-title">' + title + '</span><span class="perde-person-credit-meta">' + year + ' · ' + role + '</span><span class="perde-person-credit-score"><i class="fa-solid fa-star"></i> ' + score + '</span></button>';
+                    return '<button class="perde-person-credit" data-production-id="' + mediaId + '" onclick="openDetailModal(this.dataset.productionId)"><span class="perde-person-credit-title">' + title + '</span><span class="perde-person-credit-meta">' + year + ' · ' + role + '</span><span class="perde-person-credit-score"><i class="fa-solid fa-star"></i> ' + score + '</span></button>';
                 }).join('') : '<p class="perde-person-empty">Bu sanatçı için öne çıkan yapım kaydı bulunamadı.</p>';
 
                 content.innerHTML = '<div class="perde-person-profile-head">' +
@@ -895,7 +895,7 @@
                 const localCredits = movies.filter(movie => movie.cast && movie.cast.some(person => person.name && person.name.toLowerCase() === actorName.toLowerCase()));
                 content.innerHTML = '<div class="perde-person-profile-head"><img src="' + getAvatarUrl(actorName) + '" alt="' + safeName + '" class="perde-person-profile-image"><div class="perde-person-profile-intro"><span class="perde-person-department">Sanatçı Profili</span><h3>' + safeName + '</h3><p class="perde-person-biography">' + escapeProviderText((local && local.bio) || 'Çevrimiçi sanatçı bilgisine şu anda ulaşılamıyor.') + '</p></div></div>' +
                     '<section class="perde-person-filmography"><div class="perde-person-section-heading"><h4>Arşivindeki yapımlar</h4></div><div class="perde-person-credit-grid">' +
-                    (localCredits.map(movie => '<button class="perde-person-credit" onclick="openDetailModal(\\'' + String(movie.id).replace(/'/g, "\\\\'") + '\\')"><span class="perde-person-credit-title">' + escapeProviderText(movie.title) + '</span><span class="perde-person-credit-meta">' + escapeProviderText(movie.year || '') + '</span></button>').join('') || '<p class="perde-person-empty">Arşivinde kayıtlı başka yapım bulunamadı.</p>') +
+                    (localCredits.map(movie => '<button class="perde-person-credit" data-production-id="' + escapeProviderText(movie.id) + '" onclick="openDetailModal(this.dataset.productionId)"><span class="perde-person-credit-title">' + escapeProviderText(movie.title) + '</span><span class="perde-person-credit-meta">' + escapeProviderText(movie.year || '') + '</span></button>').join('') || '<p class="perde-person-empty">Arşivinde kayıtlı başka yapım bulunamadı.</p>') +
                     '</div></section>';
             }
         }
@@ -904,7 +904,7 @@
             return String(names || 'Bilinmiyor').split(',').map(name => name.trim()).filter(Boolean).map(name => {
                 const safe = escapeProviderText(name);
                 const jsName = name.replace(/\\\\/g, "\\\\\\\\").replace(/'/g, "\\\\'");
-                return '<button type="button" class="perde-person-inline-link" onclick="openActorBio(\\'' + jsName + '\\')">' + safe + '</button>';
+                return '<button type="button" class="perde-person-inline-link" data-person-name="' + safe + '" onclick="openActorBio(this.dataset.personName)">' + safe + '</button>';
             }).join(', ') || 'Bilinmiyor';
         }
 
