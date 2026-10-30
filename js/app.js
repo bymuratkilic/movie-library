@@ -801,7 +801,13 @@
                             </div>
                         </section>
                     </div>
+                    <section class="perde-similar" aria-label="Benzer yapımlar">
+                        <h3>Benzer Yapımlar</h3>
+                        <div id="perde-similar-grid" class="perde-similar-grid"><p class="perde-similar-loading">Benzer yapımlar yükleniyor…</p></div>
+                    </section>
                 `;
+
+                loadSimilarProductions(m);
 
                 if (m.cast && m.cast.length > 0) {
                     m.cast.forEach((c, idx) => {
@@ -817,6 +823,72 @@
                 closeModal('detail-modal');
                 switchTab('detail');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        async function loadSimilarProductions(movie) {
+            const container = document.getElementById('perde-similar-grid');
+            if (!container) return;
+            const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
+            const mediaType = movie.type === 'tv' ? 'tv' : 'movie';
+            const apiBase = 'https://api.themoviedb.org/3/';
+            try {
+                let tmdbId = movie.tmdbId || (String(movie.id || '').startsWith('tmdb-') ? String(movie.id).split('-').pop() : '');
+                if (!tmdbId) {
+                    const searchResponse = await fetch(apiBase + 'search/' + mediaType + '?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR&query=' + encodeURIComponent(movie.title || ''));
+                    const searchData = await searchResponse.json();
+                    const match = (searchData.results || [])[0];
+                    tmdbId = match && match.id;
+                }
+                if (!tmdbId) throw new Error('TMDb eşleşmesi bulunamadı');
+                const response = await fetch(apiBase + mediaType + '/' + tmdbId + '/recommendations?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR&page=1');
+                const data = await response.json();
+                if (!response.ok || !Array.isArray(data.results)) throw new Error('Benzer yapımlar alınamadı');
+                const seen = new Set([String(movie.title || '').toLocaleLowerCase('tr')]);
+                const recommendations = data.results.filter(item => {
+                    const title = item.title || item.name || '';
+                    const key = title.toLocaleLowerCase('tr');
+                    if (!title || seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                }).slice(0, 6).map(item => {
+                    const title = item.title || item.name || 'İsimsiz yapım';
+                    const date = item.release_date || item.first_air_date || '';
+                    return {
+                        id: 'tmdb-' + mediaType + '-' + item.id,
+                        source: 'tmdb',
+                        tmdbId: item.id,
+                        title,
+                        type: mediaType === 'tv' ? 'tv' : 'movie',
+                        year: parseInt(date.slice(0, 4), 10) || '',
+                        director: 'Bilinmiyor',
+                        country: 'Bilinmiyor',
+                        runtime: 'Bilinmiyor',
+                        imdb: Number(item.vote_average) > 0 ? Number(item.vote_average).toFixed(1) : '—',
+                        status: 'watched',
+                        favorite: false,
+                        genres: [],
+                        trailerUrl: '',
+                        poster: item.poster_path ? 'https://image.tmdb.org/t/p/w500' + item.poster_path : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80',
+                        overview: item.overview || title + ' yapımı.',
+                        cast: []
+                    };
+                });
+                if (!recommendations.length) {
+                    container.innerHTML = '<p class="perde-similar-empty">Bu yapım için benzer öneri bulunamadı.</p>';
+                    return;
+                }
+                recommendations.forEach(item => {
+                    if (!fetchedOnlineResults.some(existing => existing.id === item.id)) fetchedOnlineResults.push(item);
+                });
+                container.innerHTML = recommendations.map(item => `
+                    <button class="perde-similar-card" onclick="openDetailModal('${item.id}')">
+                        <img src="${item.poster}" alt="${item.title.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80'">
+                        <span>${item.title} ${item.year ? '· ' + item.year : ''}</span>
+                    </button>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = '<p class="perde-similar-empty">Benzer yapımlar şu anda yüklenemedi.</p>';
             }
         }
 
