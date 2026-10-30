@@ -5,10 +5,9 @@ from email.utils import parsedate_to_datetime
 from html import unescape
 from urllib.parse import urlparse
 import feedparser
-
 FEEDS = [
     ("https://www.dizifilmdergisiturkiye.com/rss/sinema.xml", "tr", "Türk Sineması"),
-    ("https://www.dizifilmdergisiturkiye.com/rss/diziler.xml", "tr", "Türk Dizileri"),
+    ("https://www.dizifilmdergisiturkiye.com/rss/diziler.xml", "series", "Türk Dizileri"),
     ("https://www.dizifilmdergisiturkiye.com/rss/fragman.xml", "trailers", "Fragmanlar"),
     ("https://www.dizifilmdergisiturkiye.com/rss/gundem.xml", "tr", "Sektör Gündemi"),
     ("https://www.beyazperde.com/rss/haberler.xml", "tr", "Beyazperde"),
@@ -18,12 +17,10 @@ FEEDS = [
     ("https://www.hollywoodreporter.com/feed/", "world", "The Hollywood Reporter"),
 ]
 MAX_ITEMS = 120
-
 def clean_html(value):
-    value = re.sub(r"<(script|style)[^>]*>.*?</\\1>", " ", value or "", flags=re.I | re.S)
-    value = re.sub(r"<[^>]+>", " ", value)
-    return re.sub(r"\\s+", " ", unescape(value)).strip()
-
+    value = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", value or "", flags=re.I | re.S)
+    value = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", value or "", flags=re.I | re.S)
+    return re.sub(r"\s+", " ", unescape(value)).strip()
 def image_for(entry):
     for key in ("media_content", "media_thumbnail"):
         values = entry.get(key) or []
@@ -33,9 +30,7 @@ def image_for(entry):
         if link.get("type", "").startswith("image/") and link.get("href"):
             return link["href"]
     html = entry.get("summary", "") or entry.get("description", "")
-    match = re.search(r'<img[^>]+src=["\\']([^"\\']+)', html, re.I)
-    return match.group(1) if match else ""
-
+    return ""
 def published_for(entry):
     value = entry.get("published") or entry.get("updated") or ""
     parsed = entry.get("published_parsed") or entry.get("updated_parsed")
@@ -47,7 +42,6 @@ def published_for(entry):
         return dt.astimezone(timezone.utc).isoformat()
     except Exception:
         return datetime.now(timezone.utc).isoformat()
-
 items, seen = [], set()
 for feed_url, category, label in FEEDS:
     try:
@@ -75,7 +69,6 @@ for feed_url, category, label in FEEDS:
             })
     except Exception as exc:
         print(f"Feed okunamadı: {feed_url}: {exc}")
-
 items.sort(key=lambda item: item["published"], reverse=True)
 payload = {"updatedAt": datetime.now(timezone.utc).isoformat(), "items": items[:MAX_ITEMS]}
 with open("data/news.json", "w", encoding="utf-8") as output:
