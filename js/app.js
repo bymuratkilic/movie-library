@@ -814,6 +814,13 @@
             }
         }
 
+        function scrollHiddenGems(direction) {
+            const rail = document.getElementById('hidden-gems-grid');
+            if (!rail) return;
+            const distance = Math.max(rail.clientWidth * 0.85, 260);
+            rail.scrollBy({ left: direction * distance, behavior: 'smooth' });
+        }
+
         let hiddenGemRequestId = 0;
         let hiddenGemRefreshCycle = 0;
         let hiddenGemCache = [];
