@@ -1113,7 +1113,7 @@
             const form = movie.status === 'watched'
                 ? '<div class="ml-diary-form"><div class="ml-diary-fields"><label>İzleme tarihi<input id="diary-watch-date" type="date" value="' + esc(date) + '" class="input-field"></label><label>Kişisel puan<input id="diary-personal-rating" type="number" min="1" max="10" step="0.5" placeholder="1–10" value="' + esc(rating) + '" class="input-field"></label></div><label class="ml-diary-review-label">Kısa yorum<textarea id="diary-personal-review" rows="3" maxlength="500" placeholder="Bu yapım hakkında ne düşündün?" class="input-field">' + esc(review) + '</textarea></label><div class="ml-diary-actions"><button onclick="savePersonalWatchEntry(\'' + movie.id + '\')" class="ml-diary-save"><i class="fa-solid fa-floppy-disk"></i> Kaydı kaydet</button><button onclick="addPersonalWatchEntry(\'' + movie.id + '\')" class="ml-diary-new"><i class="fa-solid fa-plus"></i> Yeniden izledim</button></div></div>' + historyMarkup
                 : '<div class="ml-diary-empty-state"><p>İzlediğinde kişisel puanını, tarihini ve yorumunu burada saklayabilirsin.</p><button onclick="updateMovieStatus(\'' + movie.id + '\', \'watched\')" class="ml-diary-save"><i class="fa-solid fa-check"></i> İzledim olarak işaretle</button></div>';
-            return '<section class="ml-diary-panel" aria-label="Kişisel izleme günlüğü"><div class="ml-diary-heading"><div><span class="ml-diary-kicker">KİŞİSEL SİNEMA GÜNLÜĞÜ</span><h3>İzleme notlarım</h3></div><span class="ml-diary-imdb">IMDb ' + esc(movie.imdb || '—') + '</span></div>' + form + '</section>';
+            return '<section class="ml-diary-panel" aria-label="Kişisel izleme günlüğü">' + form + '</section>';
         }
 
         function savePersonalWatchEntry(id) {
