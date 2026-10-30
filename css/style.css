@@ -3211,3 +3211,15 @@ html.light #perde-detail-series-meta>span{background:#f3f6fc;border-color:#dce5f
 html.light #perde-detail-series-meta>span b{color:#23395f}
 html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-color:#d2def8;color:#31528f}
 @media(max-width:600px){#perde-detail-series-meta{gap:7px;margin:13px 0 17px}#perde-detail-series-meta>span{min-height:31px;padding:6px 9px;font-size:10px}#perde-detail-series-meta>span b{font-size:12px}}
+
+
+/* Editör seçkileri: tıklanan alt kart üst manşete taşınır */
+.perde-cinema-feature{position:relative;isolation:isolate;overflow:hidden}
+.perde-cinema-backdrop{transition:opacity .28s ease,transform .55s ease}
+.perde-cinema-feature-copy{animation:perdeHeadlineIn .32s ease both}
+@keyframes perdeHeadlineIn{from{opacity:.45;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+.perde-cinema-card{display:block;padding:0 0 5px;border:1px solid transparent;border-radius:13px;background:transparent;cursor:pointer;transition:transform .2s ease,border-color .2s ease,background .2s ease}
+.perde-cinema-card:hover{transform:translateY(-3px);border-color:var(--ml-accent);background:color-mix(in srgb,var(--ml-accent) 6%,transparent)}
+.perde-cinema-card:focus-visible{outline:2px solid var(--ml-accent);outline-offset:3px}
+.perde-cinema-card-image{transition:border-color .2s ease,box-shadow .2s ease}
+.perde-cinema-card:hover .perde-cinema-card-image{border-color:var(--ml-accent);box-shadow:0 10px 24px rgba(24,48,95,.18)}
