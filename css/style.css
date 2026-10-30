@@ -1543,3 +1543,13 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .admin-approve-btn{background:#059669;color:white}.admin-reject-btn{background:rgba(244,63,94,.12);color:#f43f5e}
 .perde-similar-status.is-pending{color:#d69e2e}
 @media(max-width:640px){.admin-diary-fields{grid-template-columns:1fr}.admin-pending-item{align-items:flex-start;flex-direction:column}.admin-pending-actions{width:100%}.admin-pending-actions button{flex:1}}
+
+
+/* Visitor mode: public pages are read-only. Editing controls appear only in an admin session. */
+html:not(.admin-mode) .admin-only-control,
+html:not(.admin-mode) .perde-imdb-fav,
+html:not(.admin-mode) .perde-imdb-delete,
+html:not(.admin-mode) .perde-similar-add,
+html:not(.admin-mode) #trailer-url-input,
+html:not(.admin-mode) #trailer-url-input + button { display: none !important; }
+html.admin-mode .admin-only-control { display: inline-flex; }
