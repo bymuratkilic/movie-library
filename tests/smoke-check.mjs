@@ -93,3 +93,9 @@ assert.match(app, /genreMatches \* 3 \* seedWeight/, 'Recommendation ranking mus
 assert.match(app, /perde-recommendation-reason/, 'Recommendation cards must explain why an item was suggested');
 assert.match(html, /onclick="renderPersonalRecommendations\(\)"/, 'Users must be able to refresh personal recommendations');
 assert.match(css, /\.ml-recommendation-refresh/, 'Recommendation refresh control must be styled');
+
+assert.match(app, /function\\s+loadRecommendationProviders\\s*\\(/, 'Personal recommendation cards must load Turkish streaming availability');
+assert.match(app, /perde-recommendation-providers-/, 'Recommendation cards must include a streaming provider slot');
+assert.match(app, /data\.results && data\.results\.TR/, 'Recommendation availability must be scoped to Türkiye');
+assert.match(app, /uniqueStreaming\.slice\(0,3\)/, 'Recommendation cards must show a concise provider list');
+assert.match(css, /\.perde-recommendation-providers/, 'Recommendation streaming provider badges must be styled');
