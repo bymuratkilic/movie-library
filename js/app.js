@@ -4,6 +4,92 @@
         let isAdminLoggedIn = false;
         let searchDebounceTimer = null;
         let fetchedOnlineResults = [];
+        let comparisonSelection = [];
+
+        function getComparisonMovie(id) {
+            return movies.find(item => String(item.id) === String(id)) ||
+                onlineCatalog.find(item => String(item.id) === String(id)) ||
+                fetchedOnlineResults.find(item => String(item.id) === String(id)) || null;
+        }
+
+        function addToComparison(id) {
+            const item = getComparisonMovie(id);
+            if (!item) return;
+            if (comparisonSelection.some(entry => String(entry.id) === String(item.id))) {
+                showToast('Bu yapım zaten karşılaştırma listesinde.');
+                return;
+            }
+            if (comparisonSelection.length >= 2) {
+                showToast('Karşılaştırma için en fazla iki yapım seçebilirsin.');
+                return;
+            }
+            comparisonSelection.push(item);
+            renderComparisonTray();
+            showToast(item.title + ' karşılaştırmaya eklendi.');
+            if (comparisonSelection.length === 2) openComparison();
+        }
+
+        function removeFromComparison(id) {
+            comparisonSelection = comparisonSelection.filter(item => String(item.id) !== String(id));
+            renderComparisonTray();
+            if (comparisonSelection.length < 2) closeComparison();
+        }
+
+        function clearComparison() {
+            comparisonSelection = [];
+            renderComparisonTray();
+            closeComparison();
+        }
+
+        function renderComparisonTray() {
+            const tray = document.getElementById('comparison-tray');
+            const count = document.getElementById('comparison-count');
+            if (!tray || !count) return;
+            count.textContent = comparisonSelection.length + '/2';
+            tray.hidden = comparisonSelection.length === 0;
+        }
+
+        function comparisonValue(value) {
+            if (Array.isArray(value)) return value.length ? value.join(', ') : 'Bilgi yok';
+            return value !== undefined && value !== null && String(value).trim() ? String(value) : 'Bilgi yok';
+        }
+
+        function openComparison() {
+            if (comparisonSelection.length !== 2) {
+                showToast('Karşılaştırmak için iki yapım seçmelisin.');
+                return;
+            }
+            const [a, b] = comparisonSelection;
+            const rows = [
+                ['Yapım türü', a.type === 'tv' ? 'Dizi' : a.type === 'doc' ? 'Belgesel' : 'Film', b.type === 'tv' ? 'Dizi' : b.type === 'doc' ? 'Belgesel' : 'Film'],
+                ['Yıl', a.year, b.year],
+                ['IMDb puanı', a.imdb, b.imdb],
+                ['Süre', a.runtime, b.runtime],
+                ['Türler', a.genres, b.genres],
+                ['Yönetmen / yaratıcı', a.director, b.director],
+                ['Ülke', a.country, b.country],
+                ['Oyuncular', (a.cast || []).slice(0, 5).map(person => person.name), (b.cast || []).slice(0, 5).map(person => person.name)],
+                ['Konu', a.overview, b.overview]
+            ];
+            const poster = item => item.poster || item.backdrop || '';
+            const content = document.getElementById('comparison-modal-content');
+            content.innerHTML =
+                '<div class="perde-compare-heading"><span>PERDE KARŞILAŞTIRMA</span><h2>Hangisi sana daha yakın?</h2><p>İki yapımın temel bilgilerini yan yana incele.</p></div>' +
+                '<div class="perde-compare-productions">' + [a,b].map(item =>
+                    '<article class="perde-compare-production"><img src="' + escapeProviderText(poster(item)) + '" alt="' + escapeProviderText(item.title) + ' afişi"><div><strong>' + escapeProviderText(item.title) + '</strong><small>' + escapeProviderText(item.year || 'Yıl bilinmiyor') + '</small><button type="button" onclick="removeFromComparison(\'' + String(item.id).replace(/'/g, '') + '\')"><i class="fa-solid fa-xmark"></i> Çıkar</button></div></article>'
+                ).join('') + '</div>' +
+                '<div class="perde-compare-table">' + rows.map(row =>
+                    '<div class="perde-compare-row"><b>' + row[0] + '</b><div>' + escapeProviderText(comparisonValue(row[1])) + '</div><div>' + escapeProviderText(comparisonValue(row[2])) + '</div></div>'
+                ).join('') + '</div>' +
+                '<p class="perde-compare-footnote">Bilgiler mevcut arşiv ve TMDB kayıtlarından alınır. Eksik veriler “Bilgi yok” olarak gösterilir.</p>';
+            document.getElementById('comparison-modal').classList.remove('hidden');
+        }
+
+        function closeComparison() {
+            const modal = document.getElementById('comparison-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
         let genreChartInstance = null;
         let statusChartInstance = null;
 
@@ -1049,7 +1135,7 @@
                                     <div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div>
                                 </section>
                                 
-                                <div class="perde-imdb-actions"><label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
+                                <div class="perde-imdb-actions"><button type="button" onclick="addToComparison('${m.id}')" class="perde-imdb-action-btn"><i class="fa-solid fa-scale-balanced"></i> Karşılaştırmaya ekle</button><label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
                             </div>
                         </section>
