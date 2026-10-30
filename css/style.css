@@ -1662,3 +1662,24 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .perde-compare-row>div+div{border-left:1px solid var(--ml-border)}
 .perde-compare-footnote{margin-top:12px;text-align:right}
 @media(max-width:600px){.perde-compare-tray{right:10px;bottom:12px;left:10px;justify-content:space-between;gap:7px;padding:8px}.perde-compare-dialog{padding:17px}.perde-compare-heading h2{font-size:18px}.perde-compare-production{gap:8px;padding:7px}.perde-compare-production img{width:44px;height:66px;flex-basis:44px}.perde-compare-production strong{font-size:10px}.perde-compare-row{grid-template-columns:86px minmax(0,1fr) minmax(0,1fr)}.perde-compare-row>b,.perde-compare-row>div{padding:8px 7px;font-size:9px}}
+
+
+/* Personal Perde score */
+.perde-rating-panel{margin:18px 0;padding:17px;border:1px solid var(--ml-border);border-radius:13px;background:var(--ml-surface)}
+.perde-rating-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.perde-rating-heading>div:first-child>span{color:var(--ml-accent);font-size:8px;font-weight:850;letter-spacing:.14em}
+.perde-rating-heading h3{margin:5px 0;color:var(--ml-text);font-size:15px;font-weight:850}
+.perde-rating-heading h3 i{margin-right:6px;color:#d5a33d}
+.perde-rating-heading p{color:var(--ml-muted);font-size:10px;line-height:1.5}
+.perde-rating-average{display:flex;flex:0 0 auto;flex-direction:column;align-items:flex-end}
+.perde-rating-average strong{color:var(--ml-text);font-size:24px;font-weight:850;line-height:1.1}
+.perde-rating-average span{margin-top:3px;color:var(--ml-muted);font-size:9px;font-weight:750}
+.perde-rating-average small{margin-top:3px;color:var(--ml-muted);font-size:8px}
+.perde-rating-controls{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-top:14px}
+.perde-rating-controls label{color:var(--ml-muted);font-size:10px;font-weight:750}
+.perde-rating-controls select{min-width:105px;padding:8px 10px;border:1px solid var(--ml-border);border-radius:8px;background:var(--ml-bg);color:var(--ml-text);font-size:11px}
+.perde-rating-controls button{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border-radius:8px;background:var(--ml-accent);color:#fff;font-size:10px;font-weight:800}
+.perde-rating-saved,.perde-rating-hint{color:var(--ml-muted);font-size:9px}
+.perde-rating-saved i{margin-right:4px;color:#16a36a}
+.perde-rating-note{display:block;margin-top:11px;color:var(--ml-muted);font-size:8px;line-height:1.5}
+@media(max-width:560px){.perde-rating-panel{padding:13px}.perde-rating-heading{align-items:flex-start}.perde-rating-heading h3{font-size:14px}.perde-rating-average strong{font-size:21px}.perde-rating-controls{align-items:stretch}.perde-rating-controls label{width:100%}.perde-rating-controls select{flex:1}.perde-rating-controls button{justify-content:center}}
