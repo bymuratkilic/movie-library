@@ -420,7 +420,7 @@
         }
         function approveSimilarSuggestion(id) {
             const list=getPendingSuggestions(), item=list.find(x=>x.requestId===id);if(!item)return;
-            const exists=movies.some(x=>(x.tmdbId&&String(x.tmdbId)===String(item.tmdbId))||((x.title||'').trim().toLocaleLowerCase('tr')===(item.title||'').trim().toLocaleLowerCase('tr')&&String(x.year||'')===String(item.year||''));
+            const exists=movies.some(x=>(x.tmdbId&&String(x.tmdbId)===String(item.tmdbId))||((x.title||'').trim().toLocaleLowerCase('tr')===(item.title||'').trim().toLocaleLowerCase('tr')&&String(x.year||'')===String(item.year||'')));
             if(!exists){const saved={...item,id:'movie-'+Date.now(),source:'local',status:'watch_later',favorite:false};delete saved.requestId;delete saved.requestedAt;delete saved.inList;movies.unshift(saved);saveToLocalStorage();renderDashboard();renderLibrary();}
             savePendingSuggestions(list.filter(x=>x.requestId!==id));renderAdminTable();showToast(exists?'Yapım zaten arşivde; talep kapatıldı.':'Talep onaylandı ve izleme listesine eklendi.');
         }
