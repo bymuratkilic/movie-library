@@ -802,6 +802,19 @@
             }
         }
 
+        // Ana sayfa poster görseli yüklenemezse uzaktan bağımlılığı olmayan bir yedek göster.
+        function handleHomePosterError(image) {
+            if (!image || image.dataset.fallbackApplied === 'true') return;
+            image.dataset.fallbackApplied = 'true';
+            image.hidden = true;
+            const fallback = document.createElement('div');
+            fallback.className = 'ml-home-poster-fallback';
+            fallback.setAttribute('role', 'img');
+            fallback.setAttribute('aria-label', 'Afiş görseli yüklenemedi');
+            fallback.innerHTML = '<i class="fa-solid fa-film" aria-hidden="true"></i><span>AFİŞ YÜKLENEMEDİ</span>';
+            image.insertAdjacentElement('afterend', fallback);
+        }
+
         // Ana sayfa kartlarında eksik künye ve süre bilgilerini TMDB'den tamamlar.
         const homeCardMetadataCache = {};
         async function loadHomeCardMetadata(movie) {
@@ -846,6 +859,10 @@
                 fill('year', date ? date.slice(0, 4) : '');
                 if ((!Array.isArray(movie.genres) || !movie.genres.length) && Array.isArray(details.genres) && details.genres.length) {
                     movie.genres = details.genres.map(genre => genre.name).filter(Boolean);
+                    changed = true;
+                }
+                if ((!movie.poster || String(movie.poster).includes('unsplash.com')) && details.poster_path) {
+                    movie.poster = 'https://image.tmdb.org/t/p/w500' + details.poster_path;
                     changed = true;
                 }
                 if (mediaType === 'tv') {
@@ -900,7 +917,7 @@
                     '<div id="' + metaId + '-genres" class="ml-home-poster-genres">' + safe(genres || type) + '</div></div>' +
                     '<span id="' + metaId + '-duration" class="ml-home-poster-runtime"' + (durationMeta ? '' : ' hidden') + '><i class="' + (m.type === 'tv' ? 'fa-solid fa-list-ol' : 'fa-regular fa-clock') + '"></i> ' + safe(durationMeta) + '</span>';
                 return '<article class="ml-catalog-card' + (homePosterMode ? ' ml-home-poster-card' : '') + '" role="button" tabindex="0" aria-label="' + title + ' detaylarını aç" onclick="openDetailModal(\'' + id + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openDetailModal(\'' + id + '\')}">' +
-                    '<div class="ml-catalog-poster"><img src="' + safe(m.poster || '') + '" alt="' + title + ' afişi" loading="lazy" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80\'">' +
+                    '<div class="ml-catalog-poster"><img src="' + safe(m.poster || '') + '" alt="' + title + ' afişi" loading="lazy" onerror="' + (homePosterMode ? 'handleHomePosterError(this)' : "this.onerror=null;this.src=\\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80\\'") + '">' +
                     '<span class="ml-catalog-type">' + type + '</span><span class="ml-catalog-rating"><i class="fa-solid fa-star"></i> ' + safe(m.imdb || '—') + '</span>' +
                     (m.favorite ? '<span class="ml-catalog-favorite"><i class="fa-solid fa-heart"></i></span>' : '') +
                     (homePosterMode ? '<div class="ml-home-poster-gradient"></div>' + posterInfo : '') +
@@ -916,7 +933,7 @@
                     const yearNode = document.getElementById(metaId + '-year');
                     const genreNode = document.getElementById(metaId + '-genres');
                     const durationNode = document.getElementById(metaId + '-duration');
-                    const needsMetadata = !movie.year || ['—', 'Bilinmiyor'].includes(String(movie.year).trim()) || !Array.isArray(movie.genres) || !movie.genres.length ||
+                    const needsMetadata = !movie.year || ['—', 'Bilinmiyor'].includes(String(movie.year).trim()) || !Array.isArray(movie.genres) || !movie.genres.length || !movie.poster || String(movie.poster).includes('unsplash.com') ||
                         (movie.type === 'tv'
                             ? !(Number(movie.number_of_seasons || movie.seasons) && Number(movie.number_of_episodes || movie.episodes))
                             : !movie.runtime || ['Bilinmiyor', 'Süre bilgisi yok', '—'].includes(String(movie.runtime).trim()));
