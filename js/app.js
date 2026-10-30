@@ -886,6 +886,17 @@
             return homeCardMetadataCache[key];
         }
 
+        function toggleHomeCardPreview(button) {
+            const card = button && button.closest('.ml-home-poster-card');
+            if (!card) return;
+            const opening = !card.classList.contains('is-preview-open');
+            card.classList.toggle('is-preview-open', opening);
+            button.setAttribute('aria-expanded', String(opening));
+            button.setAttribute('aria-label', opening ? 'Önizlemeyi kapat' : 'Önizlemeyi aç');
+            const preview = card.querySelector('.ml-home-poster-preview');
+            if (preview) preview.setAttribute('aria-hidden', String(!opening));
+        }
+
         function renderRow(containerId, list) {
             const container = document.getElementById(containerId);
             if (!container) return;
@@ -910,6 +921,8 @@
                         : '')
                     : '';
                 const durationMeta = m.type === 'tv' ? seriesMeta : runtime;
+                const overview = String(m.overview || '').trim();
+                const previewText = overview.length > 190 ? overview.slice(0, 187).trimEnd() + '…' : overview;
                 const posterInfo = '<div class="ml-home-poster-info">' +
                     '<h3 title="' + title + '">' + title + '</h3>' +
                     '<div class="ml-home-poster-facts"><span class="ml-home-poster-rating"><i class="fa-solid fa-star"></i> IMDb ' + safe(m.imdb || '—') + '</span>' +
@@ -920,7 +933,9 @@
                     '<div class="ml-catalog-poster"><img src="' + safe(m.poster || '') + '" alt="' + title + ' afişi" loading="lazy" onerror="' + (homePosterMode ? 'handleHomePosterError(this)' : "this.onerror=null;this.src=\\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80\\'") + '">' +
                     '<span class="ml-catalog-type">' + type + '</span><span class="ml-catalog-rating"><i class="fa-solid fa-star"></i> ' + safe(m.imdb || '—') + '</span>' +
                     (m.favorite ? '<span class="ml-catalog-favorite"><i class="fa-solid fa-heart"></i></span>' : '') +
-                    (homePosterMode ? '<div class="ml-home-poster-gradient"></div>' + posterInfo : '') +
+                    (homePosterMode ? '<div class="ml-home-poster-gradient"></div>' + posterInfo +
+                        '<div class="ml-home-poster-preview" aria-hidden="true"><span class="ml-home-preview-label">KISA ÖNİZLEME</span><p>' + safe(previewText || 'Bu yapım için henüz kısa bir açıklama eklenmemiş.') + '</p></div>' +
+                        '<button type="button" class="ml-home-preview-toggle" aria-label="' + title + ' önizlemesini aç" aria-expanded="false" onclick="event.stopPropagation();toggleHomeCardPreview(this)" onkeydown="event.stopPropagation()"><i class="fa-solid fa-eye" aria-hidden="true"></i><span>Önizleme</span></button>' : '') +
                     '<span class="ml-catalog-overlay"><i class="fa-solid fa-arrow-up-right-from-square"></i> DETAYLAR</span></div>' +
                     (homePosterMode ? '' : '<div class="ml-catalog-meta"><h3 title="' + title + '">' + title + '</h3><div class="ml-catalog-sub"><span>' + safe(m.year || '—') + '</span>' +
                     (genres ? '<span class="ml-catalog-separator">•</span><span class="ml-catalog-genre">' + safe(genres) + '</span>' : '') +
