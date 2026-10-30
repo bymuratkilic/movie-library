@@ -473,9 +473,83 @@
         }
 
         // Dashboard & Liste Görünümleri Render
+
+        // İzleme geçmişi ve favorilerden hareketle TMDB önerilerini kişiselleştirir.
+        let personalRecommendationRequest = 0;
+        async function renderPersonalRecommendations() {
+            const container = document.getElementById('perde-personal-recommendations');
+            if (!container) return;
+            const requestId = ++personalRecommendationRequest;
+            const seeds = movies.filter(item => item.status === 'watched' || item.favorite)
+                .sort((a,b) => Number(Boolean(b.favorite))-Number(Boolean(a.favorite)) || (Number(b.imdb)||0)-(Number(a.imdb)||0)).slice(0,3);
+            if (!seeds.length) {
+                container.innerHTML = '<p class="perde-recommendation-empty"><i class="fa-solid fa-lightbulb"></i> Sana özel öneriler oluşturmak için arşivinden birkaç yapımı favorile veya izledim olarak işaretle.</p>';
+                return;
+            }
+            container.innerHTML = '<p class="perde-recommendation-loading"><i class="fa-solid fa-spinner fa-spin"></i> İzleme zevkine göre öneriler aranıyor…</p>';
+            const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
+            const base = 'https://api.themoviedb.org/3/';
+            const requests = seeds.map(async seed => {
+                const mediaType = seed.type === 'tv' ? 'tv' : 'movie';
+                let tmdbId = seed.tmdbId || (String(seed.id || '').match(/^tmdb-(?:movie|tv)-(.+)$/) || [])[1] || '';
+                if (!tmdbId) {
+                    const search = await fetch(base + 'search/' + mediaType + '?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR&query=' + encodeURIComponent(seed.title || ''));
+                    if (!search.ok) return [];
+                    const searchData = await search.json();
+                    const year = String(seed.year || '');
+                    const match = (searchData.results || []).find(item => String(item.release_date || item.first_air_date || '').startsWith(year)) || (searchData.results || [])[0];
+                    tmdbId = match && match.id;
+                }
+                if (!tmdbId) return [];
+                const response = await fetch(base + mediaType + '/' + tmdbId + '/recommendations?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR&page=1');
+                if (!response.ok) return [];
+                const data = await response.json();
+                return (data.results || []).map(item => ({ item, mediaType }));
+            });
+            try {
+                const groups = await Promise.all(requests);
+                if (requestId !== personalRecommendationRequest || !document.getElementById('perde-personal-recommendations')) return;
+                const archiveHas = item => movies.some(saved =>
+                    (saved.tmdbId && String(saved.tmdbId) === String(item.tmdbId)) ||
+                    ((saved.title || '').trim().toLocaleLowerCase('tr') === (item.title || '').trim().toLocaleLowerCase('tr') && String(saved.year || '') === String(item.year || ''))
+                );
+                const seen = new Set();
+                const recommendations = groups.flat().map(({item,mediaType}) => {
+                    const title = item.title || item.name || '';
+                    const date = item.release_date || item.first_air_date || '';
+                    return {
+                        id:'tmdb-' + mediaType + '-' + item.id, tmdbId:item.id, source:'recommendation',
+                        title, type:mediaType, year:date.slice(0,4),
+                        imdb:Number(item.vote_average)>0?Number(item.vote_average).toFixed(1):'—',
+                        status:'watch_later', favorite:false, genres:[],
+                        poster:item.poster_path?'https://image.tmdb.org/t/p/w500'+item.poster_path:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80',
+                        backdrop:item.backdrop_path?'https://image.tmdb.org/t/p/w1280'+item.backdrop_path:'',
+                        overview:item.overview||'Bu yapım için henüz konu özeti bulunmuyor.',
+                        director:'Bilinmiyor', country:'Bilinmiyor', runtime:'Bilinmiyor', cast:[], trailerUrl:''
+                    };
+                }).filter(item => item.title && !archiveHas(item) && !seen.has(String(item.tmdbId)) && seen.add(String(item.tmdbId)))
+                  .sort((a,b) => (Number(b.imdb)||0)-(Number(a.imdb)||0)).slice(0,6);
+                recommendations.forEach(item => {
+                    if (!fetchedOnlineResults.some(existing => String(existing.tmdbId || '') === String(item.tmdbId))) fetchedOnlineResults.push(item);
+                });
+                if (!recommendations.length) {
+                    container.innerHTML = '<p class="perde-recommendation-empty">Şu an yeni öneri bulunamadı. İzleme geçmişin değiştikçe önerilerin de yenilenecek.</p>';
+                    return;
+                }
+                container.innerHTML = recommendations.map(item => {
+                    const id = escapeProviderText(item.id), title = escapeProviderText(item.title), poster = escapeProviderText(item.poster);
+                    return '<article class="perde-personal-card"><button type="button" class="perde-personal-poster" onclick="openDetailModal(\'' + id + '\')"><img src="' + poster + '" alt="' + title + ' afişi" loading="lazy"><span><i class="fa-solid fa-star"></i> ' + escapeProviderText(item.imdb) + '</span></button><div class="perde-personal-card-copy"><button type="button" onclick="openDetailModal(\'' + id + '\')">' + title + '</button><small>' + escapeProviderText(item.year || 'Yıl bilinmiyor') + ' · ' + (item.type === 'tv' ? 'Dizi' : 'Film') + '</small><button type="button" class="perde-personal-add" onclick="addSimilarProduction(\'' + id + '\', this)"><i class="fa-solid fa-plus"></i> İzleme listeme ekle</button></div></article>';
+                }).join('');
+            } catch (error) {
+                if (requestId === personalRecommendationRequest) container.innerHTML = '<p class="perde-recommendation-empty">Öneriler şu anda yüklenemedi. Biraz sonra tekrar deneyebilirsin.</p>';
+                console.warn('Kişisel öneriler alınamadı:', error);
+            }
+        }
+
         function renderDashboard() {
             renderFeaturedHero();
             renderTodaysPick();
+            renderPersonalRecommendations();
             document.getElementById('stat-total-count').textContent = movies.length;
             document.getElementById('stat-watched-count').textContent = movies.filter(m => m.status === 'watched').length;
             const watchLaterCount = movies.filter(m => m.status === 'watch_later').length;
@@ -935,7 +1009,6 @@
 
                 loadSimilarProductions(m);
                 loadWatchProviders(m);
-                enrichDetailFromTmdb(m);
                 enrichDetailFromTmdb(m);
 
                 if (m.cast && m.cast.length > 0) {
