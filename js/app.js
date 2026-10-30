@@ -917,6 +917,10 @@
                             <div class="perde-imdb-main">
                                 <div class="perde-imdb-rating-row"><div class="perde-imdb-score"><strong>${m.imdb || '—'}</strong><span>IMDb</span></div><button onclick="toggleFavorite('${m.id}')" class="perde-imdb-fav ${m.favorite ? 'is-favorite' : ''}"><i class="fa-solid fa-heart"></i> ${m.favorite ? 'Favorilerde' : 'Favorilere Ekle'}</button></div>
                                 <p class="perde-imdb-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p>
+                                <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite">
+                                    <div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div>
+                                    <div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div>
+                                </section>
                                 
                                 <div class="perde-imdb-actions"><label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
@@ -930,6 +934,7 @@
                 `;
 
                 loadSimilarProductions(m);
+                loadWatchProviders(m);
 
                 if (m.cast && m.cast.length > 0) {
                     m.cast.forEach((c, idx) => {
@@ -946,6 +951,89 @@
                 switchTab('detail');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+        }
+
+        // Türkiye'deki yayın seçenekleri TMDB'nin JustWatch destekli Watch Providers verisinden alınır.
+        const watchProviderCache = {};
+        function escapeProviderText(value) {
+            return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        }
+
+        async function loadWatchProviders(movie) {
+            const container = document.getElementById('perde-watch-providers');
+            if (!container) return;
+            const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
+            const mediaType = movie.type === 'tv' ? 'tv' : 'movie';
+            const apiBase = 'https://api.themoviedb.org/3/';
+            const cacheKey = mediaType + ':' + (movie.tmdbId || movie.id || movie.title);
+            const renderEmpty = message => {
+                const target = document.getElementById('perde-watch-providers');
+                if (target) target.innerHTML = '<div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div><p class="perde-watch-empty">' + escapeProviderText(message) + '</p><p class="perde-watch-credit">Yayın bilgileri JustWatch kaynaklıdır.</p>';
+            };
+            const renderGroup = (label, icon, providers) => {
+                if (!Array.isArray(providers) || !providers.length) return '';
+                return '<div class="perde-watch-group"><h4><i class="fa-solid ' + icon + '"></i>' + label + '</h4><div class="perde-watch-list">' +
+                    providers.map(provider => '<div class="perde-watch-provider"><img src="https://image.tmdb.org/t/p/w92' + provider.logo_path + '" alt="" loading="lazy" onerror="this.style.display=\'none\'"><span>' + escapeProviderText(provider.provider_name) + '</span></div>').join('') +
+                    '</div></div>';
+            };
+            try {
+                if (watchProviderCache[cacheKey]) {
+                    const cached = watchProviderCache[cacheKey];
+                    renderWatchProviderResult(cached, movie);
+                    return;
+                }
+                let tmdbId = movie.tmdbId || (String(movie.id || '').match(/^tmdb-(?:movie|tv)-(.+)$/) || [])[1] || '';
+                if (!tmdbId) {
+                    const searchResponse = await fetch(apiBase + 'search/' + mediaType + '?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR&query=' + encodeURIComponent(movie.title || ''));
+                    if (!searchResponse.ok) throw new Error('search');
+                    const searchData = await searchResponse.json();
+                    const year = String(movie.year || '');
+                    const match = (searchData.results || []).find(item => {
+                        const date = String(item.release_date || item.first_air_date || '');
+                        return !year || date.startsWith(year);
+                    }) || (searchData.results || [])[0];
+                    tmdbId = match && match.id;
+                }
+                if (!tmdbId) {
+                    renderEmpty('Bu yapım için Türkiye yayın platformu bilgisi bulunamadı.');
+                    return;
+                }
+                const response = await fetch(apiBase + mediaType + '/' + tmdbId + '/watch/providers?api_key=' + encodeURIComponent(apiKey));
+                if (!response.ok) throw new Error('providers');
+                const data = await response.json();
+                const result = data.results && data.results.TR ? data.results.TR : null;
+                watchProviderCache[cacheKey] = result;
+                renderWatchProviderResult(result, movie);
+            } catch (error) {
+                renderEmpty('Platform bilgileri şu anda alınamadı. Lütfen daha sonra tekrar deneyin.');
+            }
+        }
+
+        function renderWatchProviderResult(result, movie) {
+            const container = document.getElementById('perde-watch-providers');
+            if (!container) return;
+            if (!result) {
+                container.innerHTML = '<div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div><p class="perde-watch-empty">Bu yapım için Türkiye’de yayın platformu bilgisi bulunamadı.</p><p class="perde-watch-credit">Yayın bilgileri JustWatch kaynaklıdır.</p>';
+                return;
+            }
+            const sections = [
+                ['Abonelik kapsamında', 'fa-play-circle', result.flatrate],
+                ['Ücretsiz', 'fa-gift', result.free],
+                ['Reklamlı ücretsiz', 'fa-rectangle-ad', result.ads],
+                ['Kirala', 'fa-ticket', result.rent],
+                ['Satın al', 'fa-bag-shopping', result.buy]
+            ];
+            const markup = sections.map(group => {
+                const providers = Array.isArray(group[2]) ? group[2] : [];
+                if (!providers.length) return '';
+                return '<div class="perde-watch-group"><h4><i class="fa-solid ' + group[1] + '"></i>' + group[0] + '</h4><div class="perde-watch-list">' +
+                    providers.map(provider => '<div class="perde-watch-provider"><img src="https://image.tmdb.org/t/p/w92' + provider.logo_path + '" alt="" loading="lazy" onerror="this.style.display=\'none\'"><span>' + escapeProviderText(provider.provider_name) + '</span></div>').join('') +
+                    '</div></div>';
+            }).join('');
+            container.innerHTML = '<div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div>' +
+                (markup || '<p class="perde-watch-empty">Bu yapım için şu anda listelenmiş bir izleme seçeneği bulunamadı.</p>') +
+                (result.link ? '<a class="perde-watch-more" href="' + escapeProviderText(result.link) + '" target="_blank" rel="noopener noreferrer">Tüm izleme seçeneklerini gör <i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') +
+                '<p class="perde-watch-credit">Yayın verileri JustWatch tarafından sağlanır · <a href="https://www.justwatch.com/tr" target="_blank" rel="noopener noreferrer">JustWatch</a></p>';
         }
 
         async function loadSimilarProductions(movie) {
