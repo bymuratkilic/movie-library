@@ -831,7 +831,7 @@
             document.getElementById('stat-favorite-count').textContent = movies.filter(m => m.favorite).length;
             renderCinemaShowcase();
             renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later').slice(0, 6));
-            renderRow('recent-row', movies.slice(0, 6));
+            renderRow('recent-row', movies.filter(m => m.status !== 'watch_later').slice(0, 6));
             renderGenreMenu();
         }
 
