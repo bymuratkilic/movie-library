@@ -684,6 +684,29 @@
             return String(value || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
+        // Ülke adlarını Türkçe gösterir ve ISO ülke kodundan bayrak emojisi üretir.
+        function renderCountryCredits(value) {
+            const countryMap = {
+                'united states of america':['US','Amerika Birleşik Devletleri'],'united states':['US','Amerika Birleşik Devletleri'],'usa':['US','Amerika Birleşik Devletleri'],'abd':['US','Amerika Birleşik Devletleri'],'us':['US','Amerika Birleşik Devletleri'],
+                'united kingdom':['GB','Birleşik Krallık'],'uk':['GB','Birleşik Krallık'],'great britain':['GB','Birleşik Krallık'],'england':['GB','İngiltere'],'ingiltere':['GB','İngiltere'],
+                'turkey':['TR','Türkiye'],'türkiye':['TR','Türkiye'],'turkiye':['TR','Türkiye'],
+                'south korea':['KR','Güney Kore'],'korea':['KR','Güney Kore'],'north korea':['KP','Kuzey Kore'],
+                'russia':['RU','Rusya'],'russian federation':['RU','Rusya'],'china':['CN','Çin'],'japan':['JP','Japonya'],'france':['FR','Fransa'],'germany':['DE','Almanya'],'italy':['IT','İtalya'],'spain':['ES','İspanya'],'canada':['CA','Kanada'],'australia':['AU','Avustralya'],'india':['IN','Hindistan'],'brazil':['BR','Brezilya'],'mexico':['MX','Meksika'],'ireland':['IE','İrlanda'],'scotland':['GB','İskoçya'],'wales':['GB','Galler'],'sweden':['SE','İsveç'],'norway':['NO','Norveç'],'denmark':['DK','Danimarka'],'finland':['FI','Finlandiya'],'netherlands':['NL','Hollanda'],'belgium':['BE','Belçika'],'switzerland':['CH','İsviçre'],'austria':['AT','Avusturya'],'poland':['PL','Polonya'],'ukraine':['UA','Ukrayna'],'greece':['GR','Yunanistan'],'portugal':['PT','Portekiz'],'new zealand':['NZ','Yeni Zelanda'],'south africa':['ZA','Güney Afrika'],'iran':['IR','İran'],'iraq':['IQ','Irak'],'israel':['IL','İsrail'],'egypt':['EG','Mısır'],'argentina':['AR','Arjantin'],'chile':['CL','Şili'],'colombia':['CO','Kolombiya'],'thailand':['TH','Tayland'],'indonesia':['ID','Endonezya'],'hong kong':['HK','Hong Kong'],'taiwan':['TW','Tayvan'],'czech republic':['CZ','Çekya'],'czechia':['CZ','Çekya'],'romania':['RO','Romanya'],'hungary':['HU','Macaristan'],'bulgaria':['BG','Bulgaristan'],'croatia':['HR','Hırvatistan'],'serbia':['RS','Sırbistan'],'iceland':['IS','İzlanda'],'malta':['MT','Malta'],'luxembourg':['LU','Lüksemburg'],'uae':['AE','Birleşik Arap Emirlikleri'],'united arab emirates':['AE','Birleşik Arap Emirlikleri']
+            };
+            const countries = String(value || '').split(/\\s*\\/\\s*|,\\s*/).map(name => name.trim()).filter(Boolean);
+            if (!countries.length || countries.some(name => ['bilinmiyor','unknown','n/a'].includes(name.toLowerCase()))) {
+                return '<span class="perde-country-empty">Ülke bilgisi bulunmuyor</span>';
+            }
+            return countries.map(name => {
+                const key = name.toLocaleLowerCase('tr-TR');
+                const match = countryMap[key] || countryMap[name.toLowerCase()];
+                const code = match ? match[0] : '';
+                const flag = code ? String.fromCodePoint(...code.split('').map(char => 127397 + char.charCodeAt(0))) : '🌐';
+                const translated = match ? match[1] : name;
+                return '<span class="perde-country-item"><span class="perde-country-flag" aria-hidden="true">' + flag + '</span><span class="perde-country-name">' + escapeTrailerField(translated) + '</span></span>';
+            }).join('');
+        }
+
         // Fragman bağlantısını ilgili arşiv kaydına kaydeder (LocalStorage).
         function saveTrailerUrl(id) {
             const input = document.getElementById('trailer-url-input');
@@ -751,7 +774,7 @@
                                         <div><dt>Yönetmen</dt><dd>${m.director || 'Bilinmiyor'}</dd></div>
                                         <div><dt>Yapım yılı</dt><dd>${m.year || 'Bilinmiyor'}</dd></div>
                                         <div><dt>Süre</dt><dd>${m.runtime || 'Bilinmiyor'}</dd></div>
-                                        <div><dt>Ülke</dt><dd>${m.country || 'Bilinmiyor'}</dd></div>
+                                        <div class="perde-film-country-row"><dt>Ülke</dt><dd class="perde-film-country-list">${renderCountryCredits(m.country)}</dd></div>
                                         <div><dt>Tür</dt><dd>${m.genres && m.genres.length ? m.genres.join(', ') : 'Bilinmiyor'}</dd></div>
                                     </dl>
                                 </section>
