@@ -882,13 +882,15 @@
                 }).join('') : '<p class="perde-person-empty">Bu sanatçı için öne çıkan yapım kaydı bulunamadı.</p>';
 
                 content.innerHTML = '<div class="perde-person-profile-head">' +
-                    '<img src="' + escapeProviderText(imageUrl) + '" alt="' + safeName + '" class="perde-person-profile-image" onerror="this.src=\\'' + getAvatarUrl(actorName) + '\\'">' +
+                    '<img src="' + escapeProviderText(imageUrl) + '" alt="' + safeName + '" class="perde-person-profile-image">' +
                     '<div class="perde-person-profile-intro"><span class="perde-person-department">' + escapeProviderText(department) + '</span><h3>' + safeName + '</h3>' +
                     (facts.length ? '<p class="perde-person-facts">' + facts.map(escapeProviderText).join(' · ') + '</p>' : '') +
                     '<p class="perde-person-biography">' + escapeProviderText(biography) + '</p></div></div>' +
                     '<section class="perde-person-filmography"><div class="perde-person-section-heading"><h4><i class="fa-solid fa-clapperboard"></i> Öne çıkan yapımları</h4><span>' + credits.length + ' yapım</span></div>' +
                     '<div class="perde-person-credit-grid">' + creditMarkup + '</div></section>' +
                     '<p class="perde-person-source">Sanatçı ve filmografi bilgileri TMDB kaynaklıdır.</p>';
+                const profileImage = content.querySelector('.perde-person-profile-image');
+                if (profileImage) profileImage.onerror = () => { profileImage.src = getAvatarUrl(actorName); };
             } catch (error) {
                 console.warn('Sanatçı profili yüklenemedi:', error);
                 const local = actorDatabase[actorName];
