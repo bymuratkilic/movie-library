@@ -2208,7 +2208,6 @@
             const settings = getPerdeProfileSettings();
             const favorites = movies.filter(item=>item.favorite);
             const watched = movies.filter(item=>item.status==='watched');
-            const rated = getPerdeRatedMovies();
             const genres = {};
             movies.forEach(item=>(Array.isArray(item.genres)?item.genres:(typeof item.genres==='string'?item.genres.split(','):[])).forEach(g=>{const key=String(g).trim();if(key)genres[key]=(genres[key]||0)+1;}));
             const favoriteGenre = Object.entries(genres).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'Belirlenmedi';
@@ -2311,7 +2310,6 @@
             const watched = movies.filter(item => item.status === 'watched');
             const watchLater = movies.filter(item => item.status === 'watch_later');
             const favorites = movies.filter(item => item.favorite);
-            const rated = getPerdeRatedMovies();
             const totalMinutes = watched.reduce((sum, item) => {
                 if (item.type === 'tv') return sum;
                 const runtime = String(item.runtime || '');
@@ -2343,9 +2341,6 @@
             const genreRoot=document.getElementById('stats-top-genres');
             if(genreRoot) genreRoot.innerHTML=topGenres.length?topGenres.map(([name,count])=>'<span><b>'+safe(name)+'</b><small>'+count+' yapım</small></span>').join(''):'<p class="perde-stats-empty">Tür bilgisi bulunan yapım yok.</p>';
 
-            const topRated=[...rated].sort((a,b)=>Number(b.perdeRating)-Number(a.perdeRating)||String(a.title).localeCompare(String(b.title),'tr')).slice(0,5);
-            const rankingRoot=document.getElementById('stats-top-rated');
-            if(rankingRoot) rankingRoot.innerHTML=topRated.length?topRated.map((item,index)=>'<button type="button" class="perde-stats-rank-item" onclick="openDetailModal(\''+String(item.id).replace(/'/g,'')+'\')"><span class="perde-stats-rank-number">'+(index+1)+'</span><img src="'+safe(item.poster||'')+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span class="perde-stats-rank-copy"><b>'+safe(item.title)+'</b><small>'+safe(item.year||'Yıl bilinmiyor')+' · '+(item.type==='tv'?'Dizi':item.type==='doc'?'Belgesel':'Film')+'</small></span><strong>'+Number(item.perdeRating).toFixed(1)+'</strong></button>').join(''):'<p class="perde-stats-empty">Henüz Perde Puanı verdiğin bir yapım yok. Bir yapımı puanladığında burada görünecek.</p>';
 
             const now=new Date();
             const monthKeys=[];
