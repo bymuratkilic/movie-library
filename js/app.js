@@ -413,6 +413,26 @@
                     </td>
                 </tr>
             `).join('');
+            renderAdminMovieEditor();
+        }
+
+        function renderAdminMovieEditor(selectedId) {
+            const selector = document.getElementById('admin-movie-select');
+            const container = document.getElementById('admin-movie-editor');
+            if (!selector || !container) return;
+            const currentId = selectedId || selector.value || (movies[0] && String(movies[0].id));
+            selector.innerHTML = movies.map(movie => '<option value="' + escapeTrailerField(String(movie.id)) + '">' + escapeTrailerField(movie.title || 'İsimsiz yapım') + ' (' + escapeTrailerField(movie.year || '—') + ')</option>').join('');
+            if (!movies.length) {
+                container.innerHTML = '<p class="text-sm text-slate-500">Arşivde henüz yapım bulunmuyor.</p>';
+                return;
+            }
+            const movie = movies.find(item => String(item.id) === String(currentId)) || movies[0];
+            selector.value = String(movie.id);
+            container.innerHTML = '<div class="mb-4"><label class="block text-xs font-semibold mb-2">İzleme durumu</label><select class="input-field w-full max-w-xs" onchange="updateMovieStatus(\'' + movie.id + '\', this.value); renderAdminMovieEditor(\'' + movie.id + '\')"><option value="watch_later" ' + (movie.status !== 'watched' ? 'selected' : '') + '>İzleyeceğim</option><option value="watched" ' + (movie.status === 'watched' ? 'selected' : '') + '>İzledim</option></select></div>' + renderPersonalDiary(movie);
+        }
+
+        function selectAdminMovie(id) {
+            renderAdminMovieEditor(id);
         }
 
         function exportArchiveJSON() {
@@ -918,8 +938,7 @@
                                 <div class="perde-imdb-rating-row"><div class="perde-imdb-score"><strong>${m.imdb || '—'}</strong><span>IMDb</span></div><button onclick="toggleFavorite('${m.id}')" class="perde-imdb-fav ${m.favorite ? 'is-favorite' : ''}"><i class="fa-solid fa-heart"></i> ${m.favorite ? 'Favorilerde' : 'Favorilere Ekle'}</button></div>
                                 <p class="perde-imdb-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p>
                                 
-                                <div class="perde-imdb-actions"><label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
-                                ${renderPersonalDiary(m)}
+                                <div class="perde-imdb-actions"><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
                             </div>
                         </section>
@@ -1128,7 +1147,7 @@
             const entry = { date, rating, review };
             if (movie.watchHistory.length) movie.watchHistory[movie.watchHistory.length - 1] = entry; else movie.watchHistory.push(entry);
             movie.watchedAt = date; movie.personalRating = rating; movie.personalReview = review;
-            saveToLocalStorage(); openDetailModal(id); renderDashboard(); showToast('Kişisel izleme notun kaydedildi.');
+            saveToLocalStorage(); renderDashboard(); renderAdminTable(); renderAdminMovieEditor(id); showToast('Kişisel izleme notun kaydedildi.');
         }
 
         function addPersonalWatchEntry(id) {
@@ -1137,7 +1156,7 @@
             if (!Array.isArray(movie.watchHistory)) movie.watchHistory = [];
             movie.watchHistory.push({ date: new Date().toISOString().slice(0, 10), rating: '', review: '' });
             movie.watchedAt = movie.watchHistory[movie.watchHistory.length - 1].date; movie.personalRating = ''; movie.personalReview = '';
-            saveToLocalStorage(); openDetailModal(id); showToast('Yeni izleme kaydı açıldı.');
+            saveToLocalStorage(); renderAdminTable(); renderAdminMovieEditor(id); showToast('Yeni izleme kaydı açıldı.');
         }
 
         function deleteMovie(id) {
