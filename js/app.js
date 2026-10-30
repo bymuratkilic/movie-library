@@ -1690,7 +1690,7 @@
                             const data = await response.json();
                             results = (Array.isArray(data) ? data.slice(0, 8) : []).map(entry => {
                                 const show = entry.show || {};
-                                const summary = String(show.summary || '').replace(/<[^>]*>/g, ' ').replace(/\\s+/g, ' ').trim();
+                                const summary = String(show.summary || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
                                 return { id: 'tvmaze-' + show.id, title: show.name || q, type: 'tv', year: parseInt(String(show.premiered || '').slice(0, 4), 10) || '', director: 'Bilinmiyor', country: show.network && show.network.country ? show.network.country.name : 'Bilinmiyor', runtime: show.averageRuntime ? show.averageRuntime + ' dk' : 'Dizi', imdb: show.rating && show.rating.average ? show.rating.average.toFixed(1) : '—', status: 'watched', favorite: false, genres: Array.isArray(show.genres) ? show.genres : [], trailerUrl: '', poster: show.image && (show.image.original || show.image.medium) ? (show.image.original || show.image.medium) : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80', overview: summary || (show.name || q) + ' dizisi.', cast: [] };
                             });
                         }
@@ -1894,9 +1894,9 @@
 
         function getPerdeWatchSessions(item) {
             const history = Array.isArray(item.watchHistory) ? item.watchHistory : [];
-            const valid = history.map(entry => entry && entry.date ? String(entry.date).slice(0, 10) : '').filter(date => /^\\d{4}-\\d{2}-\\d{2}$/.test(date));
+            const valid = history.map(entry => entry && entry.date ? String(entry.date).slice(0, 10) : '').filter(date => /^\d{4}-\d{2}-\d{2}$/.test(date));
             if (valid.length) return valid;
-            return item.watchedAt && /^\\d{4}-\\d{2}-\\d{2}/.test(String(item.watchedAt))
+            return item.watchedAt && /^\d{4}-\d{2}-\d{2}/.test(String(item.watchedAt))
                 ? [String(item.watchedAt).slice(0, 10)] : [];
         }
 
@@ -1909,6 +1909,8 @@
             movies.forEach(item => getPerdeWatchSessions(item).forEach(date => availableYears.add(Number(date.slice(0, 4)))));
             const years = [...availableYears].filter(Number.isFinite).sort((a,b) => b-a);
             const selectedYear = years.includes(Number(select.value)) ? Number(select.value) : currentYear;
+            const heading = document.getElementById('perde-year-heading-title');
+            if (heading) heading.textContent = selectedYear + ' Sinema Özetin';
             select.innerHTML = years.map(year => '<option value="' + year + '"' + (year === selectedYear ? ' selected' : '') + '>' + year + '</option>').join('');
 
             const sessions = [];
@@ -1917,7 +1919,7 @@
             }));
             const uniqueItems = [...new Map(sessions.map(entry => [String(entry.item.id), entry.item])).values()];
             const totalMinutes = sessions.reduce((sum, entry) => {
-                const match = String(entry.item.runtime || '').match(/(\\d+)\\s*(?:dk|min(?:ute)?s?)/i);
+                const match = String(entry.item.runtime || '').match(/(\d+)\s*(?:dk|min(?:ute)?s?)/i);
                 return sum + (match ? Number(match[1]) : 0);
             }, 0);
             const duration = totalMinutes
@@ -1960,7 +1962,7 @@
         async function sharePerdeYearReview() {
             const summary = window.perdeYearSummary;
             if (!summary) { showToast('Paylaşılacak yıllık özet bulunamadı.'); return; }
-            const message = '🎬 Perde · '+summary.year+' Sinema Özetim\\n'+summary.sessions+' izleme seansı · '+summary.titles+' farklı yapım\\nİzleme süresi: '+summary.duration+'\\nEn çok izlediğim tür: '+summary.topGenre+'\\nYılın seçkisi: '+summary.topTitles.join(', ');
+            const message = '🎬 Perde · '+summary.year+' Sinema Özetim\n'+summary.sessions+' izleme seansı · '+summary.titles+' farklı yapım\nİzleme süresi: '+summary.duration+'\nEn çok izlediğim tür: '+summary.topGenre+'\nYılın seçkisi: '+summary.topTitles.join(', ');
             if (navigator.share) {
                 try { await navigator.share({ title:'Perde · '+summary.year+' Sinema Özeti', text:message }); }
                 catch (error) { if (error && error.name !== 'AbortError') showToast('Paylaşım açılamadı.'); }
