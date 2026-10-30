@@ -1455,9 +1455,10 @@
         }
 
         function openDetailModal(id, trailerMode = null, popupOnly = false) {
-            const m = movies.find(x => x.id === id) || onlineCatalog.find(x => x.id === id) || fetchedOnlineResults.find(x => x.id === id);
+            const m = movies.find(x => String(x.id) === String(id)) || onlineCatalog.find(x => String(x.id) === String(id)) || fetchedOnlineResults.find(x => String(x.id) === String(id));
             if (!m) return;
 
+            const modal = document.getElementById('detail-modal');
             const modalContent = document.getElementById(trailerMode ? 'detail-modal-content' : 'detail-page-content');
 
             if (trailerMode) {
@@ -1467,21 +1468,47 @@
 
                 const videoId = getYouTubeVideoId(m.trailerUrl || '');
                 const searchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(searchQuery);
-                // Fragman bağlantısı kayıtlı değilse tıklama doğrudan YouTube arama sonuçlarını açar.
-                if (!videoId && !popupOnly) window.open(searchUrl, '_blank', 'noopener,noreferrer');
                 const safeTitle = escapeTrailerField(m.title);
+                const safeYear = escapeTrailerField(m.year || 'Yıl bilgisi yok');
+                const safeType = m.type === 'tv' ? 'Dizi' : m.type === 'doc' ? 'Belgesel' : 'Film';
+                const safeRuntime = escapeTrailerField(m.runtime || '');
+                const safeOverview = escapeTrailerField(m.overview || 'Bu yapım için henüz konu özeti eklenmemiş.');
+                const safeId = String(m.id).replace(/[^a-zA-Z0-9_-]/g, '');
                 const playerMarkup = videoId
-                    ? '<div class="aspect-video w-full bg-black"><iframe title="' + safeTitle + ' fragman" class="w-full h-full" src="https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0&playsinline=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>'
-                    : '<div class="aspect-video w-full bg-black flex flex-col items-center justify-center text-center text-white p-6 gap-3"><i class="fa-brands fa-youtube text-4xl text-red-500"></i><h3 class="font-bold text-lg">' + safeTitle + ' için kayıtlı fragman bağlantısı yok</h3><p class="text-sm text-slate-300 max-w-lg">YouTube araması yeni sekmede açılır. İsterseniz aşağıya doğru fragman videosunun bağlantısını ekleyip kaydedebilirsiniz.</p><a href="' + searchUrl + '" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-xl text-sm"><i class="fa-brands fa-youtube"></i>YouTube’da fragman ara</a></div>';
+                    ? '<div class="perde-trailer-player"><iframe title="' + safeTitle + ' fragman' +
+                      '" src="https://www.youtube-nocookie.com/embed/' + videoId + '?rel=0&playsinline=1' +
+                      '" allow="encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>'
+                    : '<div class="perde-trailer-empty"><span class="perde-trailer-youtube"><i class="fa-brands fa-youtube"></i></span>' +
+                      '<h3>' + safeTitle + ' için kayıtlı fragman bulunamadı</h3>' +
+                      '<p>Bu yapımın fragmanını YouTube’da arayabilir veya bulduğun bağlantıyı aşağıdan arşivine ekleyebilirsin.</p>' +
+                      '<a href="' + searchUrl + '" target="_blank" rel="noopener noreferrer" class="perde-trailer-search-primary"><i class="fa-brands fa-youtube"></i> YouTube’da fragman ara</a></div>';
 
                 modalContent.innerHTML =
-                    playerMarkup +
-                    '<div class="p-4 space-y-4 border-t dark:border-clean-border border-light-border dark:bg-slate-900 bg-white dark:text-white text-slate-900">' +
-                      '<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div><h3 class="font-bold text-sm">' + safeTitle + ' — Fragman</h3><p class="text-[11px] dark:text-slate-400 text-slate-500">' + (videoId ? 'Kayıtlı YouTube videosu oynatılıyor.' : 'Video otomatik bulunamadı; arama bağlantısını kullanabilirsiniz.') + '</p></div>' +
-                      '<div class="flex flex-wrap items-center gap-2"><button onclick="openDetailModal(&#39;' + m.id + '&#39;, &#39;tr_sub&#39;)" class="text-xs dark:bg-white/10 bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/20 px-2.5 py-1.5 rounded-lg">Altyazılı ara</button><button onclick="openDetailModal(&#39;' + m.id + '&#39;, &#39;tr_dub&#39;)" class="text-xs dark:bg-white/10 bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/20 px-2.5 py-1.5 rounded-lg">Dublajlı ara</button><a href="' + searchUrl + '" target="_blank" rel="noopener noreferrer" class="text-xs text-red-500 font-semibold hover:underline">YouTube’da aç ↗</a><button onclick="openDetailModal(&#39;' + m.id + '&#39;)" class="text-xs text-blue-500 font-semibold hover:underline">← Detaylara dön</button></div></div>' +
-                      '<div class="pt-3 border-t dark:border-white/10 border-slate-200"><label for="trailer-url-input" class="block text-xs font-semibold mb-2">Bu yapımın fragman bağlantısı</label><div class="flex flex-col sm:flex-row gap-2"><input id="trailer-url-input" type="url" value="' + escapeTrailerField(m.trailerUrl || '') + '" placeholder="YouTube bağlantısını buraya yapıştırın" class="input-field flex-1 px-3 py-2 text-xs rounded-xl"><button onclick="saveTrailerUrl(&#39;' + m.id + '&#39;)" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-xl">Bağlantıyı kaydet</button></div><p class="text-[10px] dark:text-slate-400 text-slate-500 mt-2">Bağlantı bu film kaydına ve yerel arşivinize kaydedilir. Altyazı/dublaj bulunması videoya bağlıdır.</p></div>' +
-                    '</div>';
+                    '<div class="perde-trailer-popup">' + playerMarkup +
+                    '<section class="perde-trailer-info">' +
+                      '<div class="perde-trailer-heading"><div><span class="perde-trailer-kicker">PERDE · FRAGMAN</span>' +
+                      '<h2>' + safeTitle + '</h2><p>' + safeYear + ' · ' + safeType + (safeRuntime ? ' · ' + safeRuntime : '') + '</p></div>' +
+                      '<span class="perde-trailer-status">' + (videoId ? 'YouTube oynatıcı' : 'Fragman bağlantısı yok') + '</span></div>' +
+                      '<p class="perde-trailer-overview">' + safeOverview + '</p>' +
+                      '<div class="perde-trailer-actions">' +
+                        '<a href="' + searchUrl + '" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i> YouTube’da ara</a>' +
+                        '<a href="' + 'https://www.youtube.com/results?search_query=' + encodeURIComponent(m.title + ' türkçe altyazılı fragman') + '" target="_blank" rel="noopener noreferrer">Altyazılı ara</a>' +
+                        '<a href="' + 'https://www.youtube.com/results?search_query=' + encodeURIComponent(m.title + ' türkçe dublaj fragman') + '" target="_blank" rel="noopener noreferrer">Dublajlı ara</a>' +
+                      '</div>' +
+                      '<div class="perde-trailer-save"><label for="trailer-url-input">Fragman bağlantısı</label>' +
+                        '<div><input id="trailer-url-input" type="url" value="' + escapeTrailerField(m.trailerUrl || '') + '" placeholder="YouTube bağlantısını yapıştırın">' +
+                        '<button type="button" onclick="saveTrailerUrl(\'' + safeId + '\')"><i class="fa-solid fa-link"></i> Kaydet</button></div>' +
+                        '<small>Bağlantı bu yapımın arşiv kaydına ve yerel verilerine kaydedilir.</small></div>' +
+                    '</section></div>';
 
+                if (modal) {
+                    modal.classList.add('perde-trailer-open');
+                    modal.classList.remove('hidden');
+                    if (!document.body.dataset.perdePreviousOverflow) {
+                        document.body.dataset.perdePreviousOverflow = document.body.style.overflow || '';
+                    }
+                    document.body.style.overflow = 'hidden';
+                }
             } else {
                 const detailIsInArchive = movies.some(existing =>
                     (existing.tmdbId && m.tmdbId && String(existing.tmdbId) === String(m.tmdbId)) ||
@@ -1513,49 +1540,28 @@
                                 </section>
                             </aside>
                             <div class="perde-imdb-main">
-                                
-                                
                                 <section class="perde-story-panel" aria-labelledby="perde-story-title"><div class="perde-story-heading"><span class="perde-story-kicker"><i class="fa-solid fa-book-open"></i> HİKÂYESİ</span><span class="perde-story-rule" aria-hidden="true"></span></div><h3 id="perde-story-title">Bir hikâyeye davet</h3><p class="perde-imdb-overview" id="perde-detail-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p><div class="perde-story-foot"><span><i class="fa-solid fa-clapperboard"></i> PERDE</span><span>HİKÂYE &amp; ÖZET</span></div></section><div id="perde-detail-series-meta" class="perde-detail-series-meta" hidden></div>
-                                <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite">
-                                    <div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div>
-                                    <div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div>
-                                </section>
-                                
-                                <div class="perde-detail-actions-panel">
-                                    <div class="perde-detail-actions-main">
-                                        <button type="button" onclick="addToComparison('${m.id}')" class="perde-imdb-action-btn"><i class="fa-solid fa-scale-balanced"></i><span>Karşılaştırmaya ekle</span></button>
-                                        ${detailIsInArchive ? `<label class="perde-imdb-watch-label"><span class="perde-watch-label-copy"><i class="fa-solid fa-bookmark"></i><span>İzleme durumum</span></span><select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label>` : `<button type="button" class="perde-detail-add-to-list" onclick="addSimilarProduction('${m.id}', this)"><i class="fa-solid fa-plus"></i><span>Listeme Ekle</span><small>İzleme listene kaydet</small></button>`}
-                                    </div>
-                                    ${detailIsInArchive ? `<div class="perde-detail-actions-danger"><button type="button" onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-regular fa-trash-can"></i><span>Arşivden sil</span></button></div>` : ''}
-                                </div>
+                                <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite"><div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div><div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div></section>
+                                <div class="perde-detail-actions-panel"><div class="perde-detail-actions-main"><button type="button" onclick="addToComparison('${m.id}')" class="perde-imdb-action-btn"><i class="fa-solid fa-scale-balanced"></i><span>Karşılaştırmaya ekle</span></button>${detailIsInArchive ? `<label class="perde-imdb-watch-label"><span class="perde-watch-label-copy"><i class="fa-solid fa-bookmark"></i><span>İzleme durumum</span></span><select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label>` : `<button type="button" class="perde-detail-add-to-list" onclick="addSimilarProduction('${m.id}', this)"><i class="fa-solid fa-plus"></i><span>Listeme Ekle</span><small>İzleme listene kaydet</small></button>`}</div>${detailIsInArchive ? `<div class="perde-detail-actions-danger"><button type="button" onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-regular fa-trash-can"></i><span>Arşivden sil</span></button></div>` : ''}</div>
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-cast-carousel"><button type="button" class="perde-cast-arrow perde-cast-prev" onclick="scrollDetailCast(-1)" aria-label="Önceki oyuncular" hidden><i class="fa-solid fa-chevron-left"></i></button><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div><button type="button" class="perde-cast-arrow perde-cast-next" onclick="scrollDetailCast(1)" aria-label="Sonraki oyuncular" hidden><i class="fa-solid fa-chevron-right"></i></button></div></div>
                             </div>
                         </section>
-                        <section class="perde-similar" aria-label="Benzer yapımlar">
-                            <h3>Benzer Yapımlar</h3>
-                            <div id="perde-similar-grid" class="perde-similar-grid"><p class="perde-similar-loading">Benzer yapımlar yükleniyor…</p></div>
-                        </section>
+                        <section class="perde-similar" aria-label="Benzer yapımlar"><h3>Benzer Yapımlar</h3><div id="perde-similar-grid" class="perde-similar-grid"><p class="perde-similar-loading">Benzer yapımlar yükleniyor…</p></div></section>
                     </div>
                 `;
 
                 loadSimilarProductions(m);
                 loadWatchProviders(m);
                 enrichDetailFromTmdb(m);
-
                 updateDetailCastArrows();
                 const castTrack = document.getElementById('perde-detail-cast-grid');
                 if (castTrack) castTrack.addEventListener('scroll', updateDetailCastArrows, { passive: true });
                 if (m.cast && m.cast.length > 0) {
-                    m.cast.forEach((c, idx) => {
-                        const imgId = `actor-img-${m.id}-${idx}`;
-                        fetchActorImage(c.name, imgId);
-                    });
+                    m.cast.forEach((c, idx) => fetchActorImage(c.name, `actor-img-${m.id}-${idx}`));
                 }
             }
 
-            if (trailerMode) {
-                document.getElementById('detail-modal').classList.remove('hidden');
-            } else {
+            if (!trailerMode) {
                 closeModal('detail-modal');
                 switchTab('detail');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2156,9 +2162,18 @@
         }
 
         function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+                if (modalId === 'detail-modal') modal.classList.remove('perde-trailer-open');
+            }
             if (modalId === 'detail-modal') {
-                document.getElementById('detail-modal-content').innerHTML = '';
+                const content = document.getElementById('detail-modal-content');
+                if (content) content.innerHTML = '';
+                if (document.body.dataset.perdePreviousOverflow !== undefined) {
+                    document.body.style.overflow = document.body.dataset.perdePreviousOverflow;
+                    delete document.body.dataset.perdePreviousOverflow;
+                }
             }
         }
 
