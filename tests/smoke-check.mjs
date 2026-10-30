@@ -118,3 +118,16 @@ assert.match(app, /data\.results && data\.results\.TR/, 'Recommendation availabi
 assert.match(app, /provider\.logo_path && list\.findIndex/, 'Recommendation cards must render provider logos only');
 assert.doesNotMatch(app, /KİRALA \/ SATIN AL/, 'Recommendation cards must not show rental or purchase labels');
 assert.match(css, /\.perde-recommendation-providers/, 'Recommendation streaming provider badges must be styled');
+
+
+assert.match(app, /PERDE_RECOMMENDATION_PREFS_KEY/, 'Recommendation preferences must use a separate local storage key');
+assert.match(app, /function\s+dismissPersonalRecommendation\s*\(/, 'Users must be able to dismiss an unwanted recommendation');
+assert.match(app, /function\s+markPersonalRecommendationWatched\s*\(/, 'Users must be able to mark a recommendation as watched');
+assert.match(app, /dislikedGenreIds/, 'Dismissed recommendations must inform future genre ranking');
+assert.match(app, /historyIds/, 'Recommendation history must prevent unnecessary repeats');
+assert.match(app, /diversityScore/, 'Recommendation selection must reward genre variety');
+assert.match(app, /perde-personal-watched/, 'Recommendation cards must expose a watched action');
+assert.match(app, /perde-personal-dismiss/, 'Recommendation cards must expose a not-interested action');
+assert.match(html, /perde-recommendation-history-count/, 'The recommendation section must show its history count');
+assert.match(css, /\.perde-personal-watched/, 'Watched recommendation action must be styled');
+assert.match(css, /\.perde-personal-dismiss/, 'Dismiss recommendation action must be styled');
