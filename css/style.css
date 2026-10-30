@@ -1312,3 +1312,5 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .ml-genre-item:hover,.ml-genre-item.active { border-color:var(--ml-accent); background:var(--ml-accent-soft); }
 .ml-genre-item b { flex:0 0 auto; min-width:22px; padding:3px 5px; border-radius:6px; background:var(--ml-surface); color:var(--ml-accent); font-size:9px; text-align:center; }
 .ml-genre-empty { padding:8px 2px; }
+
+#tab-trailers .ml-section-kicker { display:block; margin-bottom:5px; color:var(--ml-accent); font-size:9px; font-weight:800; letter-spacing:.16em; }

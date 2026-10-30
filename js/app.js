@@ -318,7 +318,7 @@
                 return;
             }
 
-            ['dashboard', 'library', 'detail', 'stats', 'admin'].forEach(t => {
+            ['dashboard', 'library', 'trailers', 'detail', 'stats', 'admin'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 if (el) el.classList.toggle('hidden', t !== tabId);
                 const navBtn = document.getElementById(`nav-${t}`);
@@ -334,6 +334,7 @@
             if (categoryNav) categoryNav.classList.toggle('hidden', tabId === 'detail');
             if (tabId === 'stats') renderCharts();
             if (tabId === 'library') renderGenreMenu();
+            if (tabId === 'trailers') renderTrailerLibrary();
             if (tabId === 'admin') renderAdminTable();
         }
 
@@ -668,6 +669,13 @@
             else if (sortFilter === 'title_asc') filtered.sort((a, b) => a.title.localeCompare(b.title));
 
             renderRow('library-grid', filtered);
+        }
+
+        function renderTrailerLibrary() {
+            const trailerItems = movies.filter(movie => getYouTubeVideoId(movie.trailerUrl || ''));
+            const count = document.getElementById('trailer-count');
+            if (count) count.textContent = trailerItems.length + ' yapım';
+            renderRow('trailers-grid', trailerItems);
         }
 
         // Oyuncu Biyografisi Açma Modal Fonksiyonu
