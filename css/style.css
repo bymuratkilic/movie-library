@@ -1500,3 +1500,29 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
     font-size:10px;
   }
 }
+
+/* Personal cinema diary */
+.ml-diary-panel{margin:22px 0;padding:20px;border:1px solid var(--ml-border);border-radius:14px;background:var(--ml-surface)}
+.ml-diary-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.ml-diary-kicker{font-size:9px;font-weight:800;letter-spacing:.16em;color:var(--ml-accent)}
+.ml-diary-heading h3{margin:4px 0 0;color:var(--ml-text);font-size:17px;font-weight:800}
+.ml-diary-imdb{padding:6px 9px;border:1px solid var(--ml-border);border-radius:7px;color:var(--ml-muted);font-size:10px}
+.ml-diary-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ml-diary-form label{display:flex;flex-direction:column;gap:7px;color:var(--ml-muted);font-size:10px;font-weight:700}
+.ml-diary-form .input-field{width:100%;min-width:0;padding:10px 11px;border:1px solid var(--ml-border);border-radius:8px;background:var(--ml-bg);color:var(--ml-text);font-size:12px}
+.ml-diary-review-label{margin-top:12px}
+.ml-diary-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ml-diary-save,.ml-diary-new{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 13px;border-radius:8px;font-size:11px;font-weight:750}
+.ml-diary-save{background:var(--ml-accent);color:#fff}
+.ml-diary-new{border:1px solid var(--ml-border);color:var(--ml-text)}
+.ml-diary-history{margin-top:20px;padding-top:16px;border-top:1px solid var(--ml-border)}
+.ml-diary-history h4{display:flex;align-items:center;justify-content:space-between;color:var(--ml-text);font-size:12px;font-weight:800}
+.ml-diary-history h4 span{color:var(--ml-muted);font-size:10px;font-weight:600}
+.ml-diary-history ol{display:grid;gap:10px;margin-top:12px}
+.ml-diary-history li{padding:11px 12px;border:1px solid var(--ml-border);border-radius:9px;background:var(--ml-bg)}
+.ml-diary-history li>div{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--ml-text);font-size:11px}
+.ml-diary-entry-rating{color:#d49b32;font-size:10px;font-weight:800}
+.ml-diary-history li p,.ml-diary-empty,.ml-diary-empty-state p{color:var(--ml-muted);font-size:11px;line-height:1.6;white-space:pre-wrap}
+.ml-diary-history li p{margin:7px 0 0}
+.ml-diary-empty-state{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+@media(max-width:640px){.ml-diary-panel{padding:15px}.ml-diary-fields{grid-template-columns:1fr}.ml-diary-empty-state{align-items:flex-start;flex-direction:column}}
