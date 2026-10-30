@@ -475,6 +475,7 @@
         // Dashboard & Liste Görünümleri Render
         function renderDashboard() {
             renderFeaturedHero();
+            renderTodaysPick();
             document.getElementById('stat-total-count').textContent = movies.length;
             document.getElementById('stat-watched-count').textContent = movies.filter(m => m.status === 'watched').length;
             const watchLaterCount = movies.filter(m => m.status === 'watch_later').length;
@@ -503,6 +504,39 @@
             syncHeaderSearch(value);
             switchTab('library');
             applyFilters();
+        }
+
+
+        // Her anasayfa yüklemesinde İzleme Listem'den rastgele bir yapım seç.
+        function renderTodaysPick() {
+            const container = document.getElementById('ml-todays-pick');
+            if (!container) return;
+            const safe = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            const watchlist = movies.filter(item => item.status === 'watch_later');
+            if (!watchlist.length) {
+                container.innerHTML = '<div class="ml-todays-empty"><span class="ml-todays-kicker"><i class="fa-solid fa-wand-magic-sparkles"></i> BUGÜN NE İZLESEM?</span><div class="ml-todays-empty-icon"><i class="fa-solid fa-bookmark"></i></div><h2>Seçim yapmak kolaylaşsın.</h2><p>İzleme listene yapım eklediğinde burada her yenilemede farklı bir öneri göreceksin.</p><button type="button" onclick="filterByMenu(\'watch_later\')">İzleme Listeme Git <i class="fa-solid fa-arrow-right"></i></button></div>';
+                return;
+            }
+            const item = watchlist[Math.floor(Math.random() * watchlist.length)];
+            const id = safe(item.id);
+            const title = safe(item.title || 'İsimsiz yapım');
+            const poster = safe(item.poster || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=700&q=85');
+            const overview = safe(item.overview || 'Bu yapım için henüz kısa bir konu özeti eklenmemiş.');
+            const genres = Array.isArray(item.genres) ? item.genres.filter(Boolean).join(' · ') : (item.genres || '');
+            const type = item.type === 'tv' ? 'Dizi' : item.type === 'doc' ? 'Belgesel' : 'Film';
+            const imdb = item.imdb && item.imdb !== '—' ? safe(item.imdb) : '—';
+            const year = item.year ? safe(item.year) : 'Yıl bilgisi yok';
+            const runtime = item.runtime && item.runtime !== 'Bilinmiyor' ? safe(item.runtime) : '';
+            const country = item.country && item.country !== 'Bilinmiyor' ? safe(item.country) : '';
+            const credits = [year, runtime, country].filter(Boolean).join(' · ');
+            container.innerHTML = '<div class="ml-todays-card">' +
+                '<div class="ml-todays-topline"><span class="ml-todays-kicker"><i class="fa-solid fa-wand-magic-sparkles"></i> BUGÜN NE İZLESEM?</span><span class="ml-todays-random"><i class="fa-solid fa-shuffle"></i> Rastgele seçim</span></div>' +
+                '<button type="button" class="ml-todays-main" onclick="openDetailModal(\'' + id + '\')" aria-label="' + title + ' detaylarını aç">' +
+                '<div class="ml-todays-poster"><img src="' + poster + '" alt="' + title + ' afişi" loading="lazy" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=700&q=85\'"></div>' +
+                '<div class="ml-todays-content"><h2>' + title + '</h2><div class="ml-todays-meta"><span class="ml-todays-type">' + type + '</span><span><i class="fa-solid fa-star"></i> ' + imdb + ' IMDb</span></div>' +
+                (genres ? '<div class="ml-todays-genres">' + safe(genres) + '</div>' : '') +
+                '<p class="ml-todays-overview">' + overview + '</p><div class="ml-todays-credits">' + (credits ? '<span>' + credits + '</span>' : '') + '</div></div></button>' +
+                '<div class="ml-todays-footer"><span><i class="fa-solid fa-bookmark"></i> İzleme Listemden</span><span>Detayları gör <i class="fa-solid fa-arrow-right"></i></span></div></div>';
         }
 
         function renderFeaturedHero() {
