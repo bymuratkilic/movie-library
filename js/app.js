@@ -814,10 +814,102 @@
             }
         }
 
+        let hiddenGemRequestId = 0;
+        let hiddenGemRefreshCycle = 0;
+        let hiddenGemCache = [];
+
+        // Popüler listelerde kaybolan, puanı yüksek ve görece az bilinen yapımları keşfet.
+        async function renderHiddenGems(forceRefresh = false) {
+            const container = document.getElementById('hidden-gems-grid');
+            if (!container) return;
+            if (hiddenGemCache.length && !forceRefresh) {
+                renderRow('hidden-gems-grid', hiddenGemCache);
+                return;
+            }
+            const requestId = ++hiddenGemRequestId;
+            container.innerHTML = '<div class="perde-hidden-gems-loading"><i class="fa-solid fa-spinner fa-spin"></i><span>Keşfedilmeyi bekleyen yapımlar aranıyor…</span></div>';
+            const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
+            const base = 'https://api.themoviedb.org/3/discover/';
+            const page = (hiddenGemRefreshCycle++ % 3) + 1;
+            const params = new URLSearchParams({
+                api_key: apiKey,
+                language: 'tr-TR',
+                sort_by: 'vote_average.desc',
+                'vote_average.gte': '7.4',
+                'vote_count.gte': '250',
+                'vote_count.lte': '12000',
+                'popularity.lte': '55',
+                include_adult: 'false',
+                page: String(page)
+            });
+            try {
+                const [moviesResponse, tvResponse] = await Promise.all([
+                    fetch(base + 'movie?' + params.toString()),
+                    fetch(base + 'tv?' + params.toString())
+                ]);
+                if (!moviesResponse.ok || !tvResponse.ok) throw new Error('discover');
+                const [movieData, tvData] = await Promise.all([moviesResponse.json(), tvResponse.json()]);
+                if (requestId !== hiddenGemRequestId) return;
+                const genreNames = {
+                    12:'Macera',14:'Fantastik',16:'Animasyon',18:'Dram',27:'Korku',28:'Aksiyon',
+                    35:'Komedi',36:'Tarih',37:'Western',53:'Gerilim',80:'Suç',99:'Belgesel',
+                    878:'Bilim Kurgu',9648:'Gizem',10402:'Müzik',10749:'Romantik',10751:'Aile',
+                    10752:'Savaş',10759:'Aksiyon & Macera',10762:'Çocuk',10763:'Haber',
+                    10764:'Reality',10765:'Bilim Kurgu & Fantastik',10766:'Pembe Dizi',
+                    10767:'Talk Show',10768:'Savaş & Politik',10770:'TV Filmi'
+                };
+                const archiveHas = item => movies.some(saved =>
+                    (saved.tmdbId && String(saved.tmdbId) === String(item.id)) ||
+                    String(saved.id || '') === String(item.id) ||
+                    ((saved.title || '').trim().toLocaleLowerCase('tr') === (item.title || '').trim().toLocaleLowerCase('tr') &&
+                        String(saved.year || '') === String(item.year || ''))
+                );
+                const candidates = [
+                    ...(movieData.results || []).map(item => ({item,type:'movie'})),
+                    ...(tvData.results || []).map(item => ({item,type:'tv'}))
+                ].map(({item,type}) => {
+                    const date = item.release_date || item.first_air_date || '';
+                    const title = item.title || item.name || '';
+                    return {
+                        id: 'tmdb-' + type + '-' + item.id,
+                        tmdbId: item.id,
+                        title,
+                        type,
+                        year: date ? Number(date.slice(0,4)) : '',
+                        imdb: Number(Number(item.vote_average || 0).toFixed(1)),
+                        poster: item.poster_path ? 'https://image.tmdb.org/t/p/w500' + item.poster_path : '',
+                        backdrop: item.backdrop_path ? 'https://image.tmdb.org/t/p/w1280' + item.backdrop_path : '',
+                        overview: item.overview || 'Bu yapım, yüksek izleyici puanına rağmen daha az bilinen keşiflerden biri.',
+                        genres: (item.genre_ids || []).map(id => genreNames[id]).filter(Boolean),
+                        status: 'discovered',
+                        favorite: false
+                    };
+                }).filter(item => item.title && item.poster && !archiveHas(item));
+                const unique = [...new Map(candidates.map(item => [item.id,item])).values()]
+                    .sort((a,b) => (Number(b.imdb)||0)-(Number(a.imdb)||0));
+                hiddenGemCache = unique.slice(0,8);
+                if (!hiddenGemCache.length) {
+                    container.innerHTML = '<div class="perde-hidden-gems-empty"><i class="fa-solid fa-gem"></i><span>Bu turda yeni bir gizli cevher bulamadık. Yeniden deneyebilirsin.</span></div>';
+                    return;
+                }
+                // Detay penceresi ve mevcut listeye ekleme akışlarıyla uyumlu tut.
+                hiddenGemCache.forEach(item => {
+                    if (!fetchedOnlineResults.some(existing => String(existing.id) === String(item.id))) fetchedOnlineResults.push(item);
+                });
+                renderRow('hidden-gems-grid', hiddenGemCache);
+            } catch (error) {
+                if (requestId === hiddenGemRequestId) {
+                    container.innerHTML = '<div class="perde-hidden-gems-empty"><i class="fa-solid fa-cloud-arrow-down"></i><span>Gizli cevherler şu anda yüklenemedi. Bağlantını kontrol edip yeniden deneyebilirsin.</span><button type="button" onclick="renderHiddenGems(true)">Tekrar dene</button></div>';
+                }
+                console.warn('Gizli cevherler yüklenemedi:', error);
+            }
+        }
+
         function renderDashboard() {
             renderFeaturedHero();
             renderTodaysPick();
             renderPersonalRecommendations();
+            renderHiddenGems();
             document.getElementById('stat-total-count').textContent = movies.length;
             document.getElementById('stat-watched-count').textContent = movies.filter(m => m.status === 'watched').length;
             const watchLaterCount = movies.filter(m => m.status === 'watch_later').length;
@@ -1040,7 +1132,7 @@
                 return;
             }
             const safe = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-            const homePosterMode = ['editor-picks-grid', 'recent-row', 'watchlist-row'].includes(containerId);
+            const homePosterMode = ['editor-picks-grid', 'recent-row', 'watchlist-row', 'hidden-gems-grid'].includes(containerId);
             container.innerHTML = list.map(m => {
                 const type = m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM';
                 const watched = m.status === 'watched';
@@ -1066,7 +1158,7 @@
                     '<span id="' + metaId + '-duration" class="ml-home-poster-runtime"' + (durationMeta ? '' : ' hidden') + '><i class="' + (m.type === 'tv' ? 'fa-solid fa-list-ol' : 'fa-regular fa-clock') + '"></i> ' + safe(durationMeta) + '</span>';
                 return '<article class="ml-catalog-card' + (homePosterMode ? ' ml-home-poster-card' : '') + '" role="button" tabindex="0" aria-label="' + title + ' detaylarını aç" onclick="openDetailModal(\'' + id + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openDetailModal(\'' + id + '\')}">' +
                     '<div class="ml-catalog-poster"><img src="' + safe(m.poster || '') + '" alt="' + title + ' afişi" loading="lazy" onerror="' + (homePosterMode ? 'handleHomePosterError(this)' : "this.onerror=null;this.src=\\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80\\'") + '">' +
-                    '<span class="ml-catalog-type">' + type + '</span><span class="ml-catalog-rating"><i class="fa-solid fa-star"></i> ' + safe(m.imdb || '—') + '</span>' +
+                    '<span class="ml-catalog-type">' + type + '</span><span class="ml-catalog-rating"><i class="fa-solid fa-star"></i> ' + safe(m.imdb || '—') + '</span>' + (containerId === 'hidden-gems-grid' ? '<span class="perde-hidden-gem-badge"><i class="fa-solid fa-gem"></i> GİZLİ CEVHER</span>' : '') +
                     (m.favorite ? '<span class="ml-catalog-favorite"><i class="fa-solid fa-heart"></i></span>' : '') +
                     (homePosterMode ? '<div class="ml-home-poster-gradient"></div>' + posterInfo +
                         '<div class="ml-home-poster-preview" aria-hidden="true"><span class="ml-home-preview-label">KISA ÖNİZLEME</span><p>' + safe(previewText || 'Bu yapım için henüz kısa bir açıklama eklenmemiş.') + '</p></div>' +
