@@ -935,6 +935,19 @@
                 return score(b)-score(a) || (Number(b.imdb)||0)-(Number(a.imdb)||0);
             }).slice(0, 12);
             renderRow('editor-picks-grid', picks.slice(0, 8));
+            const editorFeature = document.getElementById('editor-picks-feature');
+            if (editorFeature) {
+                const featured = picks[0];
+                if (!featured) {
+                    editorFeature.innerHTML = '';
+                    editorFeature.hidden = true;
+                } else {
+                    const safeFeature = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+                    const featureGenres = Array.isArray(featured.genres) ? featured.genres.slice(0, 3) : [];
+                    editorFeature.hidden = false;
+                    editorFeature.innerHTML = '<div class="perde-editor-feature-copy"><span class="perde-editor-feature-label"><i class="fa-solid fa-circle-play"></i> ÖNE ÇIKAN YAPIM</span><h3>' + safeFeature(featured.title) + '</h3><div class="perde-editor-feature-meta"><span>' + safeFeature(featured.year || 'Yıl bilinmiyor') + '</span><span>' + (featured.type === 'tv' ? 'Dizi' : featured.type === 'doc' ? 'Belgesel' : 'Film') + '</span><span class="perde-editor-feature-rating"><i class="fa-solid fa-star"></i> IMDb ' + safeFeature(featured.imdb || '—') + '</span></div>' + (featureGenres.length ? '<div class="perde-editor-feature-genres">' + featureGenres.map(genre => '<span>' + safeFeature(genre) + '</span>').join('') + '</div>' : '') + '</div><button type="button" class="perde-editor-feature-open" onclick="openDetailModal(\'' + String(featured.id).replace(/'/g, '') + '\')">Keşfet <i class="fa-solid fa-arrow-right"></i></button>';
+                }
+            }
             renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later').slice(0, 6));
             renderRow('recent-row', movies.slice(0, 6));
             renderGenreMenu();
