@@ -3356,39 +3356,42 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
 }
 
 
-/* PERDE düzeltme — anasayfa Son Eklenenler ve İzleme Listem afişleri */
-#recent-row.ml-recent-rail > .ml-home-poster-card,
-#watchlist-row.ml-watchlist-rail > .ml-home-poster-card {
-  position: relative;
-  display: block;
-  flex-shrink: 0;
-  min-width: 0;
+/* PERDE kesin afiş kırpma düzeltmesi — Son Eklenenler ve İzleme Listem */
+#recent-row > .ml-catalog-card,
+#watchlist-row > .ml-catalog-card {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
   overflow: hidden !important;
   border: 1px solid var(--ml-border) !important;
+  border-radius: 15px !important;
+  clip-path: inset(0 round 15px);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  background: var(--ml-surface) !important;
+}
+#recent-row > .ml-catalog-card > .ml-catalog-poster,
+#watchlist-row > .ml-catalog-card > .ml-catalog-poster {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
   border-radius: 14px !important;
   isolation: isolate;
-  contain: paint;
-  background: var(--ml-surface) !important;
-  clip-path: inset(0 round 14px);
 }
-#recent-row.ml-recent-rail > .ml-home-poster-card > .ml-catalog-poster,
-#watchlist-row.ml-watchlist-rail > .ml-home-poster-card > .ml-catalog-poster {
-  display: block;
-  width: 100%;
-  max-width: 100%;
+#recent-row > .ml-catalog-card > .ml-catalog-poster > img,
+#watchlist-row > .ml-catalog-card > .ml-catalog-poster > img {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  border-radius: 14px !important;
+  object-fit: cover !important;
+}
+#recent-row > .ml-catalog-card .ml-home-poster-gradient,
+#watchlist-row > .ml-catalog-card .ml-home-poster-gradient,
+#recent-row > .ml-catalog-card .ml-home-poster-info,
+#watchlist-row > .ml-catalog-card .ml-home-poster-info,
+#recent-row > .ml-catalog-card .ml-home-poster-preview,
+#watchlist-row > .ml-catalog-card .ml-home-poster-preview {
   overflow: hidden !important;
-  border-radius: 13px 13px 0 0 !important;
-}
-#recent-row.ml-recent-rail > .ml-home-poster-card .ml-catalog-poster > img,
-#watchlist-row.ml-watchlist-rail > .ml-home-poster-card .ml-catalog-poster > img {
-  max-width: 100%;
-  border-radius: inherit;
-}
-#recent-row.ml-recent-rail > .ml-home-poster-card .ml-home-poster-gradient,
-#watchlist-row.ml-watchlist-rail > .ml-home-poster-card .ml-home-poster-gradient,
-#recent-row.ml-recent-rail > .ml-home-poster-card .ml-home-poster-info,
-#watchlist-row.ml-watchlist-rail > .ml-home-poster-card .ml-home-poster-info,
-#recent-row.ml-recent-rail > .ml-home-poster-card .ml-home-poster-preview,
-#watchlist-row.ml-watchlist-rail > .ml-home-poster-card .ml-home-poster-preview {
-  border-radius: 0 0 13px 13px;
+  border-radius: 0 0 14px 14px !important;
 }
