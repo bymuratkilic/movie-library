@@ -73,6 +73,7 @@
             <nav class="perde-primary-nav" aria-label="Ana menü">
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn"><i class="fa-solid fa-grid-2"></i>Genel Bakış</button>
                 <button onclick="switchTab('library')" id="nav-library" class="nav-btn"><i class="fa-solid fa-film"></i>Kütüphane</button>
+                <button onclick="switchTab('trailers')" id="nav-trailers" class="nav-btn"><i class="fa-brands fa-youtube"></i>Fragmanlar</button>
                 <button onclick="filterByMenu('watched')" id="nav-watched" class="nav-btn"><i class="fa-solid fa-circle-check"></i>İzlediklerim</button>
                 <button onclick="filterByMenu('watch_later')" id="nav-watch_later" class="nav-btn"><i class="fa-solid fa-bookmark"></i>İzleme Listem</button>
                 <button onclick="filterByMenu('favorite')" id="nav-favorite" class="nav-btn"><i class="fa-solid fa-heart"></i>Favorilerim</button>
@@ -226,6 +227,15 @@
 
             <!-- Library Items Grid -->
             <div id="library-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+        </section>
+
+        <!-- TRAILERS TAB -->
+        <section id="tab-trailers" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div><span class="ml-section-kicker">VİDEO KOLEKSİYONU</span><h2 class="text-xl font-bold dark:text-white text-slate-900">Fragmanlarım</h2><p class="text-xs dark:text-clean-muted text-light-muted">Fragman bağlantısı eklediğin yapımlar burada listelenir.</p></div>
+                <span id="trailer-count" class="text-xs font-semibold px-3 py-1.5 rounded-full border dark:border-clean-border border-light-border dark:text-clean-muted text-light-muted">0 yapım</span>
+            </div>
+            <div id="trailers-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
         </section>
 
         <!-- STATS TAB -->
