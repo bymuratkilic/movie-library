@@ -81,3 +81,9 @@ assert.match(css, /@media\s*\(max-width:\s*767px\)/, 'Mobile layout rules must e
 assert.ok(config.includes('darkMode'), 'Tailwind dark-mode configuration must remain present');
 
 console.log('My Library static smoke checks passed.');
+
+assert.match(app, /function\\s+toggleHomeCardPreview\\s*\\(/, 'Homepage poster quick preview toggle must exist');
+assert.match(app, /ml-home-poster-preview/, 'Homepage cards must render a synopsis preview');
+assert.match(app, /aria-expanded=.*toggleHomeCardPreview/, 'Preview toggle must expose its expanded state');
+assert.match(css, /\\.ml-home-poster-preview/, 'Homepage synopsis preview styles must exist');
+assert.match(css, /\\.ml-home-poster-card\\.is-preview-open/, 'Touch users must be able to open the preview explicitly');
