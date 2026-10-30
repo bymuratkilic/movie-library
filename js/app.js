@@ -1506,11 +1506,13 @@
         }
 
         function updateMovieStatus(id, newStatus) {
-            let m = movies.find(x => x.id === id);
+            // Arşivden gelen sayısal kimliklerle HTML üzerinden gelen metin kimliklerini eşdeğer kabul et.
+            let m = movies.find(x => String(x.id) === String(id));
             if (!m) {
-                const catalogItem = onlineCatalog.find(x => x.id === id) || fetchedOnlineResults.find(x => x.id === id);
+                const catalogItem = onlineCatalog.find(x => String(x.id) === String(id)) ||
+                    fetchedOnlineResults.find(x => String(x.id) === String(id));
                 if (catalogItem) {
-                    m = { ...catalogItem, id: Date.now().toString() };
+                    m = { ...catalogItem, id: String(Date.now()) };
                     movies.unshift(m);
                 }
             }
@@ -1528,11 +1530,16 @@
                 // Detay sayfasındaki seçili izleme durumunu da hemen güncelle.
                 const detailPage = document.getElementById('tab-detail');
                 if (detailPage && !detailPage.classList.contains('hidden')) {
-                    openDetailModal(id);
+                    openDetailModal(m.id);
                 }
 
                 renderDashboard();
                 renderLibrary();
+                // Profil açıksa rozet ve ilerleme göstergelerini aynı işlemde yenile.
+                const profilePage = document.getElementById('tab-profile');
+                if (profilePage && !profilePage.classList.contains('hidden')) {
+                    renderPerdeProfile();
+                }
                 showToast('İzleme durumu güncellendi.');
             }
         }
