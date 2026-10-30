@@ -3143,3 +3143,18 @@ html.dark .perde-cinema-card-image{border-color:#2a3b5e;background:#111a2c}
 .perde-imdb-hero-rating .perde-imdb-fav{min-height:32px;padding:0 11px;font-size:10px}
 .perde-imdb-type{display:inline-flex;align-items:center;justify-content:center;min-width:76px;padding:8px 15px;border:1px solid rgba(255,255,255,.8);border-radius:999px;background:linear-gradient(135deg,#f5c518,#e5a900);color:#171717!important;font-size:12px;font-weight:950;letter-spacing:1.2px;line-height:1;box-shadow:0 5px 18px rgba(0,0,0,.28);text-shadow:none}
 @media(max-width:767px){.perde-imdb-hero-rating .perde-imdb-score.imdb-brand-badge{min-height:27px;padding:4px 8px}.perde-imdb-hero-rating .imdb-brand-badge strong{font-size:14px}.perde-imdb-hero-rating .imdb-brand-badge .imdb-brand-word{font-size:8px}.perde-imdb-hero-rating .perde-imdb-fav{min-height:30px;padding:0 10px}.perde-imdb-type{min-width:68px;padding:7px 12px;font-size:11px}}
+
+
+/* Perde cinematic synopsis panel */
+.perde-story-panel{position:relative;isolation:isolate;overflow:hidden;margin:24px 0 22px;padding:clamp(20px,3vw,30px);border:1px solid rgba(99,102,241,.24);border-radius:16px;background:linear-gradient(135deg,rgba(99,102,241,.09),var(--ml-surface) 58%,rgba(139,92,246,.06));box-shadow:0 12px 32px rgba(0,0,0,.08)}
+.perde-story-panel:after{content:'“';position:absolute;z-index:-1;right:22px;top:-32px;color:rgba(99,102,241,.10);font-family:Georgia,serif;font-size:190px;line-height:1;pointer-events:none}
+.perde-story-heading{display:flex;align-items:center;gap:13px;margin-bottom:13px}
+.perde-story-kicker{display:inline-flex;align-items:center;gap:8px;color:var(--ml-accent);font-size:9px;font-weight:850;letter-spacing:.17em}
+.perde-story-kicker i{font-size:12px}
+.perde-story-rule{height:1px;flex:1;background:linear-gradient(90deg,rgba(99,102,241,.45),transparent)}
+.perde-story-panel h3{margin:0 0 10px;color:var(--ml-text);font-family:Manrope,'Plus Jakarta Sans',sans-serif;font-size:clamp(17px,2vw,21px);font-weight:800;letter-spacing:-.035em}
+.perde-imdb-overview{position:relative;max-width:900px;margin:0!important;color:var(--ml-text)!important;font-size:clamp(12px,1.15vw,14px)!important;line-height:2!important;letter-spacing:.005em;opacity:.86}
+.perde-story-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px;padding-top:12px;border-top:1px solid var(--ml-border);color:var(--ml-muted);font-size:8px;font-weight:800;letter-spacing:.14em}
+.perde-story-foot span:first-child{color:var(--ml-accent)}
+.perde-story-foot i{margin-right:5px}
+@media(max-width:640px){.perde-story-panel{margin:18px 0;padding:18px 16px;border-radius:13px}.perde-story-panel:after{right:8px;top:-18px;font-size:135px}.perde-story-heading{margin-bottom:11px}.perde-imdb-overview{line-height:1.85!important;font-size:12px!important}.perde-story-foot{margin-top:15px}}
