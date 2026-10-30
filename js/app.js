@@ -21,50 +21,6 @@
             if (next) next.hidden = !hasOverflow || track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
         }
 
-        function getPerdeRatedMovies() {
-            return movies.filter(item => Number.isFinite(Number(item.perdeRating)) && Number(item.perdeRating) >= 1 && Number(item.perdeRating) <= 10);
-        }
-
-        function renderPerdeRatingPanel(movie) {
-            const current = Number(movie.perdeRating) || 0;
-            const rated = getPerdeRatedMovies();
-            const average = rated.length
-                ? (rated.reduce((sum, item) => sum + Number(item.perdeRating), 0) / rated.length).toFixed(1)
-                : '—';
-            const options = '<option value="" ' + (!current ? 'selected' : '') + ' disabled>Puan seç</option>' + Array.from({ length: 10 }, (_, index) => {
-                const value = index + 1;
-                return '<option value="' + value + '" ' + (current === value ? 'selected' : '') + '>' + value + ' / 10</option>';
-            }).join('');
-            return '<section class="perde-rating-panel" aria-label="Perde Puanı">' +
-                '<div class="perde-rating-heading"><div><span>SADECE SENİN ARŞİVİN</span><h3><i class="fa-solid fa-clapperboard"></i> Perde Puanı</h3><p>Bu yapımı kendi izleme deneyimine göre 10 üzerinden puanla.</p></div>' +
-                '<div class="perde-rating-average"><strong>' + average + '</strong><span>Arşiv ortalaması</span><small>' + rated.length + ' puanlanan yapım</small></div></div>' +
-                '<div class="perde-rating-controls"><label for="perde-rating-select">Senin puanın</label><select id="perde-rating-select" class="input-field">' + options + '</select>' +
-                '<button type="button" onclick="savePerdeRating(\'' + String(movie.id).replace(/'/g, '') + '\')"><i class="fa-solid fa-star"></i> Puanı kaydet</button>' +
-                (current ? '<span class="perde-rating-saved"><i class="fa-solid fa-circle-check"></i> Kaydedilen puanın: ' + current + '/10</span>' : '<span class="perde-rating-hint">Henüz puan vermedin.</span>') +
-                '</div><small class="perde-rating-note">Puanın bu tarayıcıdaki kişisel arşivine kaydedilir; IMDb puanından bağımsızdır.</small></section>';
-        }
-
-        function savePerdeRating(id) {
-            const select = document.getElementById('perde-rating-select');
-            const value = Number(select && select.value);
-            if (!Number.isInteger(value) || value < 1 || value > 10) {
-                showToast('Lütfen 1 ile 10 arasında bir puan seç.');
-                return;
-            }
-            let item = movies.find(movie => String(movie.id) === String(id));
-            if (!item) {
-                item = onlineCatalog.find(movie => String(movie.id) === String(id)) ||
-                    fetchedOnlineResults.find(movie => String(movie.id) === String(id));
-                if (!item) return;
-                item = { ...item };
-                movies.push(item);
-            }
-            item.perdeRating = value;
-            saveToLocalStorage();
-            showToast('Perde Puanın kaydedildi.');
-            openDetailModal(id);
-        }
-
         function getComparisonMovie(id) {
             return movies.find(item => String(item.id) === String(id)) ||
                 onlineCatalog.find(item => String(item.id) === String(id)) ||
@@ -123,7 +79,6 @@
                 ['Yapım türü', a.type === 'tv' ? 'Dizi' : a.type === 'doc' ? 'Belgesel' : 'Film', b.type === 'tv' ? 'Dizi' : b.type === 'doc' ? 'Belgesel' : 'Film'],
                 ['Yıl', a.year, b.year],
                 ['IMDb puanı', a.imdb, b.imdb],
-                ['Perde Puanı', a.perdeRating ? a.perdeRating + '/10' : 'Henüz puanlanmadı', b.perdeRating ? b.perdeRating + '/10' : 'Henüz puanlanmadı'],
                 ['Süre', a.runtime, b.runtime],
                 ['Türler', a.genres, b.genres],
                 ['Yönetmen / yaratıcı', a.director, b.director],
@@ -671,7 +626,6 @@
             if (historyCount) historyCount.textContent = preferences.history.length + ' farklı öneri';
             const seeds = movies.filter(item => item.status === 'watched' || item.favorite)
                 .sort((a,b) => Number(Boolean(b.favorite))-Number(Boolean(a.favorite)) ||
-                    (Number(b.perdeRating)||0)-(Number(a.perdeRating)||0) ||
                     (Number(b.imdb)||0)-(Number(a.imdb)||0)).slice(0,4);
             if (!seeds.length) {
                 container.innerHTML = '<p class="perde-recommendation-empty"><i class="fa-solid fa-lightbulb"></i> Sana özel öneriler oluşturmak için arşivinden birkaç yapımı favorile veya izledim olarak işaretle.</p>';
@@ -707,7 +661,7 @@
                 const recommendations = recommendationResponse.ok ? await recommendationResponse.json() : {results:[]};
                 const similar = similarResponse.ok ? await similarResponse.json() : {results:[]};
                 const genreIds = new Set((details.genres || []).map(genre => Number(genre.id)).filter(Boolean));
-                const seedWeight = 1 + (seed.favorite ? 1.5 : 0) + (Math.max(0,Math.min(10,Number(seed.perdeRating)||0)) / 10);
+                const seedWeight = 1 + (seed.favorite ? 1.5 : 0);
                 const combinedResults = [...(recommendations.results || []), ...(similar.results || [])];
                 return combinedResults.map(item => ({item,mediaType,genreIds,seedWeight}));
             });
@@ -833,7 +787,7 @@
                 if(!mr.ok||!tr.ok)throw new Error('TMDB');
                 const [md,td]=await Promise.all([mr.json(),tr.json()]);
                 if(request!==cinemaShowcaseRequest)return;
-                const archive=movies.filter(m=>m&&m.title&&(m.backdrop||m.poster)).map(m=>({...m,source:'archive',score:(Number(m.perdeRating)||0)*2.2+(Number(m.imdb)||0)*1.4+(m.favorite?3.5:0)+(m.status==='watched'?1.8:0)}));
+                const archive=movies.filter(m=>m&&m.title&&(m.backdrop||m.poster)).map(m=>({...m,source:'archive',score:(Number(m.imdb)||0)*1.4+(m.favorite?3.5:0)+(m.status==='watched'?1.8:0)}));
                 const online=[...(md.results||[]).map(x=>({...x,type:'movie'})),...(td.results||[]).map(x=>({...x,type:'tv'}))].filter(x=>x.poster_path&&(x.backdrop_path||x.poster_path)).map(x=>({id:'tmdb-'+x.type+'-'+x.id,tmdbId:x.id,title:x.title||x.name,type:x.type==='tv'?'tv':'movie',year:(x.release_date||x.first_air_date||'').slice(0,4),imdb:Number((x.vote_average||0).toFixed(1)),poster:'https://image.tmdb.org/t/p/w500'+x.poster_path,backdrop:x.backdrop_path?'https://image.tmdb.org/t/p/w1280'+x.backdrop_path:'https://image.tmdb.org/t/p/w500'+x.poster_path,overview:x.overview||'',genres:[],status:'discovered',favorite:false,source:'tmdb',score:(Number(x.vote_average)||0)*1.5+Math.min(Number(x.popularity)||0,100)/20}));
                 const seen=new Set(),combined=[...archive,...online].filter(item=>{const k=item.tmdbId?'tmdb-'+item.tmdbId:String(item.title||'').toLocaleLowerCase('tr');if(seen.has(k))return false;seen.add(k);return true;});
                 combined.sort((a,b)=>(b.score||0)-(a.score||0));
@@ -1499,7 +1453,7 @@
                             <div class="perde-imdb-hero-shade"></div>
                             <div class="perde-imdb-hero-top"><span class="perde-imdb-brand">My Library<span>ARŞİV</span></span><span class="perde-imdb-type">${m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM'}</span></div>
                             <div class="perde-imdb-feature-art"><img id="perde-detail-hero-poster" src="${m.poster || m.backdrop || ''}" alt="${m.title} afişi" onerror="this.src='${m.backdrop || ''}'"><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-play" aria-label="${m.title} fragmanını oynat"><i class="fa-solid fa-play"></i><span>FRAGMANI İZLE</span></button></div>
-                            <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker"><span id="perde-detail-year">${m.year || 'Yıl bilinmiyor'}</span> <span>•</span> <span id="perde-detail-runtime">${m.runtime || 'Süre bilgisi yok'}</span></div><h2 id="perde-detail-title">${m.title}</h2><div class="perde-imdb-genres" id="perde-detail-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div></div>
+                            <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker"><span id="perde-detail-year">${m.year || 'Yıl bilinmiyor'}</span> <span>•</span> <span id="perde-detail-runtime">${m.runtime || 'Süre bilgisi yok'}</span></div><h2 id="perde-detail-title">${m.title}</h2><div class="perde-imdb-genres" id="perde-detail-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div><div class="perde-imdb-rating-row perde-imdb-hero-rating"><div class="perde-imdb-score"><strong>${m.imdb || '—'}</strong><span>IMDb</span></div><button onclick="toggleFavorite('${m.id}')" class="perde-imdb-fav ${m.favorite ? 'is-favorite' : ''}"><i class="fa-solid fa-heart"></i> ${m.favorite ? 'Favorilerde' : 'Favorilere Ekle'}</button></div></div>
                         </section>
                         <section class="perde-imdb-content">
                             <aside class="perde-imdb-poster-wrap">
@@ -1516,8 +1470,8 @@
                                 </section>
                             </aside>
                             <div class="perde-imdb-main">
-                                <div class="perde-imdb-rating-row"><div class="perde-imdb-score"><strong>${m.imdb || '—'}</strong><span>IMDb</span></div><button onclick="toggleFavorite('${m.id}')" class="perde-imdb-fav ${m.favorite ? 'is-favorite' : ''}"><i class="fa-solid fa-heart"></i> ${m.favorite ? 'Favorilerde' : 'Favorilere Ekle'}</button></div>
-                                ${renderPerdeRatingPanel(m)}
+                                
+                                
                                 <p class="perde-imdb-overview" id="perde-detail-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p><div id="perde-detail-series-meta" class="perde-detail-series-meta" hidden></div>
                                 <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite">
                                     <div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div>
