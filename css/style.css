@@ -2792,3 +2792,19 @@ main.max-w-7xl { max-width:1480px; padding-top:28px; }
   .perde-hidden-gems-section .ml-section-heading { flex-direction:column; align-items:stretch; }
   .perde-hidden-gems-refresh { align-self:flex-start; }
 }
+
+
+/* PERDE — Hidden Gems horizontal discovery carousel */
+.perde-hidden-gems-carousel{display:flex;align-items:center;gap:10px;min-width:0}
+.perde-hidden-gems-grid{display:flex!important;flex:1 1 auto;gap:14px;min-width:0;overflow-x:auto;overflow-y:hidden;padding:5px 2px 13px;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.perde-hidden-gems-grid::-webkit-scrollbar{display:none}
+.perde-hidden-gems-grid>.ml-home-poster-card{flex:0 0 clamp(145px,17%,190px);min-width:0;scroll-snap-align:start}
+.perde-hidden-gems-arrow{display:flex;flex:0 0 34px;width:34px;height:34px;align-items:center;justify-content:center;border:1px solid color-mix(in srgb,#b99a63 42%,var(--ml-border));border-radius:50%;background:var(--ml-surface);color:var(--ml-text);transition:all .18s ease}
+.perde-hidden-gems-arrow:hover{border-color:#b99a63;background:color-mix(in srgb,#b99a63 13%,var(--ml-surface));color:#b18b4e;transform:translateY(-1px)}
+.perde-hidden-gems-loading,.perde-hidden-gems-empty{width:100%;flex:1 0 100%;grid-column:auto}
+@media(max-width:767px){
+ .perde-hidden-gems-carousel{gap:6px}
+ .perde-hidden-gems-grid{gap:10px}
+ .perde-hidden-gems-grid>.ml-home-poster-card{flex-basis:clamp(132px,39vw,165px)}
+ .perde-hidden-gems-arrow{flex-basis:28px;width:28px;height:28px;font-size:10px}
+}
