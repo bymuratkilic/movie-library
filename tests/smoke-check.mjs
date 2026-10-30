@@ -15,6 +15,8 @@ const requiredIds = [
   'tab-detail',
   'detail-page-content',
   'tab-stats',
+  'tab-profile',
+  'perde-year-review',
   'tab-admin',
   'detail-modal',
   'detail-modal-content',
@@ -37,17 +39,19 @@ for (const fn of [
   'handleCatalogSearch',
   'exportArchiveJSON',
   'importArchiveJSON',
-  'renderCharts'
+  'renderCharts',
+  'renderYearInReview'
 ]) {
   assert.match(app, new RegExp(`function\\s+${fn}\\s*\\(`), `Missing expected feature function: ${fn}`);
 }
 
+assert.match(html, /perde-year-panel/, 'Annual cinema recap section must exist');
 assert.match(app, /perde_movies_archive_v1/, 'The existing local archive storage key must remain compatible');
 assert.match(app, /item\.title\.trim\(\)\.length > 0/, 'Imported/local archive entries must include a non-empty title');
 assert.match(app, /renderLibrary\(\);\s*renderAdminTable\(\);/, 'Import must refresh the library and admin views');
 assert.match(app, /my_library_theme/ , 'The new theme preference must be saved');
 assert.match(app, /localStorage\.getItem\(['"]perde_theme['"]\)/, 'The old theme preference must still be read');
-assert.match(app, /\['dashboard',\s*'library',\s*'trailers',\s*'detail',\s*'stats',\s*'admin'\]/, 'The detail page must be registered as a tab');
+assert.match(app, /\['dashboard',\s*'library',\s*'trailers',\s*'detail',\s*'stats',\s*'profile',\s*'admin'\]/, 'All application tabs must be registered');
 assert.match(html, /id="detail-page-content"/, 'The detail page content container must exist');
 assert.match(html, /\.\/js\/config\.js/, 'Tailwind configuration must still be loaded');
 assert.match(html, /\.\/js\/app\.js/, 'The main application script must still be loaded');
