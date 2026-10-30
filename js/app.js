@@ -471,9 +471,9 @@
                 const navBtn = document.getElementById(`nav-${t}`);
                 if (navBtn) {
                     if (t === tabId) {
-                        navBtn.className = "nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold dark:text-white text-slate-900 dark:bg-clean-hover bg-white shadow-sm";
+                        navBtn.className = "nav-btn is-active px-3 py-1.5 rounded-lg text-xs font-semibold dark:text-white text-slate-900 dark:bg-clean-hover bg-white shadow-sm";
                     } else {
-                        navBtn.className = "nav-btn px-3 py-1.5 rounded-lg text-xs font-medium dark:text-clean-muted text-light-muted hover:text-blue-500 transition-colors";
+                        navBtn.className = "nav-btn is-inactive px-3 py-1.5 rounded-lg text-xs font-medium dark:text-clean-muted text-light-muted hover:text-blue-500 transition-colors";
                     }
                 }
             });
