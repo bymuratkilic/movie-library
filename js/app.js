@@ -659,12 +659,7 @@
         function filterByGenre(genre) {
             activeGenreFilter = genre;
             switchTab('library');
-            const typeSelect = document.getElementById('filter-type');
-            const statusSelect = document.getElementById('filter-status');
-            const search = document.getElementById('search-input');
-            if (typeSelect) typeSelect.value = 'all';
-            if (statusSelect) statusSelect.value = 'all';
-            if (search) search.value = '';
+            // Tür filtresi diğer aktif filtrelerle birlikte çalışır.
             renderGenreMenu();
             applyFilters();
             const panel = document.getElementById('genre-menu-panel');
@@ -676,28 +671,59 @@
         }
 
         function applyFilters() {
-            const query = (document.getElementById('search-input')?.value || '').toLowerCase();
+            const query = (document.getElementById('search-input')?.value || '').trim().toLocaleLowerCase('tr');
             const typeFilter = document.getElementById('filter-type')?.value || 'all';
             const statusFilter = document.getElementById('filter-status')?.value || 'all';
+            const minRating = Number(document.getElementById('filter-min-rating')?.value || 0);
             const sortFilter = document.getElementById('filter-sort')?.value || 'newest';
 
             let filtered = movies.filter(m => {
-                const matchesQuery = (m.title && m.title.toLowerCase().includes(query)) ||
-                                     (m.director && m.director.toLowerCase().includes(query)) ||
-                                     (m.cast && m.cast.some(c => c.name && c.name.toLowerCase().includes(query)));
+                const title = String(m.title || '').toLocaleLowerCase('tr');
+                const director = String(m.director || '').toLocaleLowerCase('tr');
+                const cast = Array.isArray(m.cast) ? m.cast : [];
+                const rating = Number.parseFloat(m.imdb);
+                const matchesQuery = !query || title.includes(query) || director.includes(query) ||
+                    cast.some(c => String(c?.name || '').toLocaleLowerCase('tr').includes(query));
                 const matchesType = typeFilter === 'all' || m.type === typeFilter;
                 const matchesGenre = !activeGenreFilter || (Array.isArray(m.genres) && m.genres.some(g => String(g).trim() === activeGenreFilter));
-                const matchesStatus = statusFilter === 'all' || 
-                                     (statusFilter === 'favorite' ? m.favorite : m.status === statusFilter);
-
-                return matchesQuery && matchesType && matchesStatus && matchesGenre;
+                const matchesStatus = statusFilter === 'all' ||
+                    (statusFilter === 'favorite' ? Boolean(m.favorite) : m.status === statusFilter);
+                const matchesRating = minRating === 0 || (Number.isFinite(rating) && rating >= minRating);
+                return matchesQuery && matchesType && matchesStatus && matchesGenre && matchesRating;
             });
 
-            if (sortFilter === 'imdb_desc') filtered.sort((a, b) => b.imdb - a.imdb);
-            else if (sortFilter === 'year_desc') filtered.sort((a, b) => b.year - a.year);
-            else if (sortFilter === 'title_asc') filtered.sort((a, b) => a.title.localeCompare(b.title));
+            const ratingValue = item => {
+                const value = Number.parseFloat(item.imdb);
+                return Number.isFinite(value) ? value : null;
+            };
+            const yearValue = item => Number(item.year) || 0;
+            if (sortFilter === 'newest') filtered.sort((a, b) => movies.indexOf(a) - movies.indexOf(b));
+            else if (sortFilter === 'oldest') filtered.sort((a, b) => movies.indexOf(b) - movies.indexOf(a));
+            else if (sortFilter === 'imdb_desc' || sortFilter === 'imdb_asc') {
+                filtered.sort((a, b) => {
+                    const av = ratingValue(a), bv = ratingValue(b);
+                    if (av === null) return bv === null ? 0 : 1;
+                    if (bv === null) return -1;
+                    return sortFilter === 'imdb_desc' ? bv - av : av - bv;
+                });
+            } else if (sortFilter === 'year_desc') filtered.sort((a, b) => yearValue(b) - yearValue(a));
+            else if (sortFilter === 'year_asc') filtered.sort((a, b) => yearValue(a) - yearValue(b));
+            else if (sortFilter === 'title_asc') filtered.sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), 'tr'));
+            else if (sortFilter === 'title_desc') filtered.sort((a, b) => String(b.title || '').localeCompare(String(a.title || ''), 'tr'));
 
             renderRow('library-grid', filtered);
+            const count = document.getElementById('library-result-count');
+            if (count) count.textContent = filtered.length + ' / ' + movies.length + ' yapım gösteriliyor';
+        }
+
+        function resetLibraryFilters() {
+            ['search-input', 'filter-type', 'filter-status', 'filter-min-rating', 'filter-sort'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.value = id === 'filter-sort' ? 'newest' : (id === 'search-input' ? '' : id === 'filter-min-rating' ? '0' : 'all');
+            });
+            activeGenreFilter = '';
+            renderGenreMenu();
+            applyFilters();
         }
 
         function renderTrailerLibrary() {
