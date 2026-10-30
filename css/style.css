@@ -2110,3 +2110,34 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
   .ml-home-poster-card,
   .ml-home-poster-card .ml-catalog-poster > img { transition:none !important; }
 }
+
+
+/* Homepage poster runtime — lower-right corner */
+.ml-home-poster-runtime {
+  position:absolute;
+  z-index:2;
+  right:9px;
+  bottom:9px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  max-width:48%;
+  overflow:hidden;
+  padding:5px 7px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:4px;
+  background:rgba(10,12,15,.62);
+  color:rgba(255,255,255,.92);
+  font-size:8px;
+  font-weight:650;
+  line-height:1.2;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  backdrop-filter:blur(7px);
+}
+.ml-home-poster-runtime i { color:#f5d58a; font-size:8px; }
+.ml-home-poster-info { padding-bottom:35px; }
+@media(max-width:767px) {
+  .ml-home-poster-runtime { right:7px; bottom:7px; max-width:52%; padding:4px 6px; font-size:7px; }
+  .ml-home-poster-info { padding-bottom:32px; }
+}
