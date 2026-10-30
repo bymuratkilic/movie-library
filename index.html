@@ -173,15 +173,20 @@
             </section>
 
             <!-- Watchlist Section -->
-            <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-base font-bold dark:text-white text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-bookmark text-rose-500 text-xs"></i>İzleme Listem
-                    </h2>
-                    <div class="flex items-center gap-3"><span id="watchlist-badge" class="text-xs text-amber-500 font-semibold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">0 yapım</span><button type="button" onclick="openHomeCollection('watchlist')" class="text-xs text-rose-400 hover:underline font-medium whitespace-nowrap">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></button></div>
+            <section id="ml-watchlist-section" class="ml-catalog-section ml-watchlist-section">
+                <div class="ml-section-heading">
+                    <div>
+                        <span class="ml-section-kicker">SIRADAKİ SEÇİMLERİN</span>
+                        <h2><i class="fa-solid fa-bookmark"></i> İzleme Listem</h2>
+                        <p>Sıradaki film gecen için bekleyen yapımlar.</p>
+                    </div>
+                    <div class="ml-watchlist-actions">
+                        <span id="watchlist-badge" class="text-xs text-amber-500 font-semibold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">0 yapım</span>
+                        <button type="button" onclick="openHomeCollection('watchlist')">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
                 </div>
-                <div id="watchlist-row" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
-            </div>
+                <div id="watchlist-row" class="ml-watchlist-rail" aria-label="İzleme listesindeki yapımlar"></div>
+            </section>
             <div class="ml-archive-stats"><div><strong id="stat-total-count">0</strong><span>Toplam yapım</span></div><div><strong id="stat-watched-count">0</strong><span>İzlenen</span></div><div><strong id="stat-watchlist-count">0</strong><span>İzlenecek</span></div><div><strong id="stat-favorite-count">0</strong><span>Favori</span></div></div>
 
         </section>

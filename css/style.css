@@ -1917,3 +1917,63 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
     width:min(43vw,168px);
   }
 }
+
+
+/* PERDE homepage stage 3 — watchlist horizontal poster rail */
+#ml-watchlist-section { min-width:0; }
+#ml-watchlist-section .ml-section-heading { align-items:flex-end; }
+#ml-watchlist-section .ml-section-heading h2 { display:flex; align-items:center; gap:9px; }
+#ml-watchlist-section .ml-section-heading h2 i { color:var(--ml-accent); font-size:13px; }
+#ml-watchlist-section .ml-section-heading p { margin:5px 0 0; color:var(--ml-muted); font-size:11px; }
+#ml-watchlist-section .ml-watchlist-actions { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+#ml-watchlist-section .ml-watchlist-actions > button {
+  color:var(--ml-accent);
+  font-size:11px;
+  font-weight:600;
+  white-space:nowrap;
+  transition:opacity .2s ease;
+}
+#ml-watchlist-section .ml-watchlist-actions > button:hover { opacity:.78; }
+#watchlist-row.ml-watchlist-rail {
+  display:flex !important;
+  grid-template-columns:none !important;
+  grid-auto-columns:unset !important;
+  align-items:stretch;
+  gap:16px !important;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:3px 2px 14px;
+  margin:0 -2px;
+  scroll-snap-type:x mandatory;
+  scroll-padding-inline:2px;
+  overscroll-behavior-inline:contain;
+  scrollbar-width:thin;
+  scrollbar-color:var(--ml-border) transparent;
+  -webkit-overflow-scrolling:touch;
+}
+#watchlist-row.ml-watchlist-rail > .ml-catalog-card {
+  flex:0 0 clamp(150px,15.5vw,190px);
+  width:clamp(150px,15.5vw,190px);
+  min-width:0;
+  scroll-snap-align:start;
+}
+#watchlist-row.ml-watchlist-rail > .ml-empty-state {
+  flex:1 0 100%;
+  min-width:100%;
+}
+#watchlist-row.ml-watchlist-rail::-webkit-scrollbar { height:6px; }
+#watchlist-row.ml-watchlist-rail::-webkit-scrollbar-track { background:transparent; }
+#watchlist-row.ml-watchlist-rail::-webkit-scrollbar-thumb { background:var(--ml-border); border-radius:99px; }
+#watchlist-row.ml-watchlist-rail::-webkit-scrollbar-thumb:hover { background:var(--ml-muted); }
+@media(max-width:767px) {
+  #ml-watchlist-section .ml-section-heading { align-items:flex-start; gap:12px; }
+  #ml-watchlist-section .ml-section-heading h2 { font-size:18px !important; }
+  #ml-watchlist-section .ml-section-heading p { max-width:230px; line-height:1.5; }
+  #ml-watchlist-section .ml-watchlist-actions { gap:8px; }
+  #ml-watchlist-section .ml-watchlist-actions > button { font-size:10px; }
+  #watchlist-row.ml-watchlist-rail { gap:12px !important; padding-bottom:10px; }
+  #watchlist-row.ml-watchlist-rail > .ml-catalog-card {
+    flex:0 0 min(43vw,168px);
+    width:min(43vw,168px);
+  }
+}
