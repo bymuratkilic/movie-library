@@ -800,11 +800,11 @@
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
                             </div>
                         </section>
+                        <section class="perde-similar" aria-label="Benzer yapımlar">
+                            <h3>Benzer Yapımlar</h3>
+                            <div id="perde-similar-grid" class="perde-similar-grid"><p class="perde-similar-loading">Benzer yapımlar yükleniyor…</p></div>
+                        </section>
                     </div>
-                    <section class="perde-similar" aria-label="Benzer yapımlar">
-                        <h3>Benzer Yapımlar</h3>
-                        <div id="perde-similar-grid" class="perde-similar-grid"><p class="perde-similar-loading">Benzer yapımlar yükleniyor…</p></div>
-                    </section>
                 `;
 
                 loadSimilarProductions(m);
@@ -832,6 +832,14 @@
             const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
             const mediaType = movie.type === 'tv' ? 'tv' : 'movie';
             const apiBase = 'https://api.themoviedb.org/3/';
+            const localItems = [...movies, ...onlineCatalog, ...fetchedOnlineResults];
+            const findInList = item => localItems.find(existing =>
+                (existing.tmdbId && String(existing.tmdbId) === String(item.tmdbId)) ||
+                (existing.id && existing.id === item.id) ||
+                ((existing.title || '').trim().toLocaleLowerCase('tr') === (item.title || '').trim().toLocaleLowerCase('tr') &&
+                 String(existing.year || '') === String(item.year || ''))
+            );
+            const esc = value => String(value || '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
             try {
                 let tmdbId = movie.tmdbId || (String(movie.id || '').startsWith('tmdb-') ? String(movie.id).split('-').pop() : '');
                 if (!tmdbId) {
@@ -844,17 +852,10 @@
                 const response = await fetch(apiBase + mediaType + '/' + tmdbId + '/recommendations?api_key=' + encodeURIComponent(apiKey) + '&language=tr-TR&page=1');
                 const data = await response.json();
                 if (!response.ok || !Array.isArray(data.results)) throw new Error('Benzer yapımlar alınamadı');
-                const seen = new Set([String(movie.title || '').toLocaleLowerCase('tr')]);
-                const recommendations = data.results.filter(item => {
-                    const title = item.title || item.name || '';
-                    const key = title.toLocaleLowerCase('tr');
-                    if (!title || seen.has(key)) return false;
-                    seen.add(key);
-                    return true;
-                }).slice(0, 6).map(item => {
+                const recommendations = data.results.filter(item => (item.title || item.name) && String(item.id) !== String(tmdbId)).slice(0, 6).map(item => {
                     const title = item.title || item.name || 'İsimsiz yapım';
                     const date = item.release_date || item.first_air_date || '';
-                    return {
+                    const normalized = {
                         id: 'tmdb-' + mediaType + '-' + item.id,
                         source: 'tmdb',
                         tmdbId: item.id,
@@ -873,6 +874,7 @@
                         overview: item.overview || title + ' yapımı.',
                         cast: []
                     };
+                    return { ...normalized, inList: !!findInList(normalized) };
                 });
                 if (!recommendations.length) {
                     container.innerHTML = '<p class="perde-similar-empty">Bu yapım için benzer öneri bulunamadı.</p>';
@@ -882,15 +884,43 @@
                     if (!fetchedOnlineResults.some(existing => existing.id === item.id)) fetchedOnlineResults.push(item);
                 });
                 container.innerHTML = recommendations.map(item => `
-                    <button class="perde-similar-card" onclick="openDetailModal('${item.id}')">
-                        <img src="${item.poster}" alt="${item.title.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80'">
-                        <span>${item.title} ${item.year ? '· ' + item.year : ''}</span>
-                    </button>
+                    <article class="perde-similar-card">
+                        <button class="perde-similar-poster" onclick="openDetailModal('${item.id}')" aria-label="${esc(item.title)} detaylarını aç">
+                            <img src="${item.poster}" alt="${esc(item.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80'">
+                        </button>
+                        <div class="perde-similar-info">
+                            <button class="perde-similar-title" onclick="openDetailModal('${item.id}')">${esc(item.title)}</button>
+                            <small>${item.year || 'Yıl bilinmiyor'}</small>
+                            <div class="perde-similar-status ${item.inList ? 'is-added' : 'is-missing'}">${item.inList ? '<i class="fa-solid fa-check"></i> Listemde' : '<i class="fa-solid fa-circle-info"></i> Listemde Yok'}</div>
+                            ${item.inList ? '' : `<button class="perde-similar-add" onclick="addSimilarProduction('${item.id}', this)"><i class="fa-solid fa-plus"></i> Listeme Ekle</button>`}
+                        </div>
+                    </article>
                 `).join('');
             } catch (error) {
                 container.innerHTML = '<p class="perde-similar-empty">Benzer yapımlar şu anda yüklenemedi.</p>';
             }
         }
+
+        function addSimilarProduction(id, button) {
+            const item = fetchedOnlineResults.find(existing => existing.id === id);
+            if (!item) return;
+            const alreadyAdded = [...movies, ...onlineCatalog].some(existing =>
+                (existing.tmdbId && String(existing.tmdbId) === String(item.tmdbId)) ||
+                ((existing.title || '').trim().toLocaleLowerCase('tr') === (item.title || '').trim().toLocaleLowerCase('tr') &&
+                 String(existing.year || '') === String(item.year || ''))
+            );
+            if (alreadyAdded) {
+                button.outerHTML = '<span class="perde-similar-status is-added"><i class="fa-solid fa-check"></i> Listemde</span>';
+                return;
+            }
+            const saved = { ...item, id: 'movie-' + Date.now(), source: 'local', status: 'watch_later', favorite: false };
+            movies.push(saved);
+            if (typeof saveMovies === 'function') saveMovies();
+            if (typeof renderMovies === 'function') renderMovies();
+            if (typeof updateStats === 'function') updateStats();
+            button.outerHTML = '<span class="perde-similar-status is-added"><i class="fa-solid fa-check"></i> Listeye Eklendi</span>';
+        }
+
 
         function toggleFavorite(id) {
             let m = movies.find(x => x.id === id);
