@@ -815,12 +815,14 @@
                 const type = m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM';
                 const watched = m.status === 'watched';
                 const genres = Array.isArray(m.genres) ? m.genres.slice(0,2).join(' · ') : '';
+                const runtime = m.runtime && !['Bilinmiyor', 'Süre bilgisi yok', '—'].includes(String(m.runtime).trim()) ? String(m.runtime).trim() : '';
                 const title = safe(m.title), id = safe(m.id);
                 const posterInfo = '<div class="ml-home-poster-info">' +
                     '<h3 title="' + title + '">' + title + '</h3>' +
                     '<div class="ml-home-poster-facts"><span class="ml-home-poster-rating"><i class="fa-solid fa-star"></i> IMDb ' + safe(m.imdb || '—') + '</span>' +
-                    '<span>' + safe(m.year || '—') + '</span><span class="ml-home-poster-type">' + type + '</span></div>' +
-                    '<div class="ml-home-poster-genres">' + safe(genres || type) + '</div></div>';
+                    '<span>' + safe(m.year || '—') + '</span></div>' +
+                    '<div class="ml-home-poster-genres">' + safe(genres || type) + '</div></div>' +
+                    (runtime ? '<span class="ml-home-poster-runtime"><i class="fa-regular fa-clock"></i> ' + safe(runtime) + '</span>' : '');
                 return '<article class="ml-catalog-card' + (homePosterMode ? ' ml-home-poster-card' : '') + '" role="button" tabindex="0" aria-label="' + title + ' detaylarını aç" onclick="openDetailModal(\'' + id + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openDetailModal(\'' + id + '\')}">' +
                     '<div class="ml-catalog-poster"><img src="' + safe(m.poster || '') + '" alt="' + title + ' afişi" loading="lazy" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80\'">' +
                     '<span class="ml-catalog-type">' + type + '</span><span class="ml-catalog-rating"><i class="fa-solid fa-star"></i> ' + safe(m.imdb || '—') + '</span>' +
