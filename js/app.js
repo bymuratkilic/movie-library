@@ -598,6 +598,10 @@
         function renderRow(containerId, list) {
             const container = document.getElementById(containerId);
             if (!container) return;
+            if (containerId === 'library-grid') {
+                const view = localStorage.getItem('perde_library_view') === 'list' ? 'list' : 'grid';
+                container.classList.toggle('ml-library-list-view', view === 'list');
+            }
             if (!list.length) {
                 container.innerHTML = '<div class="col-span-full ml-empty-state"><i class="fa-solid fa-film"></i><span>Henüz burada bir yapım yok. Arşivine yapım ekleyerek başlayabilirsin.</span></div>';
                 return;
@@ -617,6 +621,28 @@
                     (genres ? '<span class="ml-catalog-separator">•</span><span class="ml-catalog-genre">' + safe(genres) + '</span>' : '') +
                     '</div><div class="ml-catalog-status"><span class="ml-catalog-status-dot ' + (watched ? 'watched' : 'planned') + '"></span>' + (watched ? 'İzlendi' : 'İzleme listesinde') + '</div></div></article>';
             }).join('');
+        }
+
+        function setLibraryView(view) {
+            const selected = view === 'list' ? 'list' : 'grid';
+            localStorage.setItem('perde_library_view', selected);
+            const gridButton = document.getElementById('library-view-grid');
+            const listButton = document.getElementById('library-view-list');
+            [gridButton, listButton].forEach(button => {
+                if (!button) return;
+                const active = button.id === (selected === 'grid' ? 'library-view-grid' : 'library-view-list');
+                button.classList.toggle('is-active', active);
+                button.setAttribute('aria-pressed', String(active));
+            });
+            applyFilters();
+        }
+
+        function syncLibraryViewControls() {
+            const selected = localStorage.getItem('perde_library_view') === 'list' ? 'list' : 'grid';
+            const gridButton = document.getElementById('library-view-grid');
+            const listButton = document.getElementById('library-view-list');
+            if (gridButton) { gridButton.classList.toggle('is-active', selected === 'grid'); gridButton.setAttribute('aria-pressed', String(selected === 'grid')); }
+            if (listButton) { listButton.classList.toggle('is-active', selected === 'list'); listButton.setAttribute('aria-pressed', String(selected === 'list')); }
         }
 
         function renderLibrary() {
@@ -712,6 +738,7 @@
             else if (sortFilter === 'title_desc') filtered.sort((a, b) => String(b.title || '').localeCompare(String(a.title || ''), 'tr'));
 
             renderRow('library-grid', filtered);
+            syncLibraryViewControls();
             const count = document.getElementById('library-result-count');
             if (count) count.textContent = filtered.length + ' / ' + movies.length + ' yapım gösteriliyor';
         }
