@@ -90,12 +90,18 @@ assert.match(css, /\\.ml-home-poster-card\\.is-preview-open/, 'Touch users must 
 
 assert.match(app, /Number\(b\.perdeRating\)/, 'Personal recommendations must prioritize the user's Perde ratings');
 assert.match(app, /genreMatches \* 3 \* seedWeight/, 'Recommendation ranking must use genre affinity and seed preference');
-assert.match(app, /perde-recommendation-reason/, 'Recommendation cards must explain why an item was suggested');
+assert.doesNotMatch(app, /perde-recommendation-reason/, 'Recommendation cards must not show recommendation explanations');
+assert.match(app, /personalRecommendationRefreshCycle/, 'Recommendation refresh must rotate recommendation pages');
+assert.match(app, /previousRecommendationIds\\.has\\(item\\.id\\)/, 'Refresh must prioritize titles not shown in the previous result');
+assert.match(app, /Fragmanı izle/, 'Recommendation cards must include a trailer popup action');
+assert.match(app, /Detaylar/, 'Recommendation cards must include a details action');
+assert.match(app, /popupOnly = false/, 'Trailer popup mode must avoid opening an external tab');
 assert.match(html, /onclick="renderPersonalRecommendations\(\)"/, 'Users must be able to refresh personal recommendations');
 assert.match(css, /\.ml-recommendation-refresh/, 'Recommendation refresh control must be styled');
 
 assert.match(app, /function\\s+loadRecommendationProviders\\s*\\(/, 'Personal recommendation cards must load Turkish streaming availability');
 assert.match(app, /perde-recommendation-providers-/, 'Recommendation cards must include a streaming provider slot');
 assert.match(app, /data\.results && data\.results\.TR/, 'Recommendation availability must be scoped to Türkiye');
-assert.match(app, /uniqueStreaming\.slice\(0,3\)/, 'Recommendation cards must show a concise provider list');
+assert.match(app, /provider\.logo_path && list\.findIndex/, 'Recommendation cards must render provider logos only');
+assert.doesNotMatch(app, /KİRALA \/ SATIN AL/, 'Recommendation cards must not show rental or purchase labels');
 assert.match(css, /\.perde-recommendation-providers/, 'Recommendation streaming provider badges must be styled');
