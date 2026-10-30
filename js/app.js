@@ -808,7 +808,7 @@
         }
 
         // Oyuncu Biyografisi Açma Modal Fonksiyonu
-        async const personProfileCache = {};
+        const personProfileCache = {};
 
         async function openActorBio(actorName) {
             if (!actorName) return;
