@@ -1036,7 +1036,7 @@
                         const name = String(person.name || 'Oyuncu');
                         const jsName = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
                         const avatar = person.profile || getAvatarUrl(name);
-                        return '<button onclick="openActorBio(\\'' + jsName + '\\')" class="perde-imdb-cast-card"><img id="actor-img-' + movie.id + '-' + index + '" src="' + esc(avatar) + '" alt="' + esc(name) + '" loading="lazy"><span><b>' + esc(name) + '</b><small>' + esc(person.role || 'Oyuncu') + '</small></span></button>';
+                        return '<button onclick="openActorBio(\'' + jsName + '\')" class="perde-imdb-cast-card"><img id="actor-img-' + movie.id + '-' + index + '" src="' + esc(avatar) + '" alt="' + esc(name) + '" loading="lazy"><span><b>' + esc(name) + '</b><small>' + esc(person.role || 'Oyuncu') + '</small></span></button>';
                     }).join('');
                 }
                 if (!movie.trailerUrl) {
