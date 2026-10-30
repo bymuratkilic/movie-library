@@ -1526,3 +1526,97 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .ml-diary-history li p{margin:7px 0 0}
 .ml-diary-empty-state{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
 @media(max-width:640px){.ml-diary-panel{padding:15px}.ml-diary-fields{grid-template-columns:1fr}.ml-diary-empty-state{align-items:flex-start;flex-direction:column}}
+
+
+/* BUGÜN NE İZLESEM? — final layout overrides
+   Legacy responsive rules previously positioned the text as an overlay and
+   reduced the synopsis size. Keep the card in a stable two-column layout. */
+.ml-home-feature-row .ml-todays-pick {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 390px;
+  aspect-ratio: auto;
+}
+.ml-home-feature-row .ml-todays-card,
+.ml-home-feature-row .ml-todays-empty {
+  box-sizing: border-box;
+  min-height: 390px;
+  height: 100%;
+  padding: 18px;
+}
+.ml-home-feature-row .ml-todays-card .ml-todays-topline,
+.ml-home-feature-row .ml-todays-card .ml-todays-footer {
+  position: static !important;
+  inset: auto !important;
+  width: 100%;
+}
+.ml-home-feature-row .ml-todays-main {
+  display: grid;
+  grid-template-columns: minmax(135px, 40%) minmax(0, 1fr);
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 15px;
+}
+.ml-home-feature-row .ml-todays-poster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 250px;
+  padding: 10px;
+  background: linear-gradient(145deg, var(--ml-surface-muted), var(--ml-accent-soft) 52%, var(--ml-surface));
+}
+.ml-home-feature-row .ml-todays-poster img {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  padding: 0;
+  object-fit: contain;
+  object-position: center;
+}
+.ml-home-feature-row .ml-todays-content {
+  position: static !important;
+  inset: auto !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  min-height: 0;
+}
+.ml-home-feature-row .ml-todays-overview {
+  display: -webkit-box;
+  margin-top: 12px;
+  overflow: hidden;
+  font-size: clamp(14px, 1.05vw, 16px) !important;
+  line-height: 1.65;
+  -webkit-line-clamp: 5 !important;
+  -webkit-box-orient: vertical;
+}
+@media (max-width: 1050px) and (min-width: 768px) {
+  .ml-home-feature-row .ml-todays-pick,
+  .ml-home-feature-row .ml-todays-card { min-height: 360px; }
+  .ml-home-feature-row .ml-todays-card { padding: 14px; }
+  .ml-home-feature-row .ml-todays-main { grid-template-columns: minmax(112px, 38%) minmax(0, 1fr); gap: 11px; }
+  .ml-home-feature-row .ml-todays-poster { min-height: 230px; }
+  .ml-home-feature-row .ml-todays-overview { font-size: 14px !important; -webkit-line-clamp: 4 !important; }
+}
+@media (max-width: 767px) {
+  .ml-home-feature-row .ml-todays-pick {
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    min-height: 390px;
+    aspect-ratio: auto;
+  }
+  .ml-home-feature-row .ml-todays-card { min-height: 390px; height: auto; padding: 16px; }
+  .ml-home-feature-row .ml-todays-main { grid-template-columns: minmax(112px, 38%) minmax(0, 1fr); min-height: 275px; gap: 12px; }
+  .ml-home-feature-row .ml-todays-poster { min-height: 275px; }
+  .ml-home-feature-row .ml-todays-overview { font-size: 14px !important; -webkit-line-clamp: 5 !important; }
+}
+@media (max-width: 390px) {
+  .ml-home-feature-row .ml-todays-card { padding: 13px; }
+  .ml-home-feature-row .ml-todays-main { grid-template-columns: minmax(100px, 36%) minmax(0, 1fr); gap: 10px; }
+  .ml-home-feature-row .ml-todays-overview { font-size: 13px !important; }
+}
