@@ -420,7 +420,7 @@
                 return;
             }
 
-            ['dashboard', 'library', 'trailers', 'news', 'detail', 'stats', 'profile', 'admin'].forEach(t => {
+            ['dashboard', 'library', 'trailers', 'detail', 'stats', 'profile', 'admin'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 if (el) el.classList.toggle('hidden', t !== tabId);
                 const navBtn = document.getElementById(`nav-${t}`);
@@ -438,7 +438,6 @@
             if (tabId === 'profile') renderPerdeProfile();
             if (tabId === 'library') renderGenreMenu();
             if (tabId === 'trailers') renderTrailerLibrary();
-            if (tabId === 'news' && typeof loadPerdeNews === 'function') loadPerdeNews();
             if (tabId === 'admin') renderAdminTable();
         }
 
