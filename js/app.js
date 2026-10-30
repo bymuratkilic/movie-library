@@ -450,7 +450,7 @@
                 return;
             }
 
-            ['dashboard', 'library', 'trailers', 'detail', 'stats', 'admin'].forEach(t => {
+            ['dashboard', 'library', 'trailers', 'detail', 'stats', 'profile', 'admin'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 if (el) el.classList.toggle('hidden', t !== tabId);
                 const navBtn = document.getElementById(`nav-${t}`);
@@ -465,6 +465,7 @@
             const categoryNav = document.getElementById('category-navigation');
             if (categoryNav) categoryNav.classList.toggle('hidden', tabId === 'detail');
             if (tabId === 'stats') renderCharts();
+            if (tabId === 'profile') renderPerdeProfile();
             if (tabId === 'library') renderGenreMenu();
             if (tabId === 'trailers') renderTrailerLibrary();
             if (tabId === 'admin') renderAdminTable();
@@ -1810,6 +1811,84 @@
             document.getElementById(modalId).classList.add('hidden');
             if (modalId === 'detail-modal') {
                 document.getElementById('detail-modal-content').innerHTML = '';
+            }
+        }
+
+
+        const PERDE_PROFILE_KEY = 'perde_personal_profile_v1';
+
+        function getPerdeProfileSettings() {
+            try { return JSON.parse(localStorage.getItem(PERDE_PROFILE_KEY) || '{}') || {}; }
+            catch (error) { return {}; }
+        }
+
+        function savePerdeProfileName() {
+            const input = document.getElementById('perde-profile-name');
+            if (!input) return;
+            const settings = getPerdeProfileSettings();
+            settings.displayName = String(input.value || '').trim().slice(0, 40);
+            localStorage.setItem(PERDE_PROFILE_KEY, JSON.stringify(settings));
+            renderPerdeProfile();
+            showToast('Profil adı kaydedildi.');
+        }
+
+        function renderPerdeProfile() {
+            const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+            const settings = getPerdeProfileSettings();
+            const name = settings.displayName || 'Benim Sinema Profilim';
+            const watched = movies.filter(item => item.status === 'watched');
+            const favorites = movies.filter(item => item.favorite);
+            const rated = getPerdeRatedMovies();
+            const average = rated.length ? (rated.reduce((sum,item)=>sum+Number(item.perdeRating),0)/rated.length).toFixed(1) : '—';
+            const genreCounts = {};
+            movies.forEach(item => {
+                const genres = Array.isArray(item.genres) ? item.genres : (typeof item.genres === 'string' ? item.genres.split(',') : []);
+                genres.map(value=>String(value).trim()).filter(Boolean).forEach(genre=>genreCounts[genre]=(genreCounts[genre]||0)+1);
+            });
+            const topGenre = Object.entries(genreCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'Henüz belirlenmedi';
+            const title = document.getElementById('perde-profile-title');
+            const nameInput = document.getElementById('perde-profile-name');
+            const tagline = document.getElementById('perde-profile-tagline');
+            if(title) title.textContent = name;
+            if(nameInput && nameInput.value !== name) nameInput.value = settings.displayName || '';
+            if(tagline) tagline.textContent = movies.length ? 'Her izleme, koleksiyonunda sana ait bir iz bırakıyor.' : 'Arşivine yapımlar ekledikçe sinema profilin şekillenecek.';
+            const highlights = document.getElementById('perde-profile-highlights');
+            if(highlights) {
+                const items = [
+                    {value:movies.length,label:'Koleksiyondaki yapım',icon:'fa-film'},
+                    {value:watched.length,label:'İzlenen yapım',icon:'fa-circle-check'},
+                    {value:average,label:'Ortalama Perde puanı',icon:'fa-star'},
+                    {value:topGenre,label:'En sık tercih ettiğin tür',icon:'fa-masks-theater'}
+                ];
+                highlights.innerHTML = items.map(item=>'<article><i class="fa-solid '+item.icon+'"></i><strong>'+safe(item.value)+'</strong><span>'+item.label+'</span></article>').join('');
+            }
+            const topTen = [...favorites].sort((a,b)=>(Number(b.perdeRating)||0)-(Number(a.perdeRating)||0)||(Number(b.imdb)||0)-(Number(a.imdb)||0)||String(a.title).localeCompare(String(b.title),'tr')).slice(0,10);
+            const topRoot = document.getElementById('perde-profile-top-ten');
+            if(topRoot) topRoot.innerHTML = topTen.length ? topTen.map((item,index)=>'<button type="button" class="perde-profile-top-card" onclick="openDetailModal(\''+String(item.id).replace(/'/g,'')+'\')"><span class="perde-profile-rank">'+String(index+1).padStart(2,'0')+'</span><img src="'+safe(item.poster||'')+'" alt="'+safe(item.title)+' afişi" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span class="perde-profile-top-copy"><b>'+safe(item.title)+'</b><small>'+safe(item.year||'Yıl bilinmiyor')+' · '+(item.type==='tv'?'Dizi':item.type==='doc'?'Belgesel':'Film')+'</small><em>'+(Number(item.perdeRating)>0?'★ '+Number(item.perdeRating).toFixed(1):'IMDb '+safe(item.imdb||'—'))+'</em></span></button>').join('') : '<p class="perde-profile-empty">Henüz favori yapımın yok. Beğendiğin yapımlara kalp bıraktığında ilk 10 listen burada oluşacak.</p>';
+            const count = document.getElementById('perde-profile-favorite-count');
+            if(count) count.textContent = favorites.length+' yapım';
+            const favoriteRoot = document.getElementById('perde-profile-favorites');
+            if(favoriteRoot) favoriteRoot.innerHTML = favorites.length ? [...favorites].sort((a,b)=>String(a.title).localeCompare(String(b.title),'tr')).map(item=>'<button type="button" class="perde-profile-favorite-card" onclick="openDetailModal(\''+String(item.id).replace(/'/g,'')+'\')"><img src="'+safe(item.poster||'')+'" alt="'+safe(item.title)+' afişi" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span><b>'+safe(item.title)+'</b><small>'+safe(item.year||'')+'</small></span></button>').join('') : '<p class="perde-profile-empty">Favori koleksiyonun henüz boş.</p>';
+        }
+
+        async function sharePerdeProfile() {
+            const settings = getPerdeProfileSettings();
+            const favorites = movies.filter(item=>item.favorite);
+            const watched = movies.filter(item=>item.status==='watched');
+            const rated = getPerdeRatedMovies();
+            const average = rated.length ? (rated.reduce((sum,item)=>sum+Number(item.perdeRating),0)/rated.length).toFixed(1) : 'Henüz puan yok';
+            const genres = {};
+            movies.forEach(item=>(Array.isArray(item.genres)?item.genres:(typeof item.genres==='string'?item.genres.split(','):[])).forEach(g=>{const key=String(g).trim();if(key)genres[key]=(genres[key]||0)+1;}));
+            const favoriteGenre = Object.entries(genres).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'Belirlenmedi';
+            const summary = '🎬 '+(settings.displayName||'Benim Sinema Profilim')+' · Perde\n'+movies.length+' yapım koleksiyonumda · '+watched.length+' izlenen · '+favorites.length+' favori\nOrtalama Perde puanım: '+average+'\nEn sık tercih ettiğim tür: '+favoriteGenre+'\n\nKişisel sinema arşivimden.';
+            if(navigator.share) {
+                try { await navigator.share({title:'Perde · Sinema Profilim',text:summary}); }
+                catch(error) { if(error && error.name!=='AbortError') showToast('Paylaşım açılamadı.'); }
+            } else if(navigator.clipboard && navigator.clipboard.writeText) {
+                try { await navigator.clipboard.writeText(summary); showToast('Profil özeti panoya kopyalandı.'); }
+                catch(error) { showToast('Kopyalama başarısız oldu.'); }
+            } else {
+                window.prompt('Profil özetini kopyala:',summary);
             }
         }
 

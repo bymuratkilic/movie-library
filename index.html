@@ -78,6 +78,7 @@
                 <button onclick="filterByMenu('watch_later')" id="nav-watch_later" class="nav-btn"><i class="fa-solid fa-bookmark"></i>İzleme Listem</button>
                 <button onclick="filterByMenu('favorite')" id="nav-favorite" class="nav-btn"><i class="fa-solid fa-heart"></i>Favorilerim</button>
                 <button onclick="switchTab('stats')" id="nav-stats" class="nav-btn"><i class="fa-solid fa-chart-pie"></i>Analizler</button>
+                <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn"><i class="fa-solid fa-user-astronaut"></i>Profilim</button>
                 <button onclick="openAdminAuthModal()" id="nav-admin" class="nav-btn"><i class="fa-solid fa-sliders"></i>Yönetim</button>
             </nav>
         </div>
@@ -296,6 +297,30 @@
                     <div id="stats-top-rated" class="perde-stats-ranking"></div>
                 </div>
             </div>
+        </section>
+
+        <!-- PERSONAL PROFILE TAB -->
+        <section id="tab-profile" class="hidden space-y-6">
+            <div class="perde-profile-hero">
+                <div class="perde-profile-avatar"><i class="fa-solid fa-clapperboard"></i></div>
+                <div class="perde-profile-intro">
+                    <span class="perde-profile-kicker">PERDE · SİNEMA KİMLİĞİN</span>
+                    <h2 id="perde-profile-title">Benim Sinema Profilim</h2>
+                    <p id="perde-profile-tagline">Arşivinin anlattığı kişisel sinema hikâyen.</p>
+                    <div class="perde-profile-name-edit"><label for="perde-profile-name">Profil adı</label><input id="perde-profile-name" type="text" maxlength="40" placeholder="Profiline bir isim ver"><button type="button" onclick="savePerdeProfileName()"><i class="fa-solid fa-check"></i> Kaydet</button></div>
+                </div>
+                <button type="button" class="perde-profile-share" onclick="sharePerdeProfile()"><i class="fa-solid fa-share-nodes"></i><span>Özetimi paylaş</span></button>
+            </div>
+            <div id="perde-profile-highlights" class="perde-profile-highlights"></div>
+            <div class="perde-profile-section">
+                <div class="perde-profile-section-head"><div><span>İLK 10</span><h3>En Sevdiğim Yapımlar</h3><p>Favorilerin arasından kişisel puanın ve IMDb verilerine göre öne çıkanlar.</p></div></div>
+                <div id="perde-profile-top-ten" class="perde-profile-top-grid"></div>
+            </div>
+            <div class="perde-profile-section">
+                <div class="perde-profile-section-head"><div><span>KOLEKSİYON</span><h3>Favori Arşivim</h3><p>Kalp bıraktığın tüm yapımlar, tek yerde.</p></div><strong id="perde-profile-favorite-count">0 yapım</strong></div>
+                <div id="perde-profile-favorites" class="perde-profile-favorite-grid"></div>
+            </div>
+            <p class="perde-profile-privacy"><i class="fa-solid fa-lock"></i> Profil bilgisi ve arşivin bu tarayıcıda saklanır. Paylaşım yalnızca sen butona bastığında oluşturulur; arşivin otomatik olarak internete yüklenmez.</p>
         </section>
 
         <!-- ADMIN TAB (PASSWORD PROTECTED) -->
