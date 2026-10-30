@@ -17,9 +17,9 @@ FEEDS = [
     ("https://www.dizifilmdergisiturkiye.com/rss/gundem.xml", "industry", "Sektör Gündemi"),
     ("https://www.beyazperde.com/rss/haberler.xml", "tr", "Beyazperde"),
     ("https://altyazi.net/feed/", "tr", "Altyazı"),
-    ("https://variety.com/v/film/feed/", "world", "Variety · Film"),
+    ("https://variety.com/v/film/feed/", "film", "Variety · Film"),
     ("https://variety.com/v/tv/feed/", "series", "Variety · TV"),
-    ("https://deadline.com/v/film/feed/", "world", "Deadline · Film"),
+    ("https://deadline.com/v/film/feed/", "film", "Deadline · Film"),
     ("https://deadline.com/v/tv/feed/", "series", "Deadline · TV"),
     ("https://www.hollywoodreporter.com/feed/", "world", "The Hollywood Reporter"),
     ("https://www.indiewire.com/feed/", "world", "IndieWire"),
@@ -97,6 +97,24 @@ def normalize_title(value):
     value = re.sub(r"[^a-z0-9çğıöşü]+", " ", value)
     return " ".join(value.split())
 
+def classify_news(category, title, summary):
+    text = (title + " " + summary).lower()
+    actor_terms = ("oyuncu", "başrol", "kadrosuna katıldı", "cast", "star joins", "to star", "starring", "actor", "actress")
+    if any(term in text for term in actor_terms):
+        return "actors"
+    if category == "world":
+        series_terms = ("season", "series", "tv ", "television", "netflix", "hbo", "disney+", "prime video", "streaming", "dizi")
+        return "series" if any(term in text for term in series_terms) else "film"
+    return category
+
+def category_name(category):
+    return {
+        "tr": "Yerli Sinema", "trseries": "Türk Dizileri",
+        "film": "Dünya Sineması", "world": "Dünya Gündemi",
+        "series": "Yabancı Diziler", "actors": "Oyuncular",
+        "industry": "Sektör", "trailers": "Fragmanlar"
+    }.get(category, "Sinema")
+
 items, seen_links, seen_titles = [], set(), []
 for feed_url, category, label in FEEDS:
     try:
@@ -116,6 +134,7 @@ for feed_url, category, label in FEEDS:
             seen_links.add(link)
             seen_titles.append(normalized)
             original_summary = clean_html(entry.get("summary", "") or entry.get("description", ""))
+            category = classify_news(category, original_title, original_summary)
             title, summary = original_title, original_summary
             translated = False
             if category in ("world", "series", "trailers", "industry"):
@@ -132,7 +151,7 @@ for feed_url, category, label in FEEDS:
                 "published": published_for(entry),
                 "source": source[:80],
                 "category": category,
-                "categoryLabel": label,
+                "categoryLabel": category_name(category),
             })
     except Exception as exc:
         print(f"Feed okunamadı: {feed_url}: {exc}")
