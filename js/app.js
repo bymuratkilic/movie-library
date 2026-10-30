@@ -1869,6 +1869,45 @@
             if(count) count.textContent = favorites.length+' yapım';
             const favoriteRoot = document.getElementById('perde-profile-favorites');
             if(favoriteRoot) favoriteRoot.innerHTML = favorites.length ? [...favorites].sort((a,b)=>String(a.title).localeCompare(String(b.title),'tr')).map(item=>'<button type="button" class="perde-profile-favorite-card" onclick="openDetailModal(\''+String(item.id).replace(/'/g,'')+'\')"><img src="'+safe(item.poster||'')+'" alt="'+safe(item.title)+' afişi" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span><b>'+safe(item.title)+'</b><small>'+safe(item.year||'')+'</small></span></button>').join('') : '<p class="perde-profile-empty">Favori koleksiyonun henüz boş.</p>';
+            renderPerdeAchievements();
+        }
+
+        function renderPerdeAchievements() {
+            const root = document.getElementById('perde-achievements');
+            const countRoot = document.getElementById('perde-achievement-count');
+            if (!root) return;
+            const watched = movies.filter(item => item.status === 'watched');
+            const favorites = movies.filter(item => item.favorite);
+            const rated = getPerdeRatedMovies();
+            const genres = new Set();
+            watched.forEach(item => {
+                const values = Array.isArray(item.genres) ? item.genres : (typeof item.genres === 'string' ? item.genres.split(',') : []);
+                values.map(value => String(value).trim().toLocaleLowerCase('tr')).filter(Boolean).forEach(value => genres.add(value));
+            });
+            const definitions = [
+                {id:'first-watch',title:'İlk Perde',description:'İlk yapımını izledin.',icon:'fa-play',value:watched.length,target:1,unit:'yapım'},
+                {id:'watch-10',title:'İlk 10',description:'10 farklı yapımı izleme listene değil, geçmişine ekledin.',icon:'fa-film',value:watched.length,target:10,unit:'yapım'},
+                {id:'watch-25',title:'Sinema Tutkunu',description:'25 yapımı izledin.',icon:'fa-ticket',value:watched.length,target:25,unit:'yapım'},
+                {id:'watch-50',title:'Perde Müdavimi',description:'50 yapımı izledin.',icon:'fa-clapperboard',value:watched.length,target:50,unit:'yapım'},
+                {id:'watch-100',title:'Yüzler Kulübü',description:'100 yapımı izledin.',icon:'fa-crown',value:watched.length,target:100,unit:'yapım'},
+                {id:'genre-5',title:'Tür Kaşifi',description:'İzlediklerinde 5 farklı tür keşfettin.',icon:'fa-compass',value:genres.size,target:5,unit:'tür'},
+                {id:'collection-10',title:'Koleksiyoner',description:'Arşivine 10 yapım ekledin.',icon:'fa-box-archive',value:movies.length,target:10,unit:'yapım'},
+                {id:'favorite-10',title:'Seçici Göz',description:'10 yapımı favorilerine ekledin.',icon:'fa-heart',value:favorites.length,target:10,unit:'favori'},
+                {id:'rating-1',title:'Eleştirmen',description:'İlk Perde puanını verdin.',icon:'fa-star',value:rated.length,target:1,unit:'puan'},
+                {id:'rating-10',title:'Puan Ustası',description:'10 yapımı kendi puanınla değerlendirdin.',icon:'fa-award',value:rated.length,target:10,unit:'puan'}
+            ];
+            const unlocked = definitions.filter(item => item.value >= item.target).length;
+            if (countRoot) countRoot.textContent = unlocked + ' / ' + definitions.length + ' rozet';
+            root.innerHTML = definitions.map(item => {
+                const earned = item.value >= item.target;
+                const progress = Math.min(100, Math.round(item.value / item.target * 100));
+                return '<article class="perde-achievement-card ' + (earned ? 'is-earned' : 'is-locked') + '">' +
+                    '<span class="perde-achievement-icon"><i class="fa-solid ' + item.icon + '"></i></span>' +
+                    '<span class="perde-achievement-copy"><strong>' + item.title + '</strong><small>' + item.description + '</small>' +
+                    '<span class="perde-achievement-progress"><i style="width:' + progress + '%"></i></span>' +
+                    '<em>' + (earned ? 'Kazanıldı' : item.value + ' / ' + item.target + ' ' + item.unit) + '</em></span>' +
+                    '<i class="fa-solid ' + (earned ? 'fa-circle-check' : 'fa-lock') + ' perde-achievement-status" aria-label="' + (earned ? 'Kazanıldı' : 'Kilitli') + '"></i></article>';
+            }).join('');
         }
 
         async function sharePerdeProfile() {
