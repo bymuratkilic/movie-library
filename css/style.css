@@ -2351,3 +2351,11 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .perde-personal-add:hover,.perde-personal-link:hover{background:var(--ml-surface-muted);border-color:var(--ml-accent)}
 .perde-personal-link{color:var(--ml-muted)}
 @media(max-width:560px){.perde-personal-actions{gap:5px}.perde-personal-add,.perde-personal-link{padding:6px 7px;font-size:8px}}
+
+
+/* Personal recommendation feedback and discovery controls */
+.ml-recommendation-history-count{color:var(--ml-muted);font-size:9px;font-weight:700;white-space:nowrap}
+.perde-personal-watched,.perde-personal-dismiss{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:6px 8px;border:1px solid var(--ml-border);border-radius:7px;color:var(--ml-muted);font-size:9px;font-weight:800;line-height:1.25;transition:background .18s ease,border-color .18s ease,color .18s ease}
+.perde-personal-watched:hover{color:#16a36a;border-color:#16a36a;background:rgba(22,163,106,.08)}
+.perde-personal-dismiss:hover{color:#d97757;border-color:#d97757;background:rgba(217,119,87,.08)}
+@media(max-width:560px){.ml-recommendation-history-count{font-size:8px}.perde-personal-watched,.perde-personal-dismiss{padding:6px 7px;font-size:8px}}
