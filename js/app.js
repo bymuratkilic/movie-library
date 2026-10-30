@@ -684,30 +684,43 @@
             return String(value || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
-        // Ülke adlarını Türkçe gösterir ve ISO ülke kodundan bayrak emojisi üretir.
+        // Ülke adlarını normalize eder; bayrakları emoji yerine gerçek görsel olarak gösterir.
         function renderCountryCredits(value) {
             const countryMap = {
-                'united states of america':['US','Amerika Birleşik Devletleri'],'united states':['US','Amerika Birleşik Devletleri'],'usa':['US','Amerika Birleşik Devletleri'],'abd':['US','Amerika Birleşik Devletleri'],'us':['US','Amerika Birleşik Devletleri'],
-                'united kingdom':['GB','Birleşik Krallık'],'uk':['GB','Birleşik Krallık'],'great britain':['GB','Birleşik Krallık'],'england':['GB','İngiltere'],'ingiltere':['GB','İngiltere'],
-                'turkey':['TR','Türkiye'],'türkiye':['TR','Türkiye'],'turkiye':['TR','Türkiye'],
-                'south korea':['KR','Güney Kore'],'korea':['KR','Güney Kore'],'north korea':['KP','Kuzey Kore'],
-                'russia':['RU','Rusya'],'russian federation':['RU','Rusya'],'china':['CN','Çin'],'japan':['JP','Japonya'],'france':['FR','Fransa'],'germany':['DE','Almanya'],'italy':['IT','İtalya'],'spain':['ES','İspanya'],'canada':['CA','Kanada'],'australia':['AU','Avustralya'],'india':['IN','Hindistan'],'brazil':['BR','Brezilya'],'mexico':['MX','Meksika'],'ireland':['IE','İrlanda'],'scotland':['GB','İskoçya'],'wales':['GB','Galler'],'sweden':['SE','İsveç'],'norway':['NO','Norveç'],'denmark':['DK','Danimarka'],'finland':['FI','Finlandiya'],'netherlands':['NL','Hollanda'],'belgium':['BE','Belçika'],'switzerland':['CH','İsviçre'],'austria':['AT','Avusturya'],'poland':['PL','Polonya'],'ukraine':['UA','Ukrayna'],'greece':['GR','Yunanistan'],'portugal':['PT','Portekiz'],'new zealand':['NZ','Yeni Zelanda'],'south africa':['ZA','Güney Afrika'],'iran':['IR','İran'],'iraq':['IQ','Irak'],'israel':['IL','İsrail'],'egypt':['EG','Mısır'],'argentina':['AR','Arjantin'],'chile':['CL','Şili'],'colombia':['CO','Kolombiya'],'thailand':['TH','Tayland'],'indonesia':['ID','Endonezya'],'hong kong':['HK','Hong Kong'],'taiwan':['TW','Tayvan'],'czech republic':['CZ','Çekya'],'czechia':['CZ','Çekya'],'romania':['RO','Romanya'],'hungary':['HU','Macaristan'],'bulgaria':['BG','Bulgaristan'],'croatia':['HR','Hırvatistan'],'serbia':['RS','Sırbistan'],'iceland':['IS','İzlanda'],'malta':['MT','Malta'],'luxembourg':['LU','Lüksemburg'],'uae':['AE','Birleşik Arap Emirlikleri'],'united arab emirates':['AE','Birleşik Arap Emirlikleri']
+                'united states of america':['us','Amerika Birleşik Devletleri'],'united states':['us','Amerika Birleşik Devletleri'],'usa':['us','Amerika Birleşik Devletleri'],'abd':['us','Amerika Birleşik Devletleri'],'amerika birleşik devletleri':['us','Amerika Birleşik Devletleri'],'us':['us','Amerika Birleşik Devletleri'],
+                'united kingdom':['gb','Birleşik Krallık'],'uk':['gb','Birleşik Krallık'],'great britain':['gb','Birleşik Krallık'],'birleşik krallık':['gb','Birleşik Krallık'],'england':['gb','İngiltere'],'ingiltere':['gb','İngiltere'],
+                'turkey':['tr','Türkiye'],'türkiye':['tr','Türkiye'],'turkiye':['tr','Türkiye'],'south korea':['kr','Güney Kore'],'korea':['kr','Güney Kore'],'north korea':['kp','Kuzey Kore'],
+                'russia':['ru','Rusya'],'russian federation':['ru','Rusya'],'china':['cn','Çin'],'japan':['jp','Japonya'],'france':['fr','Fransa'],'germany':['de','Almanya'],'italy':['it','İtalya'],'spain':['es','İspanya'],'canada':['ca','Kanada'],'australia':['au','Avustralya'],'india':['in','Hindistan'],'brazil':['br','Brezilya'],'mexico':['mx','Meksika'],'ireland':['ie','İrlanda'],'scotland':['gb-sct','İskoçya'],'wales':['gb-wls','Galler'],'sweden':['se','İsveç'],'norway':['no','Norveç'],'denmark':['dk','Danimarka'],'finland':['fi','Finlandiya'],'netherlands':['nl','Hollanda'],'belgium':['be','Belçika'],'switzerland':['ch','İsviçre'],'austria':['at','Avusturya'],'poland':['pl','Polonya'],'ukraine':['ua','Ukrayna'],'greece':['gr','Yunanistan'],'portugal':['pt','Portekiz'],'new zealand':['nz','Yeni Zelanda'],'south africa':['za','Güney Afrika'],'iran':['ir','İran'],'iraq':['iq','Irak'],'israel':['il','İsrail'],'egypt':['eg','Mısır'],'argentina':['ar','Arjantin'],'chile':['cl','Şili'],'colombia':['co','Kolombiya'],'thailand':['th','Tayland'],'indonesia':['id','Endonezya'],'hong kong':['hk','Hong Kong'],'taiwan':['tw','Tayvan'],'czech republic':['cz','Çekya'],'czechia':['cz','Çekya'],'romania':['ro','Romanya'],'hungary':['hu','Macaristan'],'bulgaria':['bg','Bulgaristan'],'croatia':['hr','Hırvatistan'],'serbia':['rs','Sırbistan'],'iceland':['is','İzlanda'],'malta':['mt','Malta'],'luxembourg':['lu','Lüksemburg'],'uae':['ae','Birleşik Arap Emirlikleri'],'united arab emirates':['ae','Birleşik Arap Emirlikleri']
             };
-            const countries = String(value || '').split(/\s*\/\s*|,\s*/).map(name => name.trim()).filter(Boolean);
-            if (!countries.length || countries.some(name => ['bilinmiyor','unknown','n/a'].includes(name.toLowerCase()))) {
+            const entries = String(value || '').split(/\\s*\\/\\s*|,\\s*/).map(part => part.trim()).filter(Boolean);
+            if (!entries.length || entries.some(part => ['bilinmiyor','unknown','n/a'].includes(part.toLocaleLowerCase('tr-TR')))) {
                 return '<span class="perde-country-empty">Ülke bilgisi bulunmuyor</span>';
             }
-            return countries.map(name => {
-                const key = name.toLocaleLowerCase('tr-TR');
-                const match = countryMap[key] || countryMap[name.toLowerCase()];
-                const code = match ? match[0] : '';
-                const flag = code ? String.fromCodePoint(...code.split('').map(char => 127397 + char.charCodeAt(0))) : '🌐';
-                const translated = match ? match[1] : name;
-                return '<span class="perde-country-item"><span class="perde-country-flag" aria-hidden="true">' + flag + '</span><span class="perde-country-name">' + escapeTrailerField(translated) + '</span></span>';
+            const countries = entries.map(entry => {
+                const prefixed = entry.match(/^([a-z]{2})\\s+(.+)$/i);
+                const candidates = prefixed ? [prefixed[2].trim(), entry] : [entry];
+                for (const candidate of candidates) {
+                    const key = candidate.toLocaleLowerCase('tr-TR');
+                    const match = countryMap[key] || countryMap[candidate.toLowerCase()];
+                    if (match) return { code: match[0], name: match[1] };
+                }
+                if (prefixed) return { code: prefixed[1].toLowerCase(), name: prefixed[2].trim() };
+                if (/^[a-z]{2}$/i.test(entry)) {
+                    const code = entry.toLowerCase();
+                    const known = Object.values(countryMap).find(item => item[0] === code);
+                    return known ? { code, name: known[1] } : null;
+                }
+                return { code: '', name: entry };
+            }).filter(Boolean);
+            if (!countries.length) return '<span class="perde-country-empty">Ülke bilgisi bulunmuyor</span>';
+            return countries.map(country => {
+                const flag = country.code
+                    ? '<img class="perde-country-flag" src="https://flagcdn.com/w40/' + country.code + '.png" srcset="https://flagcdn.com/w80/' + country.code + '.png 2x" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+                    : '<span class="perde-country-flag-fallback" aria-hidden="true"><i class="fa-solid fa-globe"></i></span>';
+                return '<span class="perde-country-item">' + flag + '<span class="perde-country-name">' + escapeTrailerField(country.name) + '</span></span>';
             }).join('');
         }
 
-        // Fragman bağlantısını ilgili arşiv kaydına kaydeder (LocalStorage).
         function saveTrailerUrl(id) {
             const input = document.getElementById('trailer-url-input');
             const entered = (input?.value || '').trim();
@@ -763,7 +776,7 @@
                             <div class="perde-imdb-hero-shade"></div>
                             <div class="perde-imdb-hero-top"><span class="perde-imdb-brand">My Library<span>ARŞİV</span></span><span class="perde-imdb-type">${m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM'}</span></div>
                             <div class="perde-imdb-feature-art"><img src="${m.poster || m.backdrop || ''}" alt="${m.title} afişi" onerror="this.src='${m.backdrop || ''}'"><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-play" aria-label="${m.title} fragmanını oynat"><i class="fa-solid fa-play"></i><span>FRAGMANI İZLE</span></button></div>
-                            <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker">${m.year || 'Yıl bilinmiyor'} <span>•</span> ${m.runtime || 'Süre bilgisi yok'} <span>•</span> ${m.country || 'Ülke bilgisi yok'}</div><h2>${m.title}</h2><div class="perde-imdb-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div></div>
+                            <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker">${m.year || 'Yıl bilinmiyor'} <span>•</span> ${m.runtime || 'Süre bilgisi yok'}</div><h2>${m.title}</h2><div class="perde-imdb-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div></div>
                         </section>
                         <section class="perde-imdb-content">
                             <aside class="perde-imdb-poster-wrap">
