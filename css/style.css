@@ -1803,3 +1803,67 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .perde-achievement-name{display:block;max-width:100%;color:var(--ml-text);font-size:9px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
 .perde-achievement-status{position:absolute;top:5px;right:5px;color:#10a36b;font-size:10px}
 @media(max-width:620px){.perde-achievement-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.perde-achievement-card{min-height:78px;padding:9px 3px 7px;gap:6px;border-radius:10px}.perde-achievement-icon{width:31px;height:31px;font-size:14px;border-radius:9px}.perde-achievement-name{font-size:8px}.perde-achievement-status{top:3px;right:3px;font-size:9px}}
+
+
+/* PERDE homepage stage 1 — cinematic hero polish */
+#ml-featured-hero {
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:#101312;
+  box-shadow:0 22px 54px rgba(0,0,0,.16);
+}
+#ml-featured-hero .ml-featured-slide .ml-featured-backdrop img {
+  opacity:.48 !important;
+  filter:saturate(.86) brightness(.82);
+  transform:scale(1.035);
+}
+#ml-featured-hero .ml-featured-slide.is-active .ml-featured-backdrop img {
+  transform:scale(1);
+}
+#ml-featured-hero .ml-featured-slide .ml-featured-shade {
+  background:
+    linear-gradient(90deg,rgba(7,10,10,.97) 0%,rgba(7,10,10,.88) 34%,rgba(7,10,10,.56) 63%,rgba(7,10,10,.22) 100%),
+    linear-gradient(0deg,rgba(7,10,10,.55),transparent 62%) !important;
+}
+#ml-featured-hero .ml-featured-copy h2 {
+  max-width:620px;
+  text-shadow:0 3px 22px rgba(0,0,0,.28);
+}
+#ml-featured-hero .ml-featured-artwork img {
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:12px;
+  box-shadow:0 24px 58px rgba(0,0,0,.52);
+}
+#ml-featured-hero .ml-featured-controls {
+  padding:7px 10px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:999px;
+  background:rgba(8,11,11,.48);
+  backdrop-filter:blur(14px);
+}
+#ml-featured-hero .ml-featured-arrow {
+  width:31px;
+  height:31px;
+  border-color:rgba(255,255,255,.24);
+}
+#ml-featured-hero .ml-featured-dot { height:6px; }
+#ml-featured-hero .ml-featured-dot.is-active { width:20px; }
+@media(max-width:767px) {
+  #ml-featured-hero { border-radius:14px; }
+  #ml-featured-hero .ml-featured-slide .ml-featured-shade {
+    background:linear-gradient(0deg,rgba(7,10,10,.98) 0%,rgba(7,10,10,.88) 48%,rgba(7,10,10,.3) 100%) !important;
+  }
+  #ml-featured-hero .ml-featured-artwork img {
+    border-radius:9px;
+    box-shadow:0 18px 42px rgba(0,0,0,.48);
+  }
+  #ml-featured-hero .ml-featured-controls {
+    left:14px;
+    right:14px;
+    bottom:13px;
+    padding:6px 8px;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  #ml-featured-hero .ml-featured-slide .ml-featured-backdrop img { transform:none !important; }
+}
