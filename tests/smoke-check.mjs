@@ -51,12 +51,12 @@ assert.match(html, /perde-year-panel/, 'Annual cinema recap section must exist')
 assert.match(html, /perde-achievement-grid/, 'Personal achievements section must exist');
 assert.match(app, /perde-achievement-name/, 'Achievements must use compact icon labels');
 assert.match(app, /loadHomeCardMetadata/, 'Homepage cards must complete missing metadata');
-assert.match(app, /function\\s+handleHomePosterError\\s*\\(/, 'Homepage poster failures must use a dedicated fallback');
+assert.match(app, /function\s+handleHomePosterError\s*\(/, 'Homepage poster failures must use a dedicated fallback');
 assert.match(app, /ml-home-poster-fallback/, 'Homepage poster fallback markup must be available');
-assert.match(app, /image\\.tmdb\\.org\\/t\\/p\\/w500/, 'Missing homepage posters must be sourced from TMDB when available');
-assert.match(app, /String\\(movie\\.poster\\)\\.includes\\('unsplash\\.com'\\)/, 'Generic placeholder posters must be eligible for TMDB replacement');
-assert.match(css, /\\.ml-home-poster-fallback/, 'Cinematic poster fallback styles must exist');
-assert.match(app, /homePosterMode \\? 'handleHomePosterError\\(this\\)'/, 'Only homepage poster cards should use the new fallback handler');
+assert.match(app, /image\.tmdb\.org\/t\/p\/w500/, 'Missing homepage posters must be sourced from TMDB when available');
+assert.match(app, /String\(movie\.poster\)\.includes\('unsplash\.com'\)/, 'Generic placeholder posters must be eligible for TMDB replacement');
+assert.match(css, /\.ml-home-poster-fallback/, 'Cinematic poster fallback styles must exist');
+assert.match(app, /homePosterMode \? 'handleHomePosterError\(this\)'/, 'Only homepage poster cards should use the new fallback handler');
 assert.match(app, /number_of_seasons/, 'Series cards must expose season metadata');
 assert.match(app, /number_of_episodes/, 'Series cards must expose episode metadata');
 assert.match(app, /meta\.genres\.slice\(0, 2\)/, 'Homepage cards must refresh missing genre labels');
