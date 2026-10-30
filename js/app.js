@@ -272,9 +272,13 @@
         }
 
         let activeCategoryFilter = 'all';
+        let activeGenreFilter = '';
 
         function setCategoryFilter(category) {
             activeCategoryFilter = category;
+            activeGenreFilter = '';
+            const genreSearch = document.getElementById('search-input');
+            if (genreSearch) genreSearch.value = '';
             ['all', 'movie', 'tv', 'doc'].forEach(c => {
                 const btn = document.getElementById(`cat-${c}`);
                 if (btn) {
@@ -329,6 +333,7 @@
             const categoryNav = document.getElementById('category-navigation');
             if (categoryNav) categoryNav.classList.toggle('hidden', tabId === 'detail');
             if (tabId === 'stats') renderCharts();
+            if (tabId === 'library') renderGenreMenu();
             if (tabId === 'admin') renderAdminTable();
         }
 
@@ -479,6 +484,7 @@
             renderRow('editor-picks-grid', picks.slice(0, 6));
             renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later').slice(0, 6));
             renderRow('recent-row', movies.slice(0, 6));
+            renderGenreMenu();
         }
 
         let featuredHeroIndex = 0;
@@ -587,6 +593,58 @@
             applyFilters();
         }
 
+        function toggleGenreMenu() {
+            const panel = document.getElementById('genre-menu-panel');
+            const button = document.querySelector('.ml-genre-toggle');
+            if (!panel || !button) return;
+            const opening = panel.classList.contains('hidden');
+            panel.classList.toggle('hidden', !opening);
+            button.setAttribute('aria-expanded', String(opening));
+            const chevron = document.getElementById('genre-menu-chevron');
+            if (chevron) chevron.className = opening ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
+            if (opening) renderGenreMenu();
+        }
+
+        function renderGenreMenu() {
+            const container = document.getElementById('genre-menu-list');
+            const total = document.getElementById('genre-total-count');
+            if (!container) return;
+            const counts = new Map();
+            movies.forEach(movie => {
+                const genres = Array.isArray(movie.genres) ? movie.genres : [];
+                [...new Set(genres.map(g => String(g || '').trim()).filter(Boolean))].forEach(genre => {
+                    counts.set(genre, (counts.get(genre) || 0) + 1);
+                });
+            });
+            const entries = [...counts.entries()].sort((a,b) => a[0].localeCompare(b[0], 'tr'));
+            if (total) total.textContent = entries.length + ' tür';
+            if (!entries.length) {
+                container.innerHTML = '<p class="ml-genre-empty">Arşivinde henüz kategorilendirilmiş yapım bulunmuyor.</p>';
+                return;
+            }
+            const safe = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            container.innerHTML = entries.map(([genre,count]) => '<button type="button" class="ml-genre-item' + (activeGenreFilter === genre ? ' active' : '') + '" onclick="filterByGenre(\'' + safe(genre).replace(/\\'/g, "\\'") + '\')"><span>' + safe(genre) + '</span><b>' + count + '</b></button>').join('');
+        }
+
+        function filterByGenre(genre) {
+            activeGenreFilter = genre;
+            switchTab('library');
+            const typeSelect = document.getElementById('filter-type');
+            const statusSelect = document.getElementById('filter-status');
+            const search = document.getElementById('search-input');
+            if (typeSelect) typeSelect.value = 'all';
+            if (statusSelect) statusSelect.value = 'all';
+            if (search) search.value = '';
+            renderGenreMenu();
+            applyFilters();
+            const panel = document.getElementById('genre-menu-panel');
+            const button = document.querySelector('.ml-genre-toggle');
+            if (panel) panel.classList.add('hidden');
+            if (button) button.setAttribute('aria-expanded', 'false');
+            const chevron = document.getElementById('genre-menu-chevron');
+            if (chevron) chevron.className = 'fa-solid fa-chevron-down';
+        }
+
         function applyFilters() {
             const query = (document.getElementById('search-input')?.value || '').toLowerCase();
             const typeFilter = document.getElementById('filter-type')?.value || 'all';
@@ -598,10 +656,11 @@
                                      (m.director && m.director.toLowerCase().includes(query)) ||
                                      (m.cast && m.cast.some(c => c.name && c.name.toLowerCase().includes(query)));
                 const matchesType = typeFilter === 'all' || m.type === typeFilter;
+                const matchesGenre = !activeGenreFilter || (Array.isArray(m.genres) && m.genres.some(g => String(g).trim() === activeGenreFilter));
                 const matchesStatus = statusFilter === 'all' || 
                                      (statusFilter === 'favorite' ? m.favorite : m.status === statusFilter);
 
-                return matchesQuery && matchesType && matchesStatus;
+                return matchesQuery && matchesType && matchesStatus && matchesGenre;
             });
 
             if (sortFilter === 'imdb_desc') filtered.sort((a, b) => b.imdb - a.imdb);
