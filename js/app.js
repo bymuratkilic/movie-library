@@ -623,7 +623,7 @@
                 return;
             }
             const safe = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-            container.innerHTML = entries.map(([genre,count]) => '<button type="button" class="ml-genre-item' + (activeGenreFilter === genre ? ' active' : '') + '" onclick="filterByGenre(\'' + safe(genre).replace(/\\'/g, "\\'") + '\')"><span>' + safe(genre) + '</span><b>' + count + '</b></button>').join('');
+            container.innerHTML = entries.map(([genre,count]) => '<button type="button" class="ml-genre-item' + (activeGenreFilter === genre ? ' active' : '') + '" onclick="filterByGenre(decodeURIComponent(\'' + encodeURIComponent(genre) + '\'))"><span>' + safe(genre) + '</span><b>' + count + '</b></button>').join('');
         }
 
         function filterByGenre(genre) {
