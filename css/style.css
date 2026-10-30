@@ -3134,3 +3134,12 @@ html.dark .perde-cinema-refresh,html.dark .perde-cinema-rail-actions button{back
 html.dark .perde-cinema-card-image{border-color:#2a3b5e;background:#111a2c}
 
 .perde-imdb-hero-rating{display:flex;align-items:center;gap:10px;margin-top:18px}.perde-imdb-hero-rating .perde-imdb-score{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:10px}.perde-imdb-hero-rating .perde-imdb-score strong{font-size:20px;line-height:1}.perde-imdb-hero-rating .perde-imdb-score span{font-size:10px;font-weight:800}.perde-imdb-hero-rating .perde-imdb-fav{display:inline-flex;align-items:center;gap:8px;min-height:39px;padding:0 14px;border-radius:10px;font-size:10px;font-weight:850;white-space:nowrap}@media(max-width:767px){.perde-imdb-hero-rating{gap:8px;margin-top:13px}.perde-imdb-hero-rating .perde-imdb-score{padding:7px 10px}.perde-imdb-hero-rating .perde-imdb-score strong{font-size:18px}.perde-imdb-hero-rating .perde-imdb-fav{min-height:36px;padding:0 11px;font-size:9px}}
+
+/* Compact IMDb brand badge and clearer film/series type marker */
+.perde-imdb-hero-rating{gap:9px}
+.perde-imdb-hero-rating .perde-imdb-score.imdb-brand-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border:1px solid #e6b900;border-radius:7px;background:#f5c518;color:#111;box-shadow:0 2px 7px rgba(0,0,0,.16);min-height:29px}
+.perde-imdb-hero-rating .imdb-brand-badge .imdb-brand-word{display:inline-block;padding:2px 4px;border-radius:3px;background:#111;color:#f5c518;font-size:9px;font-weight:950;letter-spacing:-.35px;line-height:1.2}
+.perde-imdb-hero-rating .imdb-brand-badge strong{font-size:15px;line-height:1;font-weight:950;color:#111}
+.perde-imdb-hero-rating .perde-imdb-fav{min-height:32px;padding:0 11px;font-size:10px}
+.perde-imdb-type{display:inline-flex;align-items:center;justify-content:center;min-width:76px;padding:8px 15px;border:1px solid rgba(255,255,255,.8);border-radius:999px;background:linear-gradient(135deg,#f5c518,#e5a900);color:#171717!important;font-size:12px;font-weight:950;letter-spacing:1.2px;line-height:1;box-shadow:0 5px 18px rgba(0,0,0,.28);text-shadow:none}
+@media(max-width:767px){.perde-imdb-hero-rating .perde-imdb-score.imdb-brand-badge{min-height:27px;padding:4px 8px}.perde-imdb-hero-rating .imdb-brand-badge strong{font-size:14px}.perde-imdb-hero-rating .imdb-brand-badge .imdb-brand-word{font-size:8px}.perde-imdb-hero-rating .perde-imdb-fav{min-height:30px;padding:0 10px}.perde-imdb-type{min-width:68px;padding:7px 12px;font-size:11px}}
