@@ -1579,3 +1579,22 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .perde-imdb-cast-card:hover { border-color:var(--ml-accent); background:var(--ml-surface-muted); transform:translateY(-2px); }
 .perde-imdb-cast-card img { flex:0 0 42px; width:42px; height:42px; }
 @media (max-width:767px) { .perde-detail-series-meta { gap:6px; } .perde-detail-series-meta span { padding:6px 8px; font-size:9px; } .perde-imdb-cast-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; } .perde-imdb-cast-card { padding:7px; gap:7px; } .perde-imdb-cast-card img { width:34px; height:34px; flex-basis:34px; } .perde-imdb-cast-card b { font-size:9px; } }
+
+
+/* Personal recommendation shelf */
+.perde-personal-recommendation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.perde-personal-card{display:grid;grid-template-columns:82px minmax(0,1fr);gap:11px;min-width:0;padding:10px;border:1px solid var(--ml-border);border-radius:12px;background:var(--ml-surface);transition:border-color .18s ease,transform .18s ease}
+.perde-personal-card:hover{border-color:var(--ml-accent);transform:translateY(-2px)}
+.perde-personal-poster{position:relative;overflow:hidden;aspect-ratio:2/3;border-radius:8px;background:var(--ml-surface-muted)}
+.perde-personal-poster img{width:100%;height:100%;object-fit:cover}
+.perde-personal-poster>span{position:absolute;left:5px;bottom:5px;padding:4px 5px;border-radius:5px;background:rgba(10,12,14,.82);color:#e5b85c;font-size:9px;font-weight:800}
+.perde-personal-card-copy{display:flex;min-width:0;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px}
+.perde-personal-card-copy>button:first-child{color:var(--ml-text);font-size:12px;font-weight:800;text-align:left;line-height:1.4}
+.perde-personal-card-copy small{color:var(--ml-muted);font-size:10px}
+.perde-personal-add{display:inline-flex;align-items:center;gap:5px;margin-top:3px;padding:6px 8px;border:1px solid var(--ml-border);border-radius:7px;color:var(--ml-accent);font-size:9px;font-weight:800}
+.perde-personal-add:hover{background:var(--ml-surface-muted)}
+.perde-recommendation-loading,.perde-recommendation-empty{grid-column:1/-1;padding:18px;border:1px dashed var(--ml-border);border-radius:10px;color:var(--ml-muted);font-size:11px;line-height:1.7}
+.perde-recommendation-loading i,.perde-recommendation-empty i{margin-right:7px;color:var(--ml-accent)}
+.ml-recommendation-note{display:inline-flex;align-items:center;gap:6px;color:var(--ml-accent);font-size:9px;font-weight:800;white-space:nowrap}
+@media(max-width:900px){.perde-personal-recommendation-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.perde-personal-recommendation-grid{grid-template-columns:1fr}.perde-personal-card{grid-template-columns:72px minmax(0,1fr)}.ml-recommendation-note{display:none}}
