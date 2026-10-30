@@ -752,7 +752,7 @@
                     recommendations.push(remaining.splice(bestIndex,1)[0]);
                 }
                 personalRecommendationPreviousIds=new Set(recommendations.map(item=>item.id));
-                preferences.history=[...preferences.history,...recommendations.map(item=>({id:String(item.id),title:String(item.title||''),shownAt:new Date().toISOString()}))];
+                preferences.history=[...new Map([...preferences.history,...recommendations.map(item=>({id:String(item.id),title:String(item.title||''),shownAt:new Date().toISOString()}))].map(entry=>[String(entry.id),entry])).values()].slice(-150);
                 savePersonalRecommendationPreferences(preferences);
                 if(historyCount)historyCount.textContent=preferences.history.length+' farklı öneri';
                 recommendations.forEach(item => {
