@@ -137,6 +137,7 @@
 
         let genreChartInstance = null;
         let statusChartInstance = null;
+        let monthlyWatchChartInstance = null;
 
         const actorPhotoCache = {};
 
@@ -1812,42 +1813,91 @@
             }
         }
 
+        function renderPersonalStats() {
+            const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+            const watched = movies.filter(item => item.status === 'watched');
+            const watchLater = movies.filter(item => item.status === 'watch_later');
+            const favorites = movies.filter(item => item.favorite);
+            const rated = getPerdeRatedMovies();
+            const averageRating = rated.length
+                ? (rated.reduce((sum, item) => sum + Number(item.perdeRating), 0) / rated.length).toFixed(1)
+                : '—';
+            const totalMinutes = watched.reduce((sum, item) => {
+                if (item.type === 'tv') return sum;
+                const runtime = String(item.runtime || '');
+                const match = runtime.match(/(\d+)\s*(?:dk|min(?:ute)?s?)/i);
+                return sum + (match ? Number(match[1]) : 0);
+            }, 0);
+            const durationLabel = totalMinutes
+                ? (Math.floor(totalMinutes / 60) ? Math.floor(totalMinutes / 60) + ' sa ' : '') + (totalMinutes % 60 ? (totalMinutes % 60) + ' dk' : '')
+                : '—';
+            const filmCount = movies.filter(item => item.type !== 'tv' && item.type !== 'doc').length;
+            const seriesCount = movies.filter(item => item.type === 'tv').length;
+            const documentaryCount = movies.filter(item => item.type === 'doc').length;
+            const kpis = [
+                {label:'Toplam koleksiyon',value:movies.length,detail:filmCount+' film · '+seriesCount+' dizi · '+documentaryCount+' belgesel',icon:'fa-layer-group',tone:'blue'},
+                {label:'İzlenen yapım',value:watched.length,detail:'Arşivinde izledim olarak işaretli',icon:'fa-circle-check',tone:'green'},
+                {label:'İzleme listesi',value:watchLater.length,detail:'İzlemeyi bekleyen yapımlar',icon:'fa-bookmark',tone:'amber'},
+                {label:'Ortalama Perde Puanı',value:averageRating,detail:rated.length+' yapım puanlandı',icon:'fa-star',tone:'violet'},
+                {label:'İzlenen yapım süresi',value:durationLabel,detail:'Dizi süreleri hariç, kayıtlı süreler üzerinden',icon:'fa-clock',tone:'cyan'},
+                {label:'Favoriler',value:favorites.length,detail:'Favorilerine eklediğin yapımlar',icon:'fa-heart',tone:'rose'}
+            ];
+            const kpiRoot=document.getElementById('personal-stats-kpis');
+            if(kpiRoot) kpiRoot.innerHTML=kpis.map(item=>'<article class="perde-stats-kpi perde-stats-'+item.tone+'"><span class="perde-stats-kpi-icon"><i class="fa-solid '+item.icon+'"></i></span><span class="perde-stats-kpi-label">'+item.label+'</span><strong>'+item.value+'</strong><small>'+item.detail+'</small></article>').join('');
+
+            const genreCounts={};
+            movies.forEach(item=>{
+                const genres=Array.isArray(item.genres)?item.genres:(typeof item.genres==='string'?item.genres.split(','):[]);
+                genres.map(g=>String(g).trim()).filter(Boolean).forEach(genre=>genreCounts[genre]=(genreCounts[genre]||0)+1);
+            });
+            const topGenres=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+            const genreRoot=document.getElementById('stats-top-genres');
+            if(genreRoot) genreRoot.innerHTML=topGenres.length?topGenres.map(([name,count])=>'<span><b>'+safe(name)+'</b><small>'+count+' yapım</small></span>').join(''):'<p class="perde-stats-empty">Tür bilgisi bulunan yapım yok.</p>';
+
+            const topRated=[...rated].sort((a,b)=>Number(b.perdeRating)-Number(a.perdeRating)||String(a.title).localeCompare(String(b.title),'tr')).slice(0,5);
+            const rankingRoot=document.getElementById('stats-top-rated');
+            if(rankingRoot) rankingRoot.innerHTML=topRated.length?topRated.map((item,index)=>'<button type="button" class="perde-stats-rank-item" onclick="openDetailModal(\''+String(item.id).replace(/'/g,'')+'\')"><span class="perde-stats-rank-number">'+(index+1)+'</span><img src="'+safe(item.poster||'')+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span class="perde-stats-rank-copy"><b>'+safe(item.title)+'</b><small>'+safe(item.year||'Yıl bilinmiyor')+' · '+(item.type==='tv'?'Dizi':item.type==='doc'?'Belgesel':'Film')+'</small></span><strong>'+Number(item.perdeRating).toFixed(1)+'</strong></button>').join(''):'<p class="perde-stats-empty">Henüz Perde Puanı verdiğin bir yapım yok. Bir yapımı puanladığında burada görünecek.</p>';
+
+            const now=new Date();
+            const monthKeys=[];
+            const monthLabels=[];
+            for(let offset=11;offset>=0;offset--){
+                const date=new Date(now.getFullYear(),now.getMonth()-offset,1);
+                monthKeys.push(date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0'));
+                monthLabels.push(date.toLocaleDateString('tr-TR',{month:'short'}));
+            }
+            const monthlyCounts=Object.fromEntries(monthKeys.map(key=>[key,0]));
+            movies.forEach(item=>{
+                const history=Array.isArray(item.watchHistory)?item.watchHistory:[];
+                const dates=history.map(entry=>entry&&entry.date).filter(Boolean);
+                if(!dates.length&&item.watchedAt) dates.push(item.watchedAt);
+                dates.forEach(dateValue=>{
+                    const match=String(dateValue).match(/^(\d{4})-(\d{2})/);
+                    if(match){
+                        const key=match[1]+'-'+match[2];
+                        if(Object.prototype.hasOwnProperty.call(monthlyCounts,key)) monthlyCounts[key]++;
+                    }
+                });
+            });
+            const label=document.getElementById('stats-updated-label');
+            if(label) label.textContent='Son güncelleme: '+now.toLocaleDateString('tr-TR');
+            return {genreCounts,monthlyCounts,monthLabels,watchedCount:watched.length,watchLaterCount:watchLater.length,favoriteCount:favorites.length};
+        }
+
         function renderCharts() {
             const isDark = document.documentElement.classList.contains('dark');
             const textColor = isDark ? '#F8FAFC' : '#0F172A';
-
-            // Kütüphaneden dinamik tür dağılımı çekme
-            const genreCounts = {};
-            movies.forEach(m => {
-                if (m.genres && Array.isArray(m.genres)) {
-                    m.genres.forEach(g => {
-                        genreCounts[g] = (genreCounts[g] || 0) + 1;
-                    });
-                }
-            });
-
-            const labels = Object.keys(genreCounts).length > 0 ? Object.keys(genreCounts) : ['Bilim Kurgu', 'Dram', 'Aksiyon', 'Suç'];
-            const dataValues = Object.keys(genreCounts).length > 0 ? Object.values(genreCounts) : [3, 2, 2, 1];
+            const stats = renderPersonalStats();
+            const labels = Object.keys(stats.genreCounts);
+            const dataValues = Object.values(stats.genreCounts);
 
             const ctx1 = document.getElementById('genreDoughnutChart')?.getContext('2d');
             if (ctx1) {
                 if (genreChartInstance) genreChartInstance.destroy();
                 genreChartInstance = new Chart(ctx1, {
                     type: 'doughnut',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: dataValues,
-                            backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#F43F5E', '#8B5CF6', '#EC4899', '#6366F1'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 } } }
-                        }
-                    }
+                    data: { labels: labels.length ? labels : ['Henüz tür verisi yok'], datasets: [{ data: labels.length ? dataValues : [1], backgroundColor: labels.length ? ['#3B82F6','#10B981','#F59E0B','#F43F5E','#8B5CF6','#EC4899','#6366F1','#14B8A6'] : ['#94A3B8'], borderWidth: 0 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 } } }, tooltip: { enabled: labels.length > 0 } } }
                 });
             }
 
@@ -1856,26 +1906,18 @@
                 if (statusChartInstance) statusChartInstance.destroy();
                 statusChartInstance = new Chart(ctx2, {
                     type: 'bar',
-                    data: {
-                        labels: ['İzlenenler', 'İzlenecekler', 'Favoriler'],
-                        datasets: [{
-                            data: [
-                                movies.filter(m => m.status === 'watched').length,
-                                movies.filter(m => m.status === 'watch_later').length,
-                                movies.filter(m => m.favorite).length
-                            ],
-                            backgroundColor: ['#10B981', '#F59E0B', '#F43F5E'],
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { ticks: { color: textColor } },
-                            y: { ticks: { color: textColor } }
-                        }
-                    }
+                    data: { labels: ['İzlenenler','İzlenecekler','Favoriler'], datasets: [{ data: [stats.watchedCount,stats.watchLaterCount,stats.favoriteCount], backgroundColor: ['#10B981','#F59E0B','#F43F5E'], borderRadius: 8 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor } }, y: { beginAtZero: true, ticks: { color: textColor, precision: 0 } } } }
+                });
+            }
+
+            const ctx3=document.getElementById('monthlyWatchChart')?.getContext('2d');
+            if(ctx3){
+                if(monthlyWatchChartInstance) monthlyWatchChartInstance.destroy();
+                monthlyWatchChartInstance=new Chart(ctx3,{
+                    type:'line',
+                    data:{labels:stats.monthLabels,datasets:[{label:'İzleme kaydı',data:Object.values(stats.monthlyCounts),borderColor:'#8B5CF6',backgroundColor:'rgba(139,92,246,.14)',fill:true,tension:.35,pointRadius:3,pointHoverRadius:5}]},
+                    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:textColor}},y:{beginAtZero:true,ticks:{color:textColor,precision:0}}}}
                 });
             }
         }

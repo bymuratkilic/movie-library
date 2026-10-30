@@ -262,30 +262,38 @@
 
         <!-- STATS TAB -->
         <section id="tab-stats" class="hidden space-y-6">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
                 <div>
-                    <h2 class="text-xl font-bold dark:text-white text-slate-900">Koleksiyon Analizi</h2>
-                    <p class="text-xs dark:text-clean-muted text-light-muted">Arşivinizdeki filmlerin tür ve kategori dağılımları</p>
+                    <span class="text-[10px] font-extrabold tracking-[.18em] text-blue-500">PERDE · KİŞİSEL RAPOR</span>
+                    <h2 class="text-2xl font-extrabold dark:text-white text-slate-900 mt-1">Sinema Alışkanlıkların</h2>
+                    <p class="text-xs dark:text-clean-muted text-light-muted mt-1">Arşivindeki verilerden oluşturulan kişisel izleme özeti.</p>
+                </div>
+                <span id="stats-updated-label" class="text-[10px] dark:text-clean-muted text-light-muted">Arşiv verilerine göre</span>
+            </div>
+
+            <div id="personal-stats-kpis" class="perde-stats-kpi-grid" aria-live="polite"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
+                    <div><h3 class="text-sm font-bold dark:text-white text-slate-900"><i class="fa-solid fa-chart-pie text-blue-500 mr-2"></i>Tür Dağılımı</h3><p class="text-[10px] dark:text-clean-muted text-light-muted mt-1">Arşivindeki yapımların türlere göre dağılımı.</p></div>
+                    <div class="relative max-w-xs mx-auto h-64"><canvas id="genreDoughnutChart"></canvas></div>
+                    <div id="stats-top-genres" class="perde-stats-inline-list"></div>
+                </div>
+                <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
+                    <div><h3 class="text-sm font-bold dark:text-white text-slate-900"><i class="fa-solid fa-chart-column text-emerald-500 mr-2"></i>Koleksiyon Durumu</h3><p class="text-[10px] dark:text-clean-muted text-light-muted mt-1">İzlediklerin, izleme listen ve favorilerin.</p></div>
+                    <div class="relative max-w-xs mx-auto h-64"><canvas id="statusBarChart"></canvas></div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-panel p-6 rounded-2xl space-y-4">
-                    <h3 class="text-sm font-bold dark:text-white text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-pie text-blue-500"></i> Tür Dağılımı
-                    </h3>
-                    <div class="relative max-w-xs mx-auto aspect-square flex items-center justify-center">
-                        <canvas id="genreDoughnutChart"></canvas>
-                    </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
+                    <div><h3 class="text-sm font-bold dark:text-white text-slate-900"><i class="fa-solid fa-calendar-days text-violet-500 mr-2"></i>Aylık İzleme Aktivitesi</h3><p class="text-[10px] dark:text-clean-muted text-light-muted mt-1">Son 12 ayda arşivine kaydedilmiş izleme kayıtları.</p></div>
+                    <div class="relative h-64"><canvas id="monthlyWatchChart"></canvas></div>
+                    <p class="text-[9px] dark:text-clean-muted text-light-muted">Geçmiş kayıt bulunmayan dönemler sıfır gösterilir. Tekrar izlemeler ayrı kayıt olarak sayılır.</p>
                 </div>
-
-                <div class="glass-panel p-6 rounded-2xl space-y-4">
-                    <h3 class="text-sm font-bold dark:text-white text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-bar text-emerald-500"></i> Durum İstatistikleri
-                    </h3>
-                    <div class="relative max-w-xs mx-auto aspect-square flex items-center justify-center">
-                        <canvas id="statusBarChart"></canvas>
-                    </div>
+                <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
+                    <div><h3 class="text-sm font-bold dark:text-white text-slate-900"><i class="fa-solid fa-trophy text-amber-500 mr-2"></i>En Yüksek Perde Puanları</h3><p class="text-[10px] dark:text-clean-muted text-light-muted mt-1">Kendi verdiğin puanlara göre ilk 5 yapım.</p></div>
+                    <div id="stats-top-rated" class="perde-stats-ranking"></div>
                 </div>
             </div>
         </section>
