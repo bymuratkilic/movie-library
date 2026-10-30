@@ -2320,3 +2320,12 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
   .ml-home-poster-preview,
   .ml-home-preview-toggle { transition:none; }
 }
+
+
+/* Personal recommendation refinement */
+.ml-recommendation-actions{display:flex;align-items:center;gap:12px}
+.ml-recommendation-refresh{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--ml-border);border-radius:8px;color:var(--ml-muted);font-size:10px;font-weight:800;transition:color .18s ease,border-color .18s ease,background .18s ease}
+.ml-recommendation-refresh:hover{color:var(--ml-accent);border-color:var(--ml-accent);background:var(--ml-surface-muted)}
+.ml-recommendation-reason{display:inline-flex;align-items:center;gap:4px;color:var(--ml-accent);font-size:9px;font-weight:750;line-height:1.4}
+.ml-recommendation-reason i{font-size:8px}
+@media(max-width:560px){.ml-recommendation-actions{gap:8px}.ml-recommendation-refresh{padding:6px 8px;font-size:9px}}

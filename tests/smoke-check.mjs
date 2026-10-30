@@ -87,3 +87,9 @@ assert.match(app, /ml-home-poster-preview/, 'Homepage cards must render a synops
 assert.match(app, /aria-expanded=.*toggleHomeCardPreview/, 'Preview toggle must expose its expanded state');
 assert.match(css, /\\.ml-home-poster-preview/, 'Homepage synopsis preview styles must exist');
 assert.match(css, /\\.ml-home-poster-card\\.is-preview-open/, 'Touch users must be able to open the preview explicitly');
+
+assert.match(app, /Number\(b\.perdeRating\)/, 'Personal recommendations must prioritize the user's Perde ratings');
+assert.match(app, /genreMatches \* 3 \* seedWeight/, 'Recommendation ranking must use genre affinity and seed preference');
+assert.match(app, /perde-recommendation-reason/, 'Recommendation cards must explain why an item was suggested');
+assert.match(html, /onclick="renderPersonalRecommendations\(\)"/, 'Users must be able to refresh personal recommendations');
+assert.match(css, /\.ml-recommendation-refresh/, 'Recommendation refresh control must be styled');
