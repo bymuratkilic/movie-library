@@ -802,38 +802,71 @@
             }
         }
 
-        // Ana sayfa dizi kartları için TMDB sezon/bölüm bilgisini getirir.
-        const seriesCardMetadataCache = {};
-        async function loadSeriesCardMetadata(movie) {
-            const key = String(movie.tmdbId || movie.id || (movie.title + ':' + movie.year));
-            if (seriesCardMetadataCache[key]) return seriesCardMetadataCache[key];
-            seriesCardMetadataCache[key] = (async () => {
+        // Ana sayfa kartlarında eksik künye ve süre bilgilerini TMDB'den tamamlar.
+        const homeCardMetadataCache = {};
+        async function loadHomeCardMetadata(movie) {
+            const mediaType = movie.type === 'tv' ? 'tv' : 'movie';
+            const key = mediaType + ':' + String(movie.tmdbId || movie.id || (movie.title + ':' + movie.year));
+            if (homeCardMetadataCache[key]) return homeCardMetadataCache[key];
+            homeCardMetadataCache[key] = (async () => {
                 const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
                 const apiBase = 'https://api.themoviedb.org/3/';
                 let tmdbId = movie.tmdbId || (String(movie.id || '').match(/^tmdb-(?:tv|movie)-(.+)$/) || [])[1] || '';
                 if (!tmdbId) {
                     const params = new URLSearchParams({ api_key: apiKey, language: 'tr-TR', include_adult: 'false', query: movie.title || '' });
-                    const response = await fetch(apiBase + 'search/tv?' + params.toString());
+                    const response = await fetch(apiBase + 'search/' + mediaType + '?' + params.toString());
                     if (!response.ok) return null;
                     const data = await response.json();
                     const results = data.results || [];
+                    const normalize = value => String(value || '').toLocaleLowerCase('tr-TR').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+                    const title = normalize(movie.title);
                     const year = String(movie.year || '');
-                    const match = results.find(item => year && String(item.first_air_date || '').startsWith(year)) || results[0];
+                    const exact = results.find(item => normalize(item.name || item.title) === title);
+                    const yearMatch = results.find(item => year && String(item.first_air_date || item.release_date || '').startsWith(year));
+                    const match = exact || yearMatch;
                     tmdbId = match && match.id;
                 }
                 if (!tmdbId) return null;
                 const params = new URLSearchParams({ api_key: apiKey, language: 'tr-TR' });
-                const response = await fetch(apiBase + 'tv/' + encodeURIComponent(tmdbId) + '?' + params.toString());
+                const response = await fetch(apiBase + mediaType + '/' + encodeURIComponent(tmdbId) + '?' + params.toString());
                 if (!response.ok) return null;
                 const details = await response.json();
-                const seasons = Number(details.number_of_seasons) || 0;
-                const episodes = Number(details.number_of_episodes) || 0;
-                return seasons || episodes ? { seasons, episodes } : null;
+                const date = details.first_air_date || details.release_date || '';
+                let changed = false;
+                const fill = (field, value) => {
+                    const current = movie[field];
+                    const missing = current === undefined || current === null || current === '' ||
+                        ['—', 'Bilinmiyor', 'Süre bilgisi yok'].includes(String(current).trim());
+                    if (missing && value !== undefined && value !== null && value !== '') {
+                        movie[field] = value;
+                        changed = true;
+                    }
+                };
+                fill('tmdbId', String(tmdbId));
+                fill('year', date ? date.slice(0, 4) : '');
+                if ((!Array.isArray(movie.genres) || !movie.genres.length) && Array.isArray(details.genres) && details.genres.length) {
+                    movie.genres = details.genres.map(genre => genre.name).filter(Boolean);
+                    changed = true;
+                }
+                if (mediaType === 'tv') {
+                    fill('number_of_seasons', Number(details.number_of_seasons) || '');
+                    fill('number_of_episodes', Number(details.number_of_episodes) || '');
+                } else {
+                    fill('runtime', details.runtime ? details.runtime + ' dk' : '');
+                }
+                if (changed && movies.some(item => String(item.id) === String(movie.id))) saveToLocalStorage();
+                return {
+                    year: movie.year || '',
+                    genres: Array.isArray(movie.genres) ? movie.genres : [],
+                    runtime: movie.runtime || '',
+                    seasons: Number(movie.number_of_seasons || movie.seasons) || 0,
+                    episodes: Number(movie.number_of_episodes || movie.episodes) || 0
+                };
             })().catch(error => {
-                console.warn('Dizi sezon/bölüm bilgisi alınamadı:', error);
+                console.warn('Ana sayfa kart bilgileri alınamadı:', error);
                 return null;
             });
-            return seriesCardMetadataCache[key];
+            return homeCardMetadataCache[key];
         }
 
         function renderRow(containerId, list) {
@@ -853,20 +886,19 @@
                 const seriesSeasons = Number(m.number_of_seasons || m.seasons) || 0;
                 const seriesEpisodes = Number(m.number_of_episodes || m.episodes) || 0;
                 const title = safe(m.title), id = safe(m.id);
-                const seriesMetaId = 'ml-series-meta-' + safe(containerId) + '-' + list.indexOf(m);
+                const metaId = 'ml-home-meta-' + safe(containerId) + '-' + list.indexOf(m);
                 const seriesMeta = m.type === 'tv'
                     ? (seriesSeasons || seriesEpisodes
                         ? (seriesSeasons ? seriesSeasons + ' sezon' : '') + (seriesSeasons && seriesEpisodes ? ' · ' : '') + (seriesEpisodes ? seriesEpisodes + ' bölüm' : '')
                         : '')
                     : '';
+                const durationMeta = m.type === 'tv' ? seriesMeta : runtime;
                 const posterInfo = '<div class="ml-home-poster-info">' +
                     '<h3 title="' + title + '">' + title + '</h3>' +
                     '<div class="ml-home-poster-facts"><span class="ml-home-poster-rating"><i class="fa-solid fa-star"></i> IMDb ' + safe(m.imdb || '—') + '</span>' +
-                    '<span>' + safe(m.year || '—') + '</span></div>' +
-                    '<div class="ml-home-poster-genres">' + safe(genres || type) + '</div></div>' +
-                    (m.type === 'tv'
-                        ? '<span id="' + seriesMetaId + '" class="ml-home-poster-runtime"' + (seriesMeta ? '' : ' hidden') + '><i class="fa-solid fa-list-ol"></i> ' + safe(seriesMeta) + '</span>'
-                        : (runtime ? '<span class="ml-home-poster-runtime"><i class="fa-regular fa-clock"></i> ' + safe(runtime) + '</span>' : ''));
+                    '<span id="' + metaId + '-year">' + safe(m.year || '—') + '</span></div>' +
+                    '<div id="' + metaId + '-genres" class="ml-home-poster-genres">' + safe(genres || type) + '</div></div>' +
+                    '<span id="' + metaId + '-duration" class="ml-home-poster-runtime"' + (durationMeta ? '' : ' hidden') + '><i class="' + (m.type === 'tv' ? 'fa-solid fa-list-ol' : 'fa-regular fa-clock') + '"></i> ' + safe(durationMeta) + '</span>';
                 return '<article class="ml-catalog-card' + (homePosterMode ? ' ml-home-poster-card' : '') + '" role="button" tabindex="0" aria-label="' + title + ' detaylarını aç" onclick="openDetailModal(\'' + id + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openDetailModal(\'' + id + '\')}">' +
                     '<div class="ml-catalog-poster"><img src="' + safe(m.poster || '') + '" alt="' + title + ' afişi" loading="lazy" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80\'">' +
                     '<span class="ml-catalog-type">' + type + '</span><span class="ml-catalog-rating"><i class="fa-solid fa-star"></i> ' + safe(m.imdb || '—') + '</span>' +
@@ -880,19 +912,30 @@
             }).join('');
             if (homePosterMode) {
                 list.forEach((movie, index) => {
-                    if (movie.type !== 'tv') return;
-                    const metaId = 'ml-series-meta-' + containerId + '-' + index;
-                    const node = document.getElementById(metaId);
-                    if (!node || !node.hidden) return;
-                    loadSeriesCardMetadata(movie).then(meta => {
-                        const current = document.getElementById(metaId);
-                        if (!current || !meta) return;
-                        const label = (meta.seasons ? meta.seasons + ' sezon' : '') +
-                            (meta.seasons && meta.episodes ? ' · ' : '') +
-                            (meta.episodes ? meta.episodes + ' bölüm' : '');
-                        if (!label) return;
-                        current.innerHTML = '<i class="fa-solid fa-list-ol"></i> ' + safe(label);
-                        current.hidden = false;
+                    const metaId = 'ml-home-meta-' + containerId + '-' + index;
+                    const yearNode = document.getElementById(metaId + '-year');
+                    const genreNode = document.getElementById(metaId + '-genres');
+                    const durationNode = document.getElementById(metaId + '-duration');
+                    const needsMetadata = !movie.year || !Array.isArray(movie.genres) || !movie.genres.length ||
+                        (movie.type === 'tv'
+                            ? !(Number(movie.number_of_seasons || movie.seasons) || Number(movie.number_of_episodes || movie.episodes))
+                            : !movie.runtime || ['Bilinmiyor', 'Süre bilgisi yok', '—'].includes(String(movie.runtime).trim()));
+                    if (!needsMetadata) return;
+                    loadHomeCardMetadata(movie).then(meta => {
+                        if (!meta) return;
+                        if (yearNode && meta.year) yearNode.textContent = meta.year;
+                        if (genreNode && meta.genres.length) genreNode.textContent = meta.genres.slice(0, 2).join(' · ');
+                        if (durationNode) {
+                            const label = movie.type === 'tv'
+                                ? (meta.seasons ? meta.seasons + ' sezon' : '') +
+                                    (meta.seasons && meta.episodes ? ' · ' : '') +
+                                    (meta.episodes ? meta.episodes + ' bölüm' : '')
+                                : meta.runtime;
+                            if (label) {
+                                durationNode.innerHTML = '<i class="' + (movie.type === 'tv' ? 'fa-solid fa-list-ol' : 'fa-regular fa-clock') + '"></i> ' + safe(label);
+                                durationNode.hidden = false;
+                            }
+                        }
                     });
                 });
             }
