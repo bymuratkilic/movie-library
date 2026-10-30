@@ -88,7 +88,7 @@ assert.match(app, /aria-expanded=.*toggleHomeCardPreview/, 'Preview toggle must 
 assert.match(css, /\.ml-home-poster-preview/, 'Homepage synopsis preview styles must exist');
 assert.match(css, /\.ml-home-poster-card\.is-preview-open/, 'Touch users must be able to open the preview explicitly');
 
-assert.match(app, /Number\(b\.perdeRating\)/, 'Personal recommendations must prioritize the user's Perde ratings');
+assert.match(app, /Number\(b\.perdeRating\)/, 'Personal recommendations must prioritize the Perde ratings selected by the user');
 assert.match(app, /genreMatches \* 3 \* seedWeight/, 'Recommendation ranking must use genre affinity and seed preference');
 assert.doesNotMatch(app, /perde-recommendation-reason/, 'Recommendation cards must not show recommendation explanations');
 assert.match(app, /personalRecommendationRefreshCycle/, 'Recommendation refresh must rotate recommendation pages');
