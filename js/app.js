@@ -994,7 +994,7 @@
                     '<div id="' + metaId + '-genres" class="ml-home-poster-genres">' + safe(genres || type) + '</div></div>' +
                     '<span id="' + metaId + '-duration" class="ml-home-poster-runtime"' + (durationMeta ? '' : ' hidden') + '><i class="' + (m.type === 'tv' ? 'fa-solid fa-list-ol' : 'fa-regular fa-clock') + '"></i> ' + safe(durationMeta) + '</span>';
                 return '<article class="ml-catalog-card' + (homePosterMode ? ' ml-home-poster-card' : '') + '" role="button" tabindex="0" aria-label="' + title + ' detaylarını aç" onclick="openDetailModal(\'' + id + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openDetailModal(\'' + id + '\')}">' +
-                    '<div class="ml-catalog-poster"><img src="' + safe(m.poster || '') + '" alt="' + title + ' afişi" loading="lazy" onerror="' + (homePosterMode ? 'handleHomePosterError(this)' : "this.onerror=null;this.src=\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80\'") + '">' +
+                    '<div class="ml-catalog-poster"><img src="' + safe(m.poster || '') + '" alt="' + title + ' afişi" loading="lazy" onerror="' + (homePosterMode ? 'handleHomePosterError(this)' : "this.onerror=null;this.src=\\'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80\\'") + '">' +
                     '<span class="ml-catalog-type">' + type + '</span><span class="ml-catalog-rating"><i class="fa-solid fa-star"></i> ' + safe(m.imdb || '—') + '</span>' +
                     (m.favorite ? '<span class="ml-catalog-favorite"><i class="fa-solid fa-heart"></i></span>' : '') +
                     (homePosterMode ? '<div class="ml-home-poster-gradient"></div>' + posterInfo +
@@ -1404,7 +1404,7 @@
                                     <button type="button" onclick="addToComparison('${m.id}')" class="perde-imdb-action-btn"><i class="fa-solid fa-scale-balanced"></i> Karşılaştırmaya ekle</button>
                                     ${detailIsInArchive ? `<label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button>` : `<button type="button" class="perde-detail-add-to-list" onclick="addSimilarProduction('${m.id}', this)"><i class="fa-solid fa-plus"></i><span>Listeme Ekle</span><small>İzleme listene kaydet</small></button>`}
                                 </div>
-                                <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
+                                <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
                             </div>
                         </section>
                         <section class="perde-similar" aria-label="Benzer yapımlar">
@@ -1514,7 +1514,7 @@
                     movie.cast = credits.cast.slice(0, 12).map(person => ({ name: person.name || 'Bilinmiyor', role: person.character || 'Oyuncu', profile: person.profile_path ? 'https://image.tmdb.org/t/p/w185' + person.profile_path : '' }));
                     castGrid.innerHTML = movie.cast.map((person, index) => {
                         const name = String(person.name || 'Oyuncu');
-                        const jsName = name.replace(/\\/g, '\\\').replace(/'/g, "\'");
+                        const jsName = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
                         const avatar = person.profile || getAvatarUrl(name);
                         return '<button onclick="openActorBio(\'' + jsName + '\')" class="perde-imdb-cast-card"><img id="actor-img-' + movie.id + '-' + index + '" src="' + esc(avatar) + '" alt="' + esc(name) + '" loading="lazy"><span><b>' + esc(name) + '</b><small>' + esc(person.role || 'Oyuncu') + '</small></span></button>';
                     }).join('');
