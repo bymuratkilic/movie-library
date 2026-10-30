@@ -2141,3 +2141,45 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
   .ml-home-poster-runtime { right:7px; bottom:7px; max-width:52%; padding:4px 6px; font-size:7px; }
   .ml-home-poster-info { padding-bottom:32px; }
 }
+
+
+/* PERDE detail page — prominent add-to-list action for external productions */
+.perde-detail-add-to-list {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:48px;
+  padding:9px 17px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:11px;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8 58%,#1e40af);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(37,99,235,.24);
+  font-size:12px;
+  font-weight:850;
+  cursor:pointer;
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
+}
+.perde-detail-add-to-list:hover {
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+  box-shadow:0 12px 26px rgba(37,99,235,.32);
+}
+.perde-detail-add-to-list>i { font-size:16px; }
+.perde-detail-add-to-list>span { line-height:1.2; }
+.perde-detail-add-to-list>small {
+  margin-left:2px;
+  padding-left:10px;
+  border-left:1px solid rgba(255,255,255,.28);
+  color:rgba(255,255,255,.82);
+  font-size:9px;
+  font-weight:650;
+}
+@media(max-width:620px) {
+  .perde-detail-add-to-list { width:100%; min-height:50px; }
+  .perde-detail-add-to-list>small { margin-left:auto; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .perde-detail-add-to-list { transition:none; }
+}
