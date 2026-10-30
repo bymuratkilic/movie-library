@@ -1152,7 +1152,7 @@
                 const previewText = overview.length > 190 ? overview.slice(0, 187).trimEnd() + '…' : overview;
                 const posterInfo = '<div class="ml-home-poster-info">' +
                     '<h3 title="' + title + '">' + title + '</h3>' +
-                    '<div class="ml-home-poster-facts"><span class="ml-home-poster-rating"><i class="fa-solid fa-star"></i> IMDb ' + safe(m.imdb || '—') + '</span>' +
+                    '<div class="ml-home-poster-facts"><span class="ml-home-poster-rating"><i class="fa-solid fa-star"></i> ' + (containerId === 'hidden-gems-grid' ? 'TMDB ' : 'IMDb ') + safe(m.imdb || '—') + '</span>' +
                     '<span id="' + metaId + '-year">' + safe(m.year || '—') + '</span></div>' +
                     '<div id="' + metaId + '-genres" class="ml-home-poster-genres">' + safe(genres || type) + '</div></div>' +
                     '<span id="' + metaId + '-duration" class="ml-home-poster-runtime"' + (durationMeta ? '' : ' hidden') + '><i class="' + (m.type === 'tv' ? 'fa-solid fa-list-ol' : 'fa-regular fa-clock') + '"></i> ' + safe(durationMeta) + '</span>';
