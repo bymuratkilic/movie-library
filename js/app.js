@@ -832,8 +832,8 @@
             const apiKey = 'feec99b21abf1323730ff9fdc6e4e912';
             const mediaType = movie.type === 'tv' ? 'tv' : 'movie';
             const apiBase = 'https://api.themoviedb.org/3/';
-            const localItems = [...movies, ...onlineCatalog, ...fetchedOnlineResults];
-            const findInList = item => localItems.find(existing =>
+            // "Listemde" yalnızca kullanıcının kalıcı arşivindeki kayıtları ifade eder.
+            const findInList = item => movies.find(existing =>
                 (existing.tmdbId && String(existing.tmdbId) === String(item.tmdbId)) ||
                 (existing.id && existing.id === item.id) ||
                 ((existing.title || '').trim().toLocaleLowerCase('tr') === (item.title || '').trim().toLocaleLowerCase('tr') &&
@@ -904,7 +904,7 @@
         function addSimilarProduction(id, button) {
             const item = fetchedOnlineResults.find(existing => existing.id === id);
             if (!item) return;
-            const alreadyAdded = [...movies, ...onlineCatalog].some(existing =>
+            const alreadyAdded = movies.some(existing =>
                 (existing.tmdbId && String(existing.tmdbId) === String(item.tmdbId)) ||
                 ((existing.title || '').trim().toLocaleLowerCase('tr') === (item.title || '').trim().toLocaleLowerCase('tr') &&
                  String(existing.year || '') === String(item.year || ''))
@@ -913,11 +913,17 @@
                 button.outerHTML = '<span class="perde-similar-status is-added"><i class="fa-solid fa-check"></i> Listemde</span>';
                 return;
             }
+
+            // Arşivde en yeni kayıt olarak en başa ekle.
             const saved = { ...item, id: 'movie-' + Date.now(), source: 'local', status: 'watch_later', favorite: false };
-            movies.push(saved);
-            if (typeof saveMovies === 'function') saveMovies();
-            if (typeof renderMovies === 'function') renderMovies();
-            if (typeof updateStats === 'function') updateStats();
+            delete saved.inList;
+            movies.unshift(saved);
+            saveToLocalStorage();
+
+            // Dashboard ve kütüphane, uygulamanın gerçek render fonksiyonlarıyla yenilenir.
+            renderDashboard();
+            renderLibrary();
+            showToast('Yapım izleme listene eklendi.');
             button.outerHTML = '<span class="perde-similar-status is-added"><i class="fa-solid fa-check"></i> Listeye Eklendi</span>';
         }
 
