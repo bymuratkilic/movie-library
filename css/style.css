@@ -2998,3 +2998,87 @@ html.dark ::selection{background:#315bd4!important;color:#fff!important}
  html.dark .perde-site-footer{margin-top:30px}
  html.dark .perde-footer-inner{gap:24px}
 }
+
+
+/* KINOZ corrective pass — actual navigation state and full title-detail surfaces */
+html.dark .perde-site-header{background:#050914!important;background-image:linear-gradient(120deg,rgba(18,34,72,.42),rgba(5,9,20,.97) 52%)!important;border-bottom:1px solid #263b68!important;box-shadow:0 12px 38px rgba(0,0,0,.42),0 1px 0 rgba(88,128,235,.12)!important}
+html.dark .perde-header-inner,html.dark .perde-header-main{background:transparent!important}
+html.dark .perde-brand{color:#f2f6ff!important}
+html.dark .perde-brand-mark{background:linear-gradient(145deg,#2449a6,#101e43)!important;color:#a9c1ff!important;border:1px solid #4369c4!important;box-shadow:0 0 25px rgba(62,105,235,.25)}
+html.dark .perde-header-actions .perde-icon-action{width:39px;height:39px;background:#101a32!important;border:1px solid #2d4578!important;color:#b9ccff!important}
+html.dark .perde-header-actions .perde-add-action{background:linear-gradient(135deg,#527cff,#294fc9)!important;border:1px solid #6c91ff!important;color:#fff!important;box-shadow:0 8px 22px rgba(45,91,222,.25)}
+html.dark .perde-primary-nav{display:flex;gap:5px;padding:7px;background:rgba(8,14,28,.96)!important;border:1px solid #24375d!important;border-radius:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+html.dark .perde-primary-nav .nav-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 12px!important;border:1px solid transparent!important;border-radius:8px!important;background:transparent!important;color:#9aa9c8!important;white-space:nowrap;transition:all .2s ease}
+html.dark .perde-primary-nav .nav-btn i{color:#7897e8!important}
+html.dark .perde-primary-nav .nav-btn:hover,html.dark .perde-primary-nav .nav-btn.is-inactive:hover{background:#142345!important;border-color:#2b477e!important;color:#edf3ff!important}
+html.dark .perde-primary-nav .nav-btn.is-active{background:linear-gradient(135deg,#315bd4,#1c3e9d)!important;border:1px solid #668bff!important;color:#fff!important;box-shadow:0 5px 18px rgba(48,91,214,.28),inset 0 1px 0 rgba(255,255,255,.12)!important}
+html.dark .perde-primary-nav .nav-btn.is-active i{color:#d9e4ff!important}
+html.dark .perde-primary-nav #nav-admin{margin-left:auto}
+html.dark #tab-detail{color:#edf2ff!important}
+html.dark #detail-page-content{color:#edf2ff!important}
+html.dark .perde-imdb-detail{overflow:hidden;border:1px solid #26395e!important;border-radius:20px!important;background:#080e1a!important;box-shadow:0 22px 65px rgba(0,0,0,.42)!important}
+html.dark .perde-imdb-hero{background:#080e1a!important;border-bottom:1px solid #26395e!important}
+html.dark .perde-imdb-backdrop{opacity:.44!important;filter:saturate(.85) contrast(1.12) brightness(.72)!important}
+html.dark .perde-imdb-hero-shade{background:linear-gradient(90deg,rgba(3,7,17,.98) 0%,rgba(4,9,22,.91) 40%,rgba(5,11,27,.58) 72%,rgba(5,11,27,.25) 100%),linear-gradient(0deg,rgba(3,7,17,.97),transparent 78%)!important}
+html.dark .perde-imdb-hero-top{color:#a9beff!important}
+html.dark .perde-imdb-brand{color:#e9efff!important}
+html.dark .perde-imdb-brand span{color:#86a5ff!important}
+html.dark .perde-imdb-type{background:rgba(16,31,67,.8)!important;border:1px solid #4869b1!important;color:#c7d6ff!important}
+html.dark .perde-imdb-kicker{color:#a6b5d2!important}
+html.dark .perde-imdb-hero-copy h2{color:#fff!important;text-shadow:0 3px 24px rgba(0,0,0,.6)!important}
+html.dark .perde-imdb-genres span{background:rgba(16,29,57,.8)!important;border:1px solid rgba(132,160,229,.3)!important;color:#d6e1ff!important}
+html.dark .perde-imdb-content{background:linear-gradient(145deg,#0d1629,#070d18)!important;color:#eaf0ff!important}
+html.dark .perde-imdb-main{color:#eaf0ff!important}
+html.dark .perde-imdb-poster{border:1px solid #344a76!important;box-shadow:0 14px 35px rgba(0,0,0,.45)!important}
+html.dark .perde-film-credits{background:linear-gradient(145deg,#111d35,#0a1325)!important;border:1px solid #2b416b!important;color:#eaf0ff!important;box-shadow:0 12px 28px rgba(0,0,0,.22)!important}
+html.dark .perde-film-credits h3{color:#f2f6ff!important;border-bottom-color:#293d63!important}
+html.dark .perde-film-credits h3 i{background:#1b3265!important;color:#9bb5ff!important}
+html.dark .perde-film-credits dt{color:#8e9fbe!important}
+html.dark .perde-film-credits dd,html.dark .perde-country-name{color:#dce6ff!important}
+html.dark .perde-country-item{background:#101c33!important;border-color:#2b416a!important}
+html.dark .perde-imdb-score{background:linear-gradient(145deg,#172b55,#0d1830)!important;border:1px solid #34579a!important;color:#fff!important}
+html.dark .perde-imdb-score strong{color:#a9c2ff!important}
+html.dark .perde-imdb-score span{color:#aab9d6!important}
+html.dark .perde-imdb-fav{background:#111e38!important;border:1px solid #314b7b!important;color:#dbe5ff!important}
+html.dark .perde-imdb-fav.is-favorite{background:#3b1830!important;border-color:#9c3d72!important;color:#ffb2d0!important}
+html.dark .perde-rating-panel,html.dark .perde-rating-card,html.dark .perde-detail-series-meta{background:#101b31!important;border:1px solid #293f68!important;color:#e8efff!important}
+html.dark .perde-rating-panel h3,html.dark .perde-rating-card h3{color:#f1f5ff!important}
+html.dark .perde-rating-panel p,html.dark .perde-rating-card p{color:#aab8d2!important}
+html.dark .perde-imdb-overview{color:#c1cce0!important}
+html.dark .perde-watch-providers{background:linear-gradient(145deg,#101b31,#0a1325)!important;border:1px solid #2b416a!important;border-radius:14px!important;color:#eaf0ff!important}
+html.dark .perde-watch-heading h3{color:#f4f6ff!important}
+html.dark .perde-watch-heading>div>span,html.dark .perde-watch-region{color:#8faaff!important}
+html.dark .perde-watch-loading{color:#aab8d2!important}
+html.dark .perde-watch-provider,html.dark .perde-provider-card{background:#0b1427!important;border:1px solid #263b61!important;color:#eaf0ff!important}
+html.dark .perde-imdb-actions{border-top:1px solid #26395d!important}
+html.dark .perde-imdb-action-btn{background:#111e38!important;border:1px solid #2e4777!important;color:#dce6ff!important}
+html.dark .perde-imdb-action-btn:hover{background:#1a3262!important;border-color:#527cff!important;color:#fff!important}
+html.dark .perde-detail-add-to-list{background:linear-gradient(135deg,#527cff,#294fc9)!important;border:1px solid #6b90ff!important;color:#fff!important;box-shadow:0 9px 24px rgba(43,88,220,.24)!important}
+html.dark .perde-similar{background:#080f1e!important;border-top:1px solid #26395e!important}
+html.dark .perde-similar h3{color:#f1f5ff!important}
+html.dark .perde-similar-card{background:#101a2d!important;border:1px solid #263b60!important;color:#edf2ff!important}
+html.dark .perde-similar-title{color:#eaf0ff!important}
+html.dark .perde-similar-info small{color:#91a0bd!important}
+html.dark .perde-similar-add{background:#142345!important;border-color:#2d4778!important;color:#dce6ff!important}
+html.dark .perde-imdb-play{background:linear-gradient(135deg,#315bd4,#1c3e9d)!important;border:1px solid #7898ff!important;color:#fff!important}
+html.dark .perde-imdb-play:hover{background:#527cff!important;color:#fff!important}
+html.dark #detail-modal>div{background:#0a1222!important;border:1px solid #2b416b!important;color:#edf2ff!important}
+html.dark #detail-modal-content{background:#0a1222!important;color:#edf2ff!important}
+html.dark #detail-modal-content>.dark\:bg-slate-900,html.dark #detail-modal-content .dark\:bg-slate-900{background:#0c162a!important;color:#edf2ff!important}
+html.dark #detail-modal-content h3{color:#f4f6ff!important}
+html.dark #detail-modal-content p{color:#aebbd3!important}
+html.dark #detail-modal-content .dark\:text-slate-400{color:#95a6c7!important}
+html.dark #detail-modal-content button:not(.perde-imdb-play){background:#142345!important;border:1px solid #2e4778!important;color:#dce6ff!important}
+html.dark #detail-modal-content input{background:#080f1e!important;border:1px solid #293f68!important;color:#edf2ff!important}
+@media(max-width:1050px){
+ html.dark .perde-primary-nav{gap:3px}
+ html.dark .perde-primary-nav .nav-btn{padding:8px 9px!important;font-size:10px!important}
+}
+@media(max-width:767px){
+ html.dark .perde-header-main{gap:10px}
+ html.dark .perde-primary-nav{display:flex;overflow-x:auto;scrollbar-width:none}
+ html.dark .perde-primary-nav .nav-btn{flex:0 0 auto}
+ html.dark .perde-primary-nav #nav-admin{margin-left:0}
+ html.dark .perde-imdb-detail{border-radius:14px!important}
+ html.dark .perde-imdb-content{padding:18px 14px!important}
+}
