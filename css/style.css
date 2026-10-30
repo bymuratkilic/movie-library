@@ -1755,3 +1755,39 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 .perde-profile-privacy i{margin-right:5px;color:var(--ml-accent)}
 @media(max-width:850px){.perde-profile-top-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.perde-profile-favorite-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.perde-profile-hero{grid-template-columns:54px minmax(0,1fr);gap:12px;padding:17px}.perde-profile-avatar{width:54px;height:54px;border-radius:15px;font-size:20px}.perde-profile-intro h2{font-size:19px}.perde-profile-share{grid-column:1/-1;justify-self:start}.perde-profile-highlights{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.perde-profile-highlights article{padding:13px}.perde-profile-highlights strong{font-size:18px}.perde-profile-section{padding:14px}.perde-profile-section-head h3{font-size:15px}.perde-profile-top-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.perde-profile-favorite-grid{grid-template-columns:1fr 1fr;gap:7px}.perde-profile-favorite-card{gap:6px;padding:6px}.perde-profile-favorite-card img{width:32px;height:47px;flex-basis:32px}.perde-profile-favorite-card b{font-size:9px}}
+
+
+/* Perde annual cinema recap */
+.perde-year-panel{position:relative;overflow:hidden;padding:22px;border:1px solid var(--ml-border);border-radius:18px;background:linear-gradient(135deg,var(--ml-surface),var(--ml-surface-muted))}
+.perde-year-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}
+.perde-year-heading>div:first-child>span,.perde-year-subhead>div>span{color:var(--ml-accent);font-size:9px;font-weight:850;letter-spacing:.16em}
+.perde-year-heading h2{margin:5px 0;color:var(--ml-text);font-size:22px;font-weight:900}
+.perde-year-heading p{color:var(--ml-muted);font-size:10px;line-height:1.6}
+.perde-year-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.perde-year-actions label{color:var(--ml-muted);font-size:10px;font-weight:750}
+.perde-year-actions select{padding:8px 10px;border:1px solid var(--ml-border);border-radius:8px;background:var(--ml-bg);color:var(--ml-text);font-size:10px}
+.perde-year-actions button{display:inline-flex;align-items:center;gap:7px;padding:9px 11px;border-radius:8px;background:var(--ml-accent);color:#fff;font-size:10px;font-weight:800}
+.perde-year-actions button:disabled{opacity:.4;cursor:not-allowed}
+.perde-year-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.perde-year-kpis article{display:flex;min-width:0;flex-direction:column;gap:7px;padding:15px;border:1px solid var(--ml-border);border-radius:12px;background:var(--ml-bg)}
+.perde-year-kpis article>span{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--ml-accent-soft);color:var(--ml-accent)}
+.perde-year-kpis small{color:var(--ml-muted);font-size:9px;font-weight:750}
+.perde-year-kpis strong{color:var(--ml-text);font-size:19px;font-weight:900;overflow-wrap:anywhere}
+.perde-year-ranking{margin-top:20px}
+.perde-year-subhead{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:10px}
+.perde-year-subhead h3{margin-top:4px;color:var(--ml-text);font-size:14px;font-weight:850}
+.perde-year-subhead>small{color:var(--ml-muted);font-size:9px}
+.perde-year-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.perde-year-item{display:flex;align-items:center;gap:10px;min-width:0;padding:9px;border:1px solid var(--ml-border);border-radius:10px;background:var(--ml-bg);text-align:left;transition:border-color .18s,transform .18s}
+.perde-year-item:hover{border-color:var(--ml-accent);transform:translateY(-1px)}
+.perde-year-rank{display:grid;place-items:center;flex:0 0 25px;width:25px;height:25px;border-radius:8px;background:var(--ml-surface-muted);color:var(--ml-muted);font-size:10px}
+.perde-year-item img{width:36px;height:52px;flex:0 0 36px;border-radius:5px;object-fit:cover;background:var(--ml-surface-muted)}
+.perde-year-item>span{display:flex;min-width:0;flex:1;flex-direction:column;gap:4px}
+.perde-year-item>span strong{overflow:hidden;color:var(--ml-text);font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+.perde-year-item>span small{color:var(--ml-muted);font-size:8px}
+.perde-year-item em{color:var(--ml-accent);font-size:9px;font-style:normal;font-weight:850;white-space:nowrap}
+.perde-year-empty{display:flex;align-items:center;flex-direction:column;gap:8px;padding:28px 14px;border:1px dashed var(--ml-border);border-radius:12px;color:var(--ml-muted);text-align:center}
+.perde-year-empty i{color:var(--ml-accent);font-size:22px}
+.perde-year-empty strong{color:var(--ml-text);font-size:12px}
+.perde-year-empty span{font-size:10px;line-height:1.6}
+@media(max-width:700px){.perde-year-panel{padding:15px}.perde-year-heading{align-items:flex-start;flex-direction:column}.perde-year-heading h2{font-size:19px}.perde-year-actions{width:100%}.perde-year-actions select{flex:1}.perde-year-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.perde-year-kpis article{padding:12px}.perde-year-kpis strong{font-size:17px}.perde-year-list{grid-template-columns:1fr}}
