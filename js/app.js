@@ -814,10 +814,49 @@
             }
         }
 
-        function scrollEditorPicks(direction) {
-            const rail = document.getElementById('editor-picks-grid');
-            if (!rail) return;
-            rail.scrollBy({ left: direction * Math.max(rail.clientWidth * 0.85, 260), behavior: 'smooth' });
+        let cinemaShowcaseRequest = 0;
+        let cinemaShowcaseCache = [];
+        function scrollCinemaShowcase(direction) {
+            const rail=document.getElementById('perde-cinema-rail');
+            if(rail)rail.scrollBy({left:direction*Math.max(rail.clientWidth*.82,280),behavior:'smooth'});
+        }
+        async function renderCinemaShowcase(forceRefresh=false) {
+            const feature=document.getElementById('perde-cinema-feature'),rail=document.getElementById('perde-cinema-rail');
+            if(!feature||!rail)return;
+            if(cinemaShowcaseCache.length&&!forceRefresh){paintCinemaShowcase(cinemaShowcaseCache);return;}
+            const request=++cinemaShowcaseRequest;
+            feature.innerHTML='<div class="perde-cinema-loading"><i class="fa-solid fa-spinner fa-spin"></i> Vitrin hazırlanıyor…</div>';
+            const key='feec99b21abf1323730ff9fdc6e4e912';
+            const params=new URLSearchParams({api_key:key,language:'tr-TR',include_adult:'false',page:String(1+Math.floor(Math.random()*4))});
+            try{
+                const [mr,tr]=await Promise.all([fetch('https://api.themoviedb.org/3/trending/movie/week?'+params),fetch('https://api.themoviedb.org/3/trending/tv/week?'+params)]);
+                if(!mr.ok||!tr.ok)throw new Error('TMDB');
+                const [md,td]=await Promise.all([mr.json(),tr.json()]);
+                if(request!==cinemaShowcaseRequest)return;
+                const archive=movies.filter(m=>m&&m.title&&(m.backdrop||m.poster)).map(m=>({...m,source:'archive',score:(Number(m.perdeRating)||0)*2.2+(Number(m.imdb)||0)*1.4+(m.favorite?3.5:0)+(m.status==='watched'?1.8:0)}));
+                const online=[...(md.results||[]).map(x=>({...x,type:'movie'})),...(td.results||[]).map(x=>({...x,type:'tv'}))].filter(x=>x.poster_path&&(x.backdrop_path||x.poster_path)).map(x=>({id:'tmdb-'+x.type+'-'+x.id,tmdbId:x.id,title:x.title||x.name,type:x.type==='tv'?'tv':'movie',year:(x.release_date||x.first_air_date||'').slice(0,4),imdb:Number((x.vote_average||0).toFixed(1)),poster:'https://image.tmdb.org/t/p/w500'+x.poster_path,backdrop:x.backdrop_path?'https://image.tmdb.org/t/p/w1280'+x.backdrop_path:'https://image.tmdb.org/t/p/w500'+x.poster_path,overview:x.overview||'',genres:[],status:'discovered',favorite:false,source:'tmdb',score:(Number(x.vote_average)||0)*1.5+Math.min(Number(x.popularity)||0,100)/20}));
+                const seen=new Set(),combined=[...archive,...online].filter(item=>{const k=item.tmdbId?'tmdb-'+item.tmdbId:String(item.title||'').toLocaleLowerCase('tr');if(seen.has(k))return false;seen.add(k);return true;});
+                combined.sort((a,b)=>(b.score||0)-(a.score||0));
+                cinemaShowcaseCache=combined.slice(0,14);
+                online.forEach(item=>{if(!fetchedOnlineResults.some(x=>String(x.id)===String(item.id)))fetchedOnlineResults.push(item);});
+                paintCinemaShowcase(cinemaShowcaseCache);
+            }catch(error){
+                if(request!==cinemaShowcaseRequest)return;
+                const fallback=movies.filter(m=>m&&m.title&&(m.backdrop||m.poster)).map(m=>({...m,source:'archive',score:(Number(m.perdeRating)||0)*2.2+(Number(m.imdb)||0)*1.4+(m.favorite?3.5:0)})).sort((a,b)=>b.score-a.score).slice(0,14);
+                cinemaShowcaseCache=fallback;
+                if(fallback.length)paintCinemaShowcase(fallback);else feature.innerHTML='<div class="perde-cinema-loading">Vitrin şu anda yüklenemedi. Biraz sonra yeniden deneyebilirsin.</div>';
+                console.warn('Sinema vitrini yüklenemedi:',error);
+            }
+        }
+        function paintCinemaShowcase(items){
+            const feature=document.getElementById('perde-cinema-feature'),rail=document.getElementById('perde-cinema-rail');
+            if(!feature||!rail)return;
+            const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            if(!items.length){feature.innerHTML='<div class="perde-cinema-loading">Arşivine yapım eklediğinde vitrin burada oluşacak.</div>';rail.innerHTML='';return;}
+            const lead=items[0];
+            feature.innerHTML='<img class="perde-cinema-backdrop" src="'+safe(lead.backdrop||lead.poster||'')+'" alt="" onerror="this.style.display=\'none\'"><div class="perde-cinema-overlay"></div><div class="perde-cinema-feature-copy"><span class="perde-cinema-feature-tag"><i class="fa-solid fa-star"></i> '+(lead.source==='archive'?'ARŞİVİNDEN SEÇİLDİ':'TMDB HAFTANIN KEŞFİ')+'</span><h3>'+safe(lead.title)+'</h3><div class="perde-cinema-meta"><span>'+safe(lead.year||'Yıl bilgisi yok')+'</span><span>'+(lead.type==='tv'?'DİZİ':lead.type==='doc'?'BELGESEL':'FİLM')+'</span><span><i class="fa-solid fa-star"></i> '+safe(lead.imdb||'—')+'</span></div><p>'+safe((lead.overview||'Bu yapımı daha yakından keşfet.').slice(0,230))+'</p><button type="button" onclick="openDetailModal(\''+safe(lead.id).replace(/'/g,'')+'\')">Yapımı keşfet <i class="fa-solid fa-arrow-right"></i></button></div>';
+            rail.innerHTML=items.slice(1).map(item=>'<button type="button" class="perde-cinema-card" onclick="openDetailModal(\''+safe(item.id).replace(/'/g,'')+'\')" aria-label="'+safe(item.title)+' detaylarını aç"><span class="perde-cinema-card-image"><img src="'+safe(item.poster||item.backdrop||'')+'" alt="'+safe(item.title)+'" loading="lazy"><span>'+(item.source==='archive'?'ARŞİV':'KEŞİF')+'</span></span><strong>'+safe(item.title)+'</strong><small>'+safe(item.year||'—')+' · '+(item.type==='tv'?'Dizi':'Film')+' · ★ '+safe(item.imdb||'—')+'</small></button>').join('');
+            const count=document.getElementById('perde-cinema-count');if(count)count.textContent=items.length+' yapım · Arşiv + TMDB';
         }
 
         function renderDashboard() {
@@ -830,25 +869,7 @@
             document.getElementById('stat-watchlist-count').textContent = watchLaterCount;
             document.getElementById('watchlist-badge').textContent = watchLaterCount + ' yapım';
             document.getElementById('stat-favorite-count').textContent = movies.filter(m => m.favorite).length;
-            const picks = [...movies].sort((a,b) => {
-                const score = item => (Number(item.perdeRating)||0)*2.2 + (Number(item.imdb)||0)*1.4 +
-                    (item.favorite ? 3.5 : 0) + (item.status === 'watched' ? 1.8 : 0);
-                return score(b)-score(a) || (Number(b.imdb)||0)-(Number(a.imdb)||0);
-            }).slice(0, 12);
-            renderRow('editor-picks-grid', picks.slice(0, 8));
-            const editorFeature = document.getElementById('editor-picks-feature');
-            if (editorFeature) {
-                const featured = picks[0];
-                if (!featured) {
-                    editorFeature.innerHTML = '';
-                    editorFeature.hidden = true;
-                } else {
-                    const safeFeature = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-                    const featureGenres = Array.isArray(featured.genres) ? featured.genres.slice(0, 3) : [];
-                    editorFeature.hidden = false;
-                    editorFeature.innerHTML = '<div class="perde-editor-feature-copy"><span class="perde-editor-feature-label"><i class="fa-solid fa-circle-play"></i> ÖNE ÇIKAN YAPIM</span><h3>' + safeFeature(featured.title) + '</h3><div class="perde-editor-feature-meta"><span>' + safeFeature(featured.year || 'Yıl bilinmiyor') + '</span><span>' + (featured.type === 'tv' ? 'Dizi' : featured.type === 'doc' ? 'Belgesel' : 'Film') + '</span><span class="perde-editor-feature-rating"><i class="fa-solid fa-star"></i> IMDb ' + safeFeature(featured.imdb || '—') + '</span></div>' + (featureGenres.length ? '<div class="perde-editor-feature-genres">' + featureGenres.map(genre => '<span>' + safeFeature(genre) + '</span>').join('') + '</div>' : '') + '</div><button type="button" class="perde-editor-feature-open" onclick="openDetailModal(\'' + String(featured.id).replace(/'/g, '') + '\')">Keşfet <i class="fa-solid fa-arrow-right"></i></button>';
-                }
-            }
+            renderCinemaShowcase();
             renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later').slice(0, 6));
             renderRow('recent-row', movies.slice(0, 6));
             renderGenreMenu();
