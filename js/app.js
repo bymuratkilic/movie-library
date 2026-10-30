@@ -743,11 +743,23 @@
                             <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker">${m.year || 'Yıl bilinmiyor'} <span>•</span> ${m.runtime || 'Süre bilgisi yok'} <span>•</span> ${m.country || 'Ülke bilgisi yok'}</div><h2>${m.title}</h2><div class="perde-imdb-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div></div>
                         </section>
                         <section class="perde-imdb-content">
-                            <div class="perde-imdb-poster-wrap"><img class="perde-imdb-poster" src="${m.poster || ''}" alt="${m.title} afişi" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80'"><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-trailer-btn"><i class="fa-solid fa-play"></i> Fragmanı İzle</button></div>
+                            <aside class="perde-imdb-poster-wrap">
+                                <img class="perde-imdb-poster" src="${m.poster || ''}" alt="${m.title} afişi" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80'">
+                                <section class="perde-film-credits" aria-label="Film künyesi">
+                                    <h3><i class="fa-solid fa-ticket"></i> Film Künyesi</h3>
+                                    <dl>
+                                        <div><dt>Yönetmen</dt><dd>${m.director || 'Bilinmiyor'}</dd></div>
+                                        <div><dt>Yapım yılı</dt><dd>${m.year || 'Bilinmiyor'}</dd></div>
+                                        <div><dt>Süre</dt><dd>${m.runtime || 'Bilinmiyor'}</dd></div>
+                                        <div><dt>Ülke</dt><dd>${m.country || 'Bilinmiyor'}</dd></div>
+                                        <div><dt>Tür</dt><dd>${m.genres && m.genres.length ? m.genres.join(', ') : 'Bilinmiyor'}</dd></div>
+                                    </dl>
+                                </section>
+                            </aside>
                             <div class="perde-imdb-main">
                                 <div class="perde-imdb-rating-row"><div class="perde-imdb-score"><strong>${m.imdb || '—'}</strong><span>IMDb</span></div><button onclick="toggleFavorite('${m.id}')" class="perde-imdb-fav ${m.favorite ? 'is-favorite' : ''}"><i class="fa-solid fa-heart"></i> ${m.favorite ? 'Favorilerde' : 'Favorilere Ekle'}</button></div>
                                 <p class="perde-imdb-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p>
-                                <div class="perde-imdb-credits"><div><b>YÖNETMEN</b><span>${m.director || 'Bilinmiyor'}</span></div><div><b>YIL</b><span>${m.year || 'Bilinmiyor'}</span></div><div><b>TÜR</b><span>${m.genres && m.genres.length ? m.genres.join(', ') : 'Bilinmiyor'}</span></div><div><b>ÜLKE</b><span>${m.country || 'Bilinmiyor'}</span></div></div>
+                                
                                 <div class="perde-imdb-actions"><label class="perde-imdb-watch-label">İZLEME LİSTEM<select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-action-btn"><i class="fa-solid fa-closed-captioning"></i> Altyazılı fragman</button><button onclick="openDetailModal('${m.id}', 'tr_dub')" class="perde-imdb-action-btn"><i class="fa-solid fa-microphone"></i> Dublajlı fragman</button><button onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-solid fa-trash"></i> Arşivden sil</button></div>
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-imdb-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div></div>
                             </div>
