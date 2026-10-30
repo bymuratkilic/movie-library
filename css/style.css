@@ -3414,3 +3414,12 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
 .perde-news-card .perde-news-read{display:inline-flex;margin-top:12px}
 body.perde-news-modal-open{overflow:hidden}
 @media(max-width:640px){.perde-news-modal{align-items:flex-end;padding:7px}.perde-news-modal-panel{width:100%;max-height:92dvh;border-radius:16px 16px 12px 12px}.perde-news-modal-image,.perde-news-modal-image img{max-height:220px}.perde-news-modal-copy{padding:19px 16px 22px}.perde-news-modal-summary{margin-top:17px;font-size:13px;line-height:1.75}.perde-news-modal-close{top:8px;margin:8px 8px -45px 0}}
+
+
+/* Haber detayında önceki / sonraki gezinme */
+.perde-news-modal-navigation{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:24px;padding-top:17px;border-top:1px solid var(--ml-border)}
+.perde-news-modal-navigation button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 13px;border:1px solid var(--ml-border);border-radius:9px;background:var(--ml-surface-muted);color:var(--ml-text);font-size:10px;font-weight:800;cursor:pointer;transition:border-color .18s ease,background .18s ease,opacity .18s ease}
+.perde-news-modal-navigation button:not(:disabled):hover{border-color:var(--ml-accent);background:var(--ml-accent-soft)}
+.perde-news-modal-navigation button:disabled{opacity:.35;cursor:not-allowed}
+.perde-news-modal-navigation span{color:var(--ml-muted);font-size:10px;font-weight:750;white-space:nowrap}
+@media(max-width:420px){.perde-news-modal-navigation{gap:6px}.perde-news-modal-navigation button{min-height:38px;padding:0 9px;font-size:9px}.perde-news-modal-navigation span{font-size:9px}}
