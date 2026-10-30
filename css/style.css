@@ -3706,3 +3706,104 @@ html.light .perde-menu-grid>button:hover{
     transition: none !important;
   }
 }
+
+
+/* PERDE Tasarım Aşaması 4 — bölüm aralıkları ve hizalama */
+#tab-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 30px !important;
+}
+#tab-dashboard > .ml-home-feature-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
+  align-items: stretch;
+  gap: 18px;
+  min-width: 0;
+}
+#tab-dashboard > .ml-catalog-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+#tab-dashboard .ml-section-heading,
+#tab-dashboard .perde-cinema-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 0;
+  margin: 0;
+}
+#tab-dashboard .ml-section-heading > div:first-child,
+#tab-dashboard .perde-cinema-heading > div:first-child {
+  min-width: 0;
+}
+#tab-dashboard .ml-section-heading h2,
+#tab-dashboard .perde-cinema-heading h2 {
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+#tab-dashboard .ml-section-heading p,
+#tab-dashboard .perde-cinema-heading p {
+  margin-top: 6px;
+  margin-bottom: 0;
+  max-width: 620px;
+}
+#tab-dashboard .perde-recommendation-carousel,
+#tab-dashboard .perde-cinema-feature,
+#tab-dashboard .perde-cinema-rail-heading,
+#tab-dashboard .perde-cinema-rail {
+  min-width: 0;
+}
+#tab-dashboard .perde-cinema-rail-heading {
+  margin-top: 3px;
+}
+#tab-dashboard .ml-archive-stats {
+  margin-top: 1px;
+}
+#tab-dashboard > .ml-catalog-section + .ml-catalog-section {
+  scroll-margin-top: 90px;
+}
+@media (max-width: 767px) {
+  #tab-dashboard {
+    gap: 25px !important;
+  }
+  #tab-dashboard > .ml-home-feature-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+  }
+  #tab-dashboard > .ml-catalog-section {
+    gap: 14px;
+  }
+  #tab-dashboard .ml-section-heading,
+  #tab-dashboard .perde-cinema-heading {
+    align-items: flex-start;
+    gap: 10px;
+  }
+  #tab-dashboard .ml-section-heading p,
+  #tab-dashboard .perde-cinema-heading p {
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+  #tab-dashboard .ml-recommendation-actions {
+    gap: 7px;
+  }
+  #tab-dashboard .perde-cinema-rail-heading {
+    margin-top: 0;
+  }
+  #tab-dashboard .ml-archive-stats {
+    margin-top: 0;
+  }
+}
+@media (max-width: 420px) {
+  #tab-dashboard .ml-section-heading,
+  #tab-dashboard .perde-cinema-heading {
+    gap: 8px;
+  }
+  #tab-dashboard .ml-section-heading > div:first-child,
+  #tab-dashboard .perde-cinema-heading > div:first-child {
+    flex: 1 1 auto;
+  }
+}
