@@ -2140,8 +2140,6 @@
             const name = settings.displayName || 'Benim Sinema Profilim';
             const watched = movies.filter(item => item.status === 'watched');
             const favorites = movies.filter(item => item.favorite);
-            const rated = getPerdeRatedMovies();
-            const average = rated.length ? (rated.reduce((sum,item)=>sum+Number(item.perdeRating),0)/rated.length).toFixed(1) : '—';
             const genreCounts = {};
             movies.forEach(item => {
                 const genres = Array.isArray(item.genres) ? item.genres : (typeof item.genres === 'string' ? item.genres.split(',') : []);
@@ -2159,7 +2157,6 @@
                 const items = [
                     {value:movies.length,label:'Koleksiyondaki yapım',icon:'fa-film'},
                     {value:watched.length,label:'İzlenen yapım',icon:'fa-circle-check'},
-                    {value:average,label:'Ortalama Perde puanı',icon:'fa-star'},
                     {value:topGenre,label:'En sık tercih ettiğin tür',icon:'fa-masks-theater'}
                 ];
                 highlights.innerHTML = items.map(item=>'<article><i class="fa-solid '+item.icon+'"></i><strong>'+safe(item.value)+'</strong><span>'+item.label+'</span></article>').join('');
@@ -2195,8 +2192,6 @@
                 {id:'genre-5',title:'Tür Kaşifi',description:'İzlediklerinde 5 farklı tür keşfettin.',icon:'fa-compass',value:genres.size,target:5,unit:'tür'},
                 {id:'collection-10',title:'Koleksiyoner',description:'Arşivine 10 yapım ekledin.',icon:'fa-box-archive',value:movies.length,target:10,unit:'yapım'},
                 {id:'favorite-10',title:'Seçici Göz',description:'10 yapımı favorilerine ekledin.',icon:'fa-heart',value:favorites.length,target:10,unit:'favori'},
-                {id:'rating-1',title:'Eleştirmen',description:'İlk Perde puanını verdin.',icon:'fa-star',value:rated.length,target:1,unit:'puan'},
-                {id:'rating-10',title:'Puan Ustası',description:'10 yapımı kendi puanınla değerlendirdin.',icon:'fa-award',value:rated.length,target:10,unit:'puan'}
             ];
             const unlocked = definitions.filter(item => item.value >= item.target).length;
             if (countRoot) countRoot.textContent = unlocked + ' / ' + definitions.length + ' rozet';
@@ -2215,11 +2210,10 @@
             const favorites = movies.filter(item=>item.favorite);
             const watched = movies.filter(item=>item.status==='watched');
             const rated = getPerdeRatedMovies();
-            const average = rated.length ? (rated.reduce((sum,item)=>sum+Number(item.perdeRating),0)/rated.length).toFixed(1) : 'Henüz puan yok';
             const genres = {};
             movies.forEach(item=>(Array.isArray(item.genres)?item.genres:(typeof item.genres==='string'?item.genres.split(','):[])).forEach(g=>{const key=String(g).trim();if(key)genres[key]=(genres[key]||0)+1;}));
             const favoriteGenre = Object.entries(genres).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'Belirlenmedi';
-            const summary = '🎬 '+(settings.displayName||'Benim Sinema Profilim')+' · Perde\n'+movies.length+' yapım koleksiyonumda · '+watched.length+' izlenen · '+favorites.length+' favori\nOrtalama Perde puanım: '+average+'\nEn sık tercih ettiğim tür: '+favoriteGenre+'\n\nKişisel sinema arşivimden.';
+            const summary = '🎬 '+(settings.displayName||'Benim Sinema Profilim')+' · Perde\n'+movies.length+' yapım koleksiyonumda · '+watched.length+' izlenen · '+favorites.length+' favori\nEn sık tercih ettiğim tür: '+favoriteGenre+'\n\nKişisel sinema arşivimden.';
             if(navigator.share) {
                 try { await navigator.share({title:'Perde · Sinema Profilim',text:summary}); }
                 catch(error) { if(error && error.name!=='AbortError') showToast('Paylaşım açılamadı.'); }
@@ -2319,9 +2313,6 @@
             const watchLater = movies.filter(item => item.status === 'watch_later');
             const favorites = movies.filter(item => item.favorite);
             const rated = getPerdeRatedMovies();
-            const averageRating = rated.length
-                ? (rated.reduce((sum, item) => sum + Number(item.perdeRating), 0) / rated.length).toFixed(1)
-                : '—';
             const totalMinutes = watched.reduce((sum, item) => {
                 if (item.type === 'tv') return sum;
                 const runtime = String(item.runtime || '');
@@ -2338,7 +2329,6 @@
                 {label:'Toplam koleksiyon',value:movies.length,detail:filmCount+' film · '+seriesCount+' dizi · '+documentaryCount+' belgesel',icon:'fa-layer-group',tone:'blue'},
                 {label:'İzlenen yapım',value:watched.length,detail:'Arşivinde izledim olarak işaretli',icon:'fa-circle-check',tone:'green'},
                 {label:'İzleme listesi',value:watchLater.length,detail:'İzlemeyi bekleyen yapımlar',icon:'fa-bookmark',tone:'amber'},
-                {label:'Ortalama Perde Puanı',value:averageRating,detail:rated.length+' yapım puanlandı',icon:'fa-star',tone:'violet'},
                 {label:'İzlenen yapım süresi',value:durationLabel,detail:'Dizi süreleri hariç, kayıtlı süreler üzerinden',icon:'fa-clock',tone:'cyan'},
                 {label:'Favoriler',value:favorites.length,detail:'Favorilerine eklediğin yapımlar',icon:'fa-heart',tone:'rose'}
             ];
