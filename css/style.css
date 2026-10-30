@@ -1239,51 +1239,29 @@ html.dark select:focus-visible, html.dark textarea:focus-visible {
 }
 
 
-/* Film künyesi — refined editorial metadata card with native country flags. */
-.perde-film-credits {
-  position:relative; overflow:hidden; padding:18px 16px !important;
-  border:1px solid color-mix(in srgb,var(--ml-accent) 24%,var(--ml-border)) !important;
-  border-radius:15px !important;
-  background:linear-gradient(155deg,color-mix(in srgb,var(--ml-accent) 7%,var(--ml-surface)),var(--ml-surface-muted)) !important;
-  box-shadow:0 12px 28px rgba(0,0,0,.08);
-}
-.perde-film-credits:before {
-  content:""; position:absolute; inset:0 0 auto; height:3px;
-  background:linear-gradient(90deg,var(--ml-accent),color-mix(in srgb,var(--ml-accent) 12%,transparent));
-}
-.perde-film-credits h3 {
-  margin:0 0 15px !important; padding-bottom:12px;
-  border-bottom:1px solid var(--ml-border);
-  font-size:12px !important; letter-spacing:.09em !important; text-transform:uppercase;
-}
-.perde-film-credits h3 i {
-  display:grid; place-items:center; width:29px; height:29px;
-  border-radius:9px; background:var(--ml-accent-soft); font-size:12px;
-}
-.perde-film-credits dl { gap:0 !important; }
-.perde-film-credits dl>div {
-  display:grid; grid-template-columns:1fr; gap:5px !important;
-  padding:10px 0; border-bottom:1px solid color-mix(in srgb,var(--ml-border) 72%,transparent);
-}
+/* Film künyesi — sade, dengeli ve okunaklı bilgi düzeni. */
+.perde-film-credits { position:relative; padding:15px 14px !important; border:1px solid var(--ml-border) !important; border-radius:13px !important; background:var(--ml-surface) !important; box-shadow:none !important; }
+.perde-film-credits:before { content:none !important; }
+.perde-film-credits h3 { display:flex; align-items:center; gap:9px; margin:0 0 9px !important; padding:0 0 11px; border-bottom:1px solid var(--ml-border); color:var(--ml-text); font:750 12px/1.3 Manrope,sans-serif !important; letter-spacing:0 !important; text-transform:none; }
+.perde-film-credits h3 i { display:grid; place-items:center; width:27px; height:27px; border-radius:8px; background:var(--ml-accent-soft); color:var(--ml-accent); font-size:11px; }
+.perde-film-credits dl { display:grid; gap:0 !important; margin:0; }
+.perde-film-credits dl>div { display:grid; grid-template-columns:76px minmax(0,1fr); align-items:start; gap:9px !important; padding:9px 0; border-bottom:1px solid color-mix(in srgb,var(--ml-border) 72%,transparent); }
 .perde-film-credits dl>div:last-child { border-bottom:0; padding-bottom:1px; }
-.perde-film-credits dt { font-size:9px !important; letter-spacing:.12em !important; }
-.perde-film-credits dd { font-size:12px !important; font-weight:650; }
-.perde-film-credits .perde-film-country-row { gap:7px !important; }
-.perde-film-country-list { display:flex; flex-wrap:wrap; gap:8px; }
-.perde-country-item {
-  display:inline-flex; align-items:center; gap:7px;
-  min-height:32px; padding:5px 9px;
-  border:1px solid var(--ml-border); border-radius:9px;
-  background:var(--ml-surface); box-shadow:0 2px 7px rgba(0,0,0,.04);
-}
-.perde-country-flag { font-size:19px; line-height:1; filter:saturate(1.08); }
-.perde-country-name { color:var(--ml-text); font-size:11px; font-weight:750; }
+.perde-film-credits dt { padding-top:2px; color:var(--ml-muted); font-size:10px !important; font-weight:600; letter-spacing:0 !important; text-transform:none; }
+.perde-film-credits dd { min-width:0; margin:0; color:var(--ml-text); font-size:11px !important; font-weight:650; line-height:1.55; overflow-wrap:anywhere; }
+.perde-film-country-list { display:flex; flex-wrap:wrap; gap:6px; }
+.perde-country-item { display:inline-flex; align-items:center; gap:6px; min-height:27px; padding:4px 7px; border:1px solid var(--ml-border); border-radius:7px; background:var(--ml-surface-muted); }
+.perde-country-flag { display:block; width:21px; height:15px; flex:0 0 21px; object-fit:cover; border-radius:2px; box-shadow:0 0 0 1px rgba(0,0,0,.12); }
+.perde-country-flag-fallback { display:grid; place-items:center; width:21px; color:var(--ml-muted); font-size:12px; }
+.perde-country-name { color:var(--ml-text); font-size:10px; font-weight:650; line-height:1.25; }
 .perde-country-empty { color:var(--ml-muted); font-size:11px; font-weight:500; }
 @media(max-width:767px) {
- .perde-film-credits { padding:13px 11px !important; border-radius:12px !important; }
- .perde-film-credits h3 { margin-bottom:9px !important; padding-bottom:9px; font-size:10px !important; }
- .perde-film-credits dl>div { padding:7px 0; }
- .perde-country-item { min-height:28px; padding:4px 6px; gap:5px; }
- .perde-country-flag { font-size:16px; }
- .perde-country-name { font-size:10px; }
+ .perde-film-credits { padding:11px 9px !important; border-radius:11px !important; }
+ .perde-film-credits h3 { margin-bottom:6px !important; padding-bottom:8px; font-size:10px !important; }
+ .perde-film-credits dl>div { grid-template-columns:58px minmax(0,1fr); gap:6px !important; padding:7px 0; }
+ .perde-film-credits dt { font-size:9px !important; }
+ .perde-film-credits dd { font-size:10px !important; }
+ .perde-country-item { min-height:24px; padding:3px 5px; gap:5px; }
+ .perde-country-flag { width:18px; height:13px; flex-basis:18px; }
+ .perde-country-name { font-size:9px; }
 }
