@@ -38,9 +38,9 @@ class ImageParser(HTMLParser):
             self.image = attrs.get("src") or attrs.get("data-src") or attrs.get("data-lazy-src") or ""
 
 def clean_html(value):
-    value = re.sub(r"<(script|style)[^>]*>.*?</\\1>", " ", value or "", flags=re.I | re.S)
+    value = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", value or "", flags=re.I | re.S)
     value = re.sub(r"<[^>]+>", " ", value)
-    return re.sub(r"\\s+", " ", unescape(value)).strip()
+    return re.sub(r"\s+", " ", unescape(value)).strip()
 
 def image_for(entry):
     for key in ("media_content", "media_thumbnail"):
@@ -68,7 +68,7 @@ def published_for(entry):
         return datetime.now(timezone.utc).isoformat()
 
 def translate_to_turkish(title, summary):
-    combined = title + "\\n\\n---PERDE-SUMMARY---\\n\\n" + (summary or "")
+    combined = title + "\n\n---PERDE-SUMMARY---\n\n" + (summary or "")
     if combined in TRANSLATE_CACHE:
         return TRANSLATE_CACHE[combined]
     try:
