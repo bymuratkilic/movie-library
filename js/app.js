@@ -1833,12 +1833,13 @@
                 : '—';
             const filmCount = movies.filter(item => item.type !== 'tv' && item.type !== 'doc').length;
             const seriesCount = movies.filter(item => item.type === 'tv').length;
+            const documentaryCount = movies.filter(item => item.type === 'doc').length;
             const kpis = [
-                {label:'Toplam koleksiyon',value:movies.length,detail:filmCount+' film · '+seriesCount+' dizi',icon:'fa-layer-group',tone:'blue'},
+                {label:'Toplam koleksiyon',value:movies.length,detail:filmCount+' film · '+seriesCount+' dizi · '+documentaryCount+' belgesel',icon:'fa-layer-group',tone:'blue'},
                 {label:'İzlenen yapım',value:watched.length,detail:'Arşivinde izledim olarak işaretli',icon:'fa-circle-check',tone:'green'},
                 {label:'İzleme listesi',value:watchLater.length,detail:'İzlemeyi bekleyen yapımlar',icon:'fa-bookmark',tone:'amber'},
                 {label:'Ortalama Perde Puanı',value:averageRating,detail:rated.length+' yapım puanlandı',icon:'fa-star',tone:'violet'},
-                {label:'İzlenen film süresi',value:durationLabel,detail:'Süresi okunabilen filmler üzerinden',icon:'fa-clock',tone:'cyan'},
+                {label:'İzlenen yapım süresi',value:durationLabel,detail:'Dizi süreleri hariç, kayıtlı süreler üzerinden',icon:'fa-clock',tone:'cyan'},
                 {label:'Favoriler',value:favorites.length,detail:'Favorilerine eklediğin yapımlar',icon:'fa-heart',tone:'rose'}
             ];
             const kpiRoot=document.getElementById('personal-stats-kpis');
