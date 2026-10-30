@@ -416,6 +416,19 @@
         </div>
     </div>
 
+    <!-- FILM COMPARISON MODAL -->
+    <div id="comparison-modal" class="fixed inset-0 z-[60] hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="perde-compare-dialog">
+            <button type="button" onclick="closeComparison()" class="perde-compare-close" aria-label="Karşılaştırmayı kapat"><i class="fa-solid fa-xmark"></i></button>
+            <div id="comparison-modal-content"></div>
+        </div>
+    </div>
+    <div id="comparison-tray" class="perde-compare-tray" hidden>
+        <span><i class="fa-solid fa-scale-balanced"></i> <b id="comparison-count">0/2</b> yapım seçildi</span>
+        <button type="button" onclick="openComparison()">Karşılaştır <i class="fa-solid fa-arrow-right"></i></button>
+        <button type="button" onclick="clearComparison()" aria-label="Seçimleri temizle"><i class="fa-solid fa-trash-can"></i></button>
+    </div>
+
     <!-- ACTOR BIO & FILMOGRAPHY MODAL -->
     <div id="actor-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="dark:bg-clean-card bg-white border dark:border-clean-border border-light-border w-full max-w-2xl rounded-2xl p-6 relative shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
