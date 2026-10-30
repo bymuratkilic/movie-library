@@ -1472,7 +1472,7 @@
                             <div class="perde-imdb-main">
                                 
                                 
-                                <p class="perde-imdb-overview" id="perde-detail-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p><div id="perde-detail-series-meta" class="perde-detail-series-meta" hidden></div>
+                                <section class="perde-story-panel" aria-labelledby="perde-story-title"><div class="perde-story-heading"><span class="perde-story-kicker"><i class="fa-solid fa-book-open"></i> HİKÂYESİ</span><span class="perde-story-rule" aria-hidden="true"></span></div><h3 id="perde-story-title">Bir hikâyeye davet</h3><p class="perde-imdb-overview" id="perde-detail-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p><div class="perde-story-foot"><span><i class="fa-solid fa-clapperboard"></i> PERDE</span><span>HİKÂYE &amp; ÖZET</span></div></section><div id="perde-detail-series-meta" class="perde-detail-series-meta" hidden></div>
                                 <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite">
                                     <div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div>
                                     <div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div>
