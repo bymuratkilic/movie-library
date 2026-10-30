@@ -2699,3 +2699,96 @@ main.max-w-7xl { max-width:1480px; padding-top:28px; }
   .ml-home-poster-card,
   .perde-personal-card { transition:none !important; }
 }
+
+
+/* PERDE — Hidden Gems discovery collection */
+.perde-hidden-gems-section {
+  position:relative;
+  overflow:hidden;
+  padding:22px;
+  border:1px solid color-mix(in srgb,#b99a63 28%,var(--ml-border));
+  border-radius:18px;
+  background:
+    radial-gradient(ellipse at 5% 0%,rgba(185,154,99,.12),transparent 42%),
+    linear-gradient(135deg,color-mix(in srgb,var(--ml-surface) 96%,#b99a63),var(--ml-surface));
+}
+.perde-hidden-gems-section .ml-section-kicker { color:#b18b4e; }
+.perde-hidden-gems-section .ml-section-kicker i { font-size:11px; }
+.perde-hidden-gems-refresh {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:35px;
+  padding:0 12px;
+  border:1px solid color-mix(in srgb,#b99a63 38%,var(--ml-border));
+  border-radius:9px;
+  background:var(--ml-surface);
+  color:var(--ml-text);
+  font-size:10px;
+  font-weight:800;
+  white-space:nowrap;
+  transition:background .18s ease,border-color .18s ease,transform .18s ease;
+}
+.perde-hidden-gems-refresh:hover { transform:translateY(-1px); border-color:#b99a63; background:var(--ml-surface-muted); }
+.perde-hidden-gems-grid { min-height:120px; }
+.perde-hidden-gem-badge {
+  position:absolute;
+  z-index:2;
+  top:10px;
+  left:10px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  max-width:calc(100% - 20px);
+  padding:6px 8px;
+  border:1px solid rgba(231,204,150,.34);
+  border-radius:7px;
+  background:rgba(24,22,18,.82);
+  color:#f0d49b;
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.07em;
+  backdrop-filter:blur(8px);
+}
+.perde-hidden-gems-loading,
+.perde-hidden-gems-empty {
+  grid-column:1/-1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  min-height:125px;
+  padding:20px;
+  color:var(--ml-muted);
+  font-size:11px;
+  text-align:center;
+}
+.perde-hidden-gems-empty button {
+  padding:7px 11px;
+  border:1px solid var(--ml-border);
+  border-radius:8px;
+  color:var(--ml-accent);
+  font-weight:800;
+}
+.perde-hidden-gems-note {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin:2px 0 0;
+  color:var(--ml-muted);
+  font-size:9px;
+  line-height:1.5;
+}
+.perde-hidden-gems-note i { color:#b18b4e; }
+@media(max-width:767px) {
+  .perde-hidden-gems-section { padding:15px 12px 12px; border-radius:14px; }
+  .perde-hidden-gems-section .ml-section-heading { flex-direction:row; align-items:flex-end; }
+  .perde-hidden-gems-refresh { min-height:31px; padding:0 9px; font-size:9px; }
+  .perde-hidden-gem-badge { top:7px; left:7px; padding:5px 6px; font-size:7px; }
+}
+@media(max-width:390px) {
+  .perde-hidden-gems-section .ml-section-heading { flex-direction:column; align-items:stretch; }
+  .perde-hidden-gems-refresh { align-self:flex-start; }
+}
