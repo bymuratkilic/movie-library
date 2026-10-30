@@ -223,7 +223,38 @@
                 <span id="stats-updated-label" class="text-[10px] dark:text-clean-muted text-light-muted">Arşiv verilerine göre</span>
             </div>
 
-            
+            <div id="personal-stats-kpis" class="perde-stats-kpi-grid"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="glass-panel p-5 rounded-2xl space-y-3">
+                    <div><h3 class="text-sm font-bold dark:text-white text-slate-900">En Çok Tercih Ettiğin Türler</h3><p class="text-[10px] dark:text-clean-muted text-light-muted mt-1">Koleksiyonundaki tür dağılımı</p></div>
+                    <div id="stats-top-genres" class="perde-stats-inline-list"><p class="perde-stats-empty">Henüz tür verisi yok.</p></div>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl space-y-3">
+                    <h3 class="text-sm font-bold dark:text-white text-slate-900">Tür Dağılımı</h3>
+                    <div class="relative h-64"><canvas id="genreDoughnutChart"></canvas></div>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl space-y-3">
+                    <h3 class="text-sm font-bold dark:text-white text-slate-900">İzleme Durumları</h3>
+                    <div class="relative h-64"><canvas id="statusBarChart"></canvas></div>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl space-y-3">
+                    <h3 class="text-sm font-bold dark:text-white text-slate-900">Son 12 Ayda İzleme Aktivitesi</h3>
+                    <div class="relative h-64"><canvas id="monthlyWatchChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5 rounded-2xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div><span class="text-[10px] font-extrabold tracking-[.16em] text-blue-500">YILLIK RAPOR</span><h3 id="perde-year-heading-title" class="text-base font-bold dark:text-white text-slate-900 mt-1">Sinema Özetin</h3></div>
+                    <div class="flex items-center gap-2">
+                        <select id="perde-year-select" class="input-field rounded-lg px-3 py-2 text-xs" onchange="renderYearInReview()"></select>
+                        <button id="perde-year-share" type="button" onclick="sharePerdeYearReview()" class="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold"><i class="fa-solid fa-share-nodes mr-1"></i> Paylaş</button>
+                    </div>
+                </div>
+                <div id="perde-year-review"></div>
+            </div>
+        </section>
 
         <!-- PERSONAL PROFILE TAB -->
         <section id="tab-profile" class="hidden space-y-6">
