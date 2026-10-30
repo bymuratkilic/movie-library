@@ -912,6 +912,12 @@
             }
         }
 
+        function scrollEditorPicks(direction) {
+            const rail = document.getElementById('editor-picks-grid');
+            if (!rail) return;
+            rail.scrollBy({ left: direction * Math.max(rail.clientWidth * 0.85, 260), behavior: 'smooth' });
+        }
+
         function renderDashboard() {
             renderFeaturedHero();
             renderTodaysPick();
@@ -923,8 +929,12 @@
             document.getElementById('stat-watchlist-count').textContent = watchLaterCount;
             document.getElementById('watchlist-badge').textContent = watchLaterCount + ' yapım';
             document.getElementById('stat-favorite-count').textContent = movies.filter(m => m.favorite).length;
-            const picks = [...movies].sort((a,b) => (Number(b.imdb)||0)-(Number(a.imdb)||0) || Number(Boolean(b.favorite))-Number(Boolean(a.favorite))).slice(0,12);
-            renderRow('editor-picks-grid', picks.slice(0, 6));
+            const picks = [...movies].sort((a,b) => {
+                const score = item => (Number(item.perdeRating)||0)*2.2 + (Number(item.imdb)||0)*1.4 +
+                    (item.favorite ? 3.5 : 0) + (item.status === 'watched' ? 1.8 : 0);
+                return score(b)-score(a) || (Number(b.imdb)||0)-(Number(a.imdb)||0);
+            }).slice(0, 12);
+            renderRow('editor-picks-grid', picks.slice(0, 8));
             renderRow('watchlist-row', movies.filter(m => m.status === 'watch_later').slice(0, 6));
             renderRow('recent-row', movies.slice(0, 6));
             renderGenreMenu();
