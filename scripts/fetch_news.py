@@ -10,6 +10,8 @@ from urllib.parse import urlparse, urlencode
 from urllib.request import Request, urlopen
 import feedparser
 
+feedparser.USER_AGENT = "Mozilla/5.0 (compatible; PerdeNews/1.0)"
+
 FEEDS = [
     ("https://www.dizifilmdergisiturkiye.com/rss/sinema.xml", "tr", "Türk Sineması"),
     ("https://www.dizifilmdergisiturkiye.com/rss/diziler.xml", "trseries", "Türk Dizileri"),
