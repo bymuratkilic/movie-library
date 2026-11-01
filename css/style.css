@@ -3584,3 +3584,46 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
   .perde-watch-link-row { flex-direction: column; }
   .perde-watch-link-row button { width: 100%; }
 }
+
+
+/* Perde detail page enhancement — 2026-11 */
+.perde-detail-nav{position:sticky;top:0;z-index:8;display:flex;gap:6px;overflow-x:auto;padding:10px clamp(16px,3vw,30px);border-bottom:1px solid var(--ml-border);background:color-mix(in srgb,var(--ml-surface) 94%,transparent);backdrop-filter:blur(14px);scrollbar-width:none}
+.perde-detail-nav::-webkit-scrollbar{display:none}
+.perde-detail-nav button{flex:0 0 auto;padding:9px 13px;border:1px solid transparent;border-radius:8px;color:var(--ml-muted);font-size:11px;font-weight:750;transition:.2s}
+.perde-detail-nav button:hover{border-color:var(--ml-border);background:var(--ml-surface-muted);color:var(--ml-text)}
+.perde-detail-quick-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.perde-detail-quick-actions button{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid var(--ml-border);border-radius:9px;background:var(--ml-surface);color:var(--ml-text);font-size:10px;font-weight:750;transition:.2s}
+.perde-detail-quick-actions button:first-child{border-color:var(--ml-accent);background:var(--ml-accent);color:#fff}
+.perde-detail-quick-actions button:hover{transform:translateY(-1px);border-color:var(--ml-accent)}
+.perde-detail-gallery{margin:20px 0 24px;padding:18px;border:1px solid var(--ml-border);border-radius:14px;background:var(--ml-surface)}
+.perde-detail-section-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
+.perde-detail-section-heading>div>span{display:block;margin-bottom:4px;color:var(--ml-accent);font-size:8px;font-weight:850;letter-spacing:.16em}
+.perde-detail-section-heading h3{margin:0;color:var(--ml-text);font-size:16px;font-weight:800;letter-spacing:-.03em}
+.perde-detail-section-heading>span{color:var(--ml-muted);font-size:9px}
+.perde-detail-gallery-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(120px,.7fr);gap:12px}
+.perde-detail-gallery-grid figure{position:relative;min-width:0;margin:0;overflow:hidden;border:1px solid var(--ml-border);border-radius:10px;background:var(--ml-surface-muted)}
+.perde-detail-gallery-grid img{display:block;width:100%;height:190px;object-fit:cover;transition:transform .35s}
+.perde-detail-gallery-grid figure:hover img{transform:scale(1.025)}
+.perde-detail-gallery-grid figcaption{padding:8px 10px;color:var(--ml-muted);font-size:9px}
+.perde-personal-review{margin:22px clamp(18px,3vw,32px);padding:20px;border:1px solid var(--ml-border);border-radius:14px;background:var(--ml-surface)}
+.perde-personal-review-form{display:grid;grid-template-columns:minmax(150px,.45fr) minmax(0,1.55fr);gap:14px}
+.perde-personal-review-form label{display:flex;flex-direction:column;gap:7px;color:var(--ml-muted);font-size:10px;font-weight:750}
+.perde-personal-review-form select,.perde-personal-note-label textarea{width:100%;min-width:0;border:1px solid var(--ml-border);border-radius:9px;background:var(--ml-surface-muted);color:var(--ml-text);padding:11px;font:inherit;font-size:11px}
+.perde-personal-note-label textarea{min-height:86px;resize:vertical;line-height:1.6}
+.perde-personal-review-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.perde-personal-review-actions small{color:var(--ml-muted);font-size:9px}
+.perde-personal-review-actions button{display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border:1px solid var(--ml-accent);border-radius:9px;background:var(--ml-accent);color:#fff;font-size:10px;font-weight:800}
+#perde-detail-overview-section,#perde-detail-gallery,#perde-detail-cast-section,#perde-personal-review,#perde-similar-grid{scroll-margin-top:76px}
+@media(max-width:640px){
+ .perde-detail-nav{padding:8px 12px}
+ .perde-detail-nav button{padding:8px 10px;font-size:10px}
+ .perde-detail-quick-actions{gap:6px}
+ .perde-detail-quick-actions button{flex:1 1 calc(50% - 6px);justify-content:center;padding:10px 8px}
+ .perde-detail-gallery{padding:13px;margin:16px 0 20px}
+ .perde-detail-gallery-grid{grid-template-columns:1fr 1fr;gap:8px}
+ .perde-detail-gallery-grid img{height:118px}
+ .perde-personal-review{margin:18px 14px;padding:15px}
+ .perde-personal-review-form{grid-template-columns:1fr;gap:11px}
+ .perde-personal-review-actions{align-items:flex-start;flex-direction:column}
+ .perde-personal-review-actions button{width:100%;justify-content:center}
+}
