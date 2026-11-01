@@ -1454,6 +1454,67 @@
             openDetailModal(id, 'tr_sub');
         }
 
+        // Film izleme bağlantıları: yalnızca bilinen gömülebilir kaynaklar ve doğrudan video dosyaları.
+        function getPerdeWatchSource(rawUrl) {
+            try {
+                const parsed = new URL(String(rawUrl || '').trim());
+                if (parsed.protocol !== 'https:' || parsed.username || parsed.password) return null;
+                const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
+                let videoId = '';
+                if (['youtube.com', 'm.youtube.com', 'youtube-nocookie.com', 'youtu.be'].includes(host)) {
+                    if (host === 'youtu.be') videoId = parsed.pathname.split('/').filter(Boolean)[0] || '';
+                    else videoId = parsed.searchParams.get('v') || (parsed.pathname.match(/^\/(?:embed|shorts|live)\/([a-zA-Z0-9_-]{11})/) || [])[1] || '';
+                    if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) return null;
+                    return { type: 'iframe', embedUrl: 'https://www.youtube-nocookie.com/embed/' + videoId + '?rel=0&playsinline=1', normalizedUrl: 'https://www.youtube.com/watch?v=' + videoId };
+                }
+                if (host === 'vimeo.com' || host === 'player.vimeo.com') {
+                    const match = parsed.pathname.match(/(?:^|\/)video\/(\d+)|^\/(\d+)/);
+                    videoId = match ? (match[1] || match[2]) : '';
+                    if (!videoId) return null;
+                    return { type: 'iframe', embedUrl: 'https://player.vimeo.com/video/' + videoId, normalizedUrl: 'https://vimeo.com/' + videoId };
+                }
+                if (host === 'dailymotion.com' || host === 'dai.ly') {
+                    videoId = (parsed.pathname.match(/(?:^|\/)video\/([a-zA-Z0-9]+)/) || [])[1] || (host === 'dai.ly' ? parsed.pathname.split('/').filter(Boolean)[0] : '');
+                    if (!/^[a-zA-Z0-9]+$/.test(videoId)) return null;
+                    return { type: 'iframe', embedUrl: 'https://www.dailymotion.com/embed/video/' + videoId, normalizedUrl: 'https://www.dailymotion.com/video/' + videoId };
+                }
+                if (/\.(mp4|webm|ogg)$/i.test(parsed.pathname)) return { type: 'video', videoUrl: parsed.href, normalizedUrl: parsed.href };
+            } catch (error) {}
+            return null;
+        }
+
+        function renderPerdeWatchPlayer(movie, isInArchive) {
+            const safeTitle = escapeTrailerField(movie.title || 'Film');
+            const safeId = String(movie.id).replace(/[^a-zA-Z0-9_-]/g, '');
+            const rawUrl = String(movie.watchUrl || '').trim();
+            const source = rawUrl ? getPerdeWatchSource(rawUrl) : null;
+            let player = '';
+            if (source && source.type === 'iframe') {
+                player = '<div class="perde-watch-player-frame"><iframe title="' + safeTitle + ' izleme oynatıcısı" src="' + escapeTrailerField(source.embedUrl) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
+            } else if (source && source.type === 'video') {
+                player = '<div class="perde-watch-player-frame"><video controls playsinline preload="metadata" src="' + escapeTrailerField(source.videoUrl) + '">Tarayıcınız video oynatmayı desteklemiyor.</video></div>';
+            } else {
+                const message = rawUrl ? 'Kayıtlı bağlantı desteklenmiyor. YouTube, Vimeo, Dailymotion veya doğrudan MP4/WebM/OGG bağlantısı kullanın.' : 'İzlemek için yetkili video bağlantısını ekleyin.';
+                player = '<div class="perde-watch-player-empty"><span><i class="fa-solid fa-play"></i></span><strong>' + message + '</strong><small>Oynatma yalnızca kaynak tarafından gömülmesine izin verilen içeriklerde çalışır.</small></div>';
+            }
+            const editor = isInArchive
+                ? '<div class="perde-watch-link-editor"><label for="perde-watch-url-input">Yetkili video bağlantısı</label><div class="perde-watch-link-row"><input id="perde-watch-url-input" type="url" inputmode="url" autocomplete="url" value="' + escapeTrailerField(rawUrl) + '" placeholder="YouTube, Vimeo, Dailymotion veya MP4 bağlantısı"><button type="button" onclick="savePerdeWatchUrl(\'' + safeId + '\')"><i class="fa-solid fa-link"></i> Kaydet</button></div><small>Bağlantı bu yapımın arşiv kaydına kaydedilir. Boş bırakarak kaydederseniz bağlantı kaldırılır.</small></div>'
+                : '<p class="perde-watch-archive-note"><i class="fa-solid fa-circle-info"></i> Kendi izleme bağlantınızı eklemek için önce bu yapımı arşivinize kaydedin.</p>';
+            return '<section class="perde-watch-player-section" aria-label="Film izleme bölümü"><div class="perde-watch-player-heading"><div><span>PERDE · OYNATICI</span><h3>Filmi İzle</h3></div><span class="perde-watch-player-status">' + (source ? 'Kaynak hazır' : 'Bağlantı bekleniyor') + '</span></div>' + player + editor + '<p class="perde-watch-player-disclaimer">Not: Netflix, Prime Video gibi DRM korumalı platformların içerikleri, platform izin vermediği sürece harici oynatıcıya gömülemez.</p></section>';
+        }
+
+        function savePerdeWatchUrl(id) {
+            const input = document.getElementById('perde-watch-url-input');
+            const entered = (input?.value || '').trim();
+            const movie = movies.find(item => String(item.id) === String(id));
+            if (!movie) { showToast('İzleme bağlantısı yalnızca arşive eklenmiş yapımlara kaydedilebilir.'); return; }
+            if (entered && !getPerdeWatchSource(entered)) { showToast('Desteklenmeyen bağlantı. HTTPS YouTube, Vimeo, Dailymotion veya MP4/WebM/OGG bağlantısı girin.'); return; }
+            movie.watchUrl = entered ? getPerdeWatchSource(entered).normalizedUrl : '';
+            saveToLocalStorage();
+            showToast(entered ? 'Film izleme bağlantısı kaydedildi.' : 'Film izleme bağlantısı kaldırıldı.');
+            openDetailModal(id);
+        }
+
         function openDetailModal(id, trailerMode = null, popupOnly = false) {
             const m = movies.find(x => String(x.id) === String(id)) || onlineCatalog.find(x => String(x.id) === String(id)) || fetchedOnlineResults.find(x => String(x.id) === String(id));
             if (!m) return;
@@ -1542,7 +1603,7 @@
                             </aside>
                             <div class="perde-imdb-main">
                                 <section class="perde-story-panel" aria-labelledby="perde-story-title"><div class="perde-story-heading"><span class="perde-story-kicker"><i class="fa-solid fa-book-open"></i> HİKÂYESİ</span><span class="perde-story-rule" aria-hidden="true"></span></div><h3 id="perde-story-title">Bir hikâyeye davet</h3><p class="perde-imdb-overview" id="perde-detail-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p><div class="perde-story-foot"><span><i class="fa-solid fa-clapperboard"></i> PERDE</span><span>HİKÂYE &amp; ÖZET</span></div></section><div id="perde-detail-series-meta" class="perde-detail-series-meta" hidden></div>
-                                <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite"><div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div><div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div></section>
+                                <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite"><div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div><div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div></section>${renderPerdeWatchPlayer(m, detailIsInArchive)}
                                 <div class="perde-detail-actions-panel"><div class="perde-detail-actions-main"><button type="button" onclick="addToComparison('${m.id}')" class="perde-imdb-action-btn"><i class="fa-solid fa-scale-balanced"></i><span>Karşılaştırmaya ekle</span></button>${detailIsInArchive ? `<label class="perde-imdb-watch-label"><span class="perde-watch-label-copy"><i class="fa-solid fa-bookmark"></i><span>İzleme durumum</span></span><select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label>` : `<button type="button" class="perde-detail-add-to-list" onclick="addSimilarProduction('${m.id}', this)"><i class="fa-solid fa-plus"></i><span>Listeme Ekle</span><small>İzleme listene kaydet</small></button>`}</div>${detailIsInArchive ? `<div class="perde-detail-actions-danger"><button type="button" onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-regular fa-trash-can"></i><span>Arşivden sil</span></button></div>` : ''}</div>
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-cast-carousel"><button type="button" class="perde-cast-arrow perde-cast-prev" onclick="scrollDetailCast(-1)" aria-label="Önceki oyuncular" hidden><i class="fa-solid fa-chevron-left"></i></button><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div><button type="button" class="perde-cast-arrow perde-cast-next" onclick="scrollDetailCast(1)" aria-label="Sonraki oyuncular" hidden><i class="fa-solid fa-chevron-right"></i></button></div></div>
                             </div>
