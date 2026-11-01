@@ -1503,6 +1503,75 @@
             return '<section class="perde-watch-player-section" aria-label="Film izleme bölümü"><div class="perde-watch-player-heading"><div><span>PERDE · OYNATICI</span><h3>Filmi İzle</h3></div><span class="perde-watch-player-status">' + (source ? 'Kaynak hazır' : 'Bağlantı bekleniyor') + '</span></div>' + player + editor + '<p class="perde-watch-player-disclaimer">Not: Netflix, Prime Video gibi DRM korumalı platformların içerikleri, platform izin vermediği sürece harici oynatıcıya gömülemez.</p></section>';
         }
 
+        function renderPerdeSeriesSection(movie, isInArchive) {
+            const seasons = Array.isArray(movie.seriesSeasons) ? movie.seriesSeasons : [];
+            const episodes = seasons.flatMap(season => (season.episodes || []).map(episode => ({
+                ...episode, seasonNumber: Number(season.seasonNumber) || 1
+            }))).sort((a, b) => a.seasonNumber - b.seasonNumber || a.episodeNumber - b.episodeNumber);
+            const activeKey = movie.activeEpisodeKey || (episodes[0] ? episodes[0].seasonNumber + ':' + episodes[0].episodeNumber : '');
+            const active = episodes.find(ep => ep.seasonNumber + ':' + ep.episodeNumber === activeKey) || episodes[0] || null;
+            let player = '<div class="perde-watch-player-empty"><span><i class="fa-solid fa-tv"></i></span><strong>Henüz bölüm eklenmedi</strong><small>İzleme bağlantılarını sezon ve bölüm numarasıyla ekleyebilirsiniz.</small></div>';
+            if (active) {
+                const source = getPerdeWatchSource(active.watchUrl || '');
+                if (source && source.type === 'iframe') {
+                    player = '<div class="perde-watch-player-frame"><iframe title="' + escapeTrailerField(movie.title + ' - ' + active.title) + '" src="' + escapeTrailerField(source.embedUrl) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
+                } else if (source && source.type === 'video') {
+                    player = '<div class="perde-watch-player-frame"><video controls playsinline preload="metadata" src="' + escapeTrailerField(source.videoUrl) + '">Tarayıcınız video oynatmayı desteklemiyor.</video></div>';
+                } else if (active.watchUrl) {
+                    player = '<div class="perde-watch-player-empty"><span><i class="fa-solid fa-arrow-up-right-from-square"></i></span><strong>' + escapeTrailerField(active.title) + '</strong><small>Bu kaynak Perde içine gömülemiyor. Bölüm sayfasını yeni sekmede açabilirsiniz.</small><a class="perde-series-open-source" href="' + escapeTrailerField(active.watchUrl) + '" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-play"></i> Kaynak sayfasını aç</a></div>';
+                }
+            }
+            const safeId = String(movie.id).replace(/[^a-zA-Z0-9_-]/g, '');
+            const seasonMarkup = seasons.slice().sort((a,b) => a.seasonNumber-b.seasonNumber).map(season => {
+                const rows = (season.episodes || []).slice().sort((a,b) => a.episodeNumber-b.episodeNumber).map(ep => {
+                    const key = Number(season.seasonNumber) + ':' + Number(ep.episodeNumber);
+                    const selected = key === activeKey;
+                    return '<button type="button" class="perde-series-episode' + (selected ? ' is-active' : '') + '" onclick="playPerdeEpisode(\'' + safeId + '\',' + Number(season.seasonNumber) + ',' + Number(ep.episodeNumber) + ')"><span class="perde-series-episode-number">' + Number(ep.episodeNumber) + '</span><span class="perde-series-episode-copy"><strong>' + escapeTrailerField(ep.title || ('Bölüm ' + ep.episodeNumber)) + '</strong><small>' + (getPerdeWatchSource(ep.watchUrl || '') ? 'Oynatılabilir bağlantı' : ep.watchUrl ? 'Harici kaynak' : 'Bağlantı bekleniyor') + '</small></span><i class="fa-solid fa-play"></i></button>';
+                }).join('');
+                return '<div class="perde-series-season"><h4>' + Number(season.seasonNumber) + '. Sezon</h4><div class="perde-series-episode-list">' + rows + '</div></div>';
+            }).join('');
+            const editor = isInArchive
+                ? '<form class="perde-series-editor" onsubmit="event.preventDefault(); savePerdeEpisode(\'' + safeId + '\')"><div class="perde-series-editor-heading"><strong><i class="fa-solid fa-plus"></i> Bölüm ekle</strong><small>Her bölümün bağlantısı ayrı kaydedilir.</small></div><div class="perde-series-editor-grid"><label>Sezon<input id="perde-series-season" type="number" min="1" max="99" value="' + (seasons.length ? Math.max(...seasons.map(x=>Number(x.seasonNumber)||1)) : 1) + '" required></label><label>Bölüm<input id="perde-series-episode" type="number" min="1" max="999" value="' + (active ? Number(active.episodeNumber)+1 : 1) + '" required></label><label class="perde-series-title-field">Bölüm adı<input id="perde-series-title" type="text" maxlength="120" placeholder="Örn. Pilot"></label><label class="perde-series-url-field">Bölüm bağlantısı<input id="perde-series-url" type="url" placeholder="HTTPS bölüm sayfası veya video bağlantısı" required></label></div><button type="submit"><i class="fa-solid fa-floppy-disk"></i> Bölümü kaydet</button></form>'
+                : '<p class="perde-watch-archive-note"><i class="fa-solid fa-circle-info"></i> Sezon ve bölüm eklemek için önce diziyi arşivinize kaydedin.</p>';
+            return '<section class="perde-watch-player-section perde-series-section" aria-label="Dizi bölümleri"><div class="perde-watch-player-heading"><div><span>PERDE · DİZİ OYNATICISI</span><h3>Bölümleri İzle</h3></div><span class="perde-watch-player-status">' + episodes.length + ' bölüm</span></div>' + player + '<div class="perde-series-library">' + (seasonMarkup || '<p class="perde-series-empty-list">Sezon ve bölüm listeniz burada görünecek.</p>') + '</div>' + editor + '<p class="perde-watch-player-disclaimer">Video kaynağı gömülmeye izin veriyorsa Perde içinde oynatılır; diğer HTTPS bölüm sayfaları yeni sekmede açılır.</p></section>';
+        }
+
+        function savePerdeEpisode(id) {
+            const movie = movies.find(item => String(item.id) === String(id));
+            if (!movie) { showToast('Bölüm eklemek için diziyi önce arşivinize kaydedin.'); return; }
+            const seasonNumber = Number(document.getElementById('perde-series-season')?.value);
+            const episodeNumber = Number(document.getElementById('perde-series-episode')?.value);
+            const title = (document.getElementById('perde-series-title')?.value || '').trim();
+            const enteredUrl = (document.getElementById('perde-series-url')?.value || '').trim();
+            if (!Number.isInteger(seasonNumber) || seasonNumber < 1 || seasonNumber > 99 || !Number.isInteger(episodeNumber) || episodeNumber < 1 || episodeNumber > 999) {
+                showToast('Geçerli bir sezon ve bölüm numarası girin.'); return;
+            }
+            let parsed;
+            try { parsed = new URL(enteredUrl); } catch (error) { showToast('Geçerli bir HTTPS bölüm bağlantısı girin.'); return; }
+            if (parsed.protocol !== 'https:' || parsed.username || parsed.password) { showToast('Yalnızca güvenli HTTPS bağlantıları kaydedilebilir.'); return; }
+            if (!Array.isArray(movie.seriesSeasons)) movie.seriesSeasons = [];
+            let season = movie.seriesSeasons.find(item => Number(item.seasonNumber) === seasonNumber);
+            if (!season) { season = { seasonNumber, episodes: [] }; movie.seriesSeasons.push(season); }
+            if (!Array.isArray(season.episodes)) season.episodes = [];
+            const episode = { episodeNumber, title: title || ('Bölüm ' + episodeNumber), watchUrl: parsed.href };
+            const existingIndex = season.episodes.findIndex(item => Number(item.episodeNumber) === episodeNumber);
+            if (existingIndex >= 0) season.episodes[existingIndex] = episode;
+            else season.episodes.push(episode);
+            movie.activeEpisodeKey = seasonNumber + ':' + episodeNumber;
+            movie.seriesSeasons.sort((a,b) => Number(a.seasonNumber)-Number(b.seasonNumber));
+            saveToLocalStorage();
+            showToast('Bölüm bağlantısı kaydedildi.');
+            openDetailModal(id);
+        }
+
+        function playPerdeEpisode(id, seasonNumber, episodeNumber) {
+            const movie = movies.find(item => String(item.id) === String(id));
+            if (!movie) return;
+            movie.activeEpisodeKey = Number(seasonNumber) + ':' + Number(episodeNumber);
+            saveToLocalStorage();
+            openDetailModal(id);
+        }
+
         function savePerdeWatchUrl(id) {
             const input = document.getElementById('perde-watch-url-input');
             const entered = (input?.value || '').trim();
@@ -1603,7 +1672,7 @@
                             </aside>
                             <div class="perde-imdb-main">
                                 <section class="perde-story-panel" aria-labelledby="perde-story-title"><div class="perde-story-heading"><span class="perde-story-kicker"><i class="fa-solid fa-book-open"></i> HİKÂYESİ</span><span class="perde-story-rule" aria-hidden="true"></span></div><h3 id="perde-story-title">Bir hikâyeye davet</h3><p class="perde-imdb-overview" id="perde-detail-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p><div class="perde-story-foot"><span><i class="fa-solid fa-clapperboard"></i> PERDE</span><span>HİKÂYE &amp; ÖZET</span></div></section><div id="perde-detail-series-meta" class="perde-detail-series-meta" hidden></div>
-                                <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite"><div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div><div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div></section>${renderPerdeWatchPlayer(m, detailIsInArchive)}
+                                <section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite"><div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div><div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div></section>${m.type === 'tv' ? renderPerdeSeriesSection(m, detailIsInArchive) : renderPerdeWatchPlayer(m, detailIsInArchive)}
                                 <div class="perde-detail-actions-panel"><div class="perde-detail-actions-main"><button type="button" onclick="addToComparison('${m.id}')" class="perde-imdb-action-btn"><i class="fa-solid fa-scale-balanced"></i><span>Karşılaştırmaya ekle</span></button>${detailIsInArchive ? `<label class="perde-imdb-watch-label"><span class="perde-watch-label-copy"><i class="fa-solid fa-bookmark"></i><span>İzleme durumum</span></span><select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label>` : `<button type="button" class="perde-detail-add-to-list" onclick="addSimilarProduction('${m.id}', this)"><i class="fa-solid fa-plus"></i><span>Listeme Ekle</span><small>İzleme listene kaydet</small></button>`}</div>${detailIsInArchive ? `<div class="perde-detail-actions-danger"><button type="button" onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-regular fa-trash-can"></i><span>Arşivden sil</span></button></div>` : ''}</div>
                                 <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-cast-carousel"><button type="button" class="perde-cast-arrow perde-cast-prev" onclick="scrollDetailCast(-1)" aria-label="Önceki oyuncular" hidden><i class="fa-solid fa-chevron-left"></i></button><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div><button type="button" class="perde-cast-arrow perde-cast-next" onclick="scrollDetailCast(1)" aria-label="Sonraki oyuncular" hidden><i class="fa-solid fa-chevron-right"></i></button></div></div>
                             </div>
