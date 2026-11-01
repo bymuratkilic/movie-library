@@ -3544,6 +3544,38 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
   padding-top: 11px;
   border-top: 1px solid var(--ml-border);
 }
+
+.perde-series-library { display: grid; gap: 16px; margin-top: 18px; }
+.perde-series-season h4 { margin: 0 0 9px; color: var(--ml-text); font-size: 13px; font-weight: 850; }
+.perde-series-episode-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.perde-series-episode { display: flex; align-items: center; gap: 11px; min-width: 0; padding: 11px; border: 1px solid var(--ml-border); border-radius: 10px; color: var(--ml-text); background: var(--ml-surface-muted); text-align: left; cursor: pointer; transition: border-color .18s, background .18s; }
+.perde-series-episode:hover, .perde-series-episode.is-active { border-color: var(--ml-accent); background: color-mix(in srgb, var(--ml-accent) 8%, var(--ml-surface)); }
+.perde-series-episode-number { display: grid; flex: 0 0 32px; width: 32px; height: 32px; place-items: center; border-radius: 8px; color: var(--ml-accent); background: color-mix(in srgb, var(--ml-accent) 12%, transparent); font-size: 12px; font-weight: 900; }
+.perde-series-episode-copy { display: grid; flex: 1; min-width: 0; gap: 3px; }
+.perde-series-episode-copy strong { overflow: hidden; font-size: 11px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.perde-series-episode-copy small { color: var(--ml-muted); font-size: 9px; }
+.perde-series-episode > i { color: var(--ml-accent); font-size: 11px; }
+.perde-series-empty-list { margin: 0; padding: 13px; border: 1px dashed var(--ml-border); border-radius: 10px; color: var(--ml-muted); font-size: 11px; }
+.perde-series-editor { display: grid; gap: 12px; margin-top: 18px; padding: 15px; border: 1px solid var(--ml-border); border-radius: 12px; background: var(--ml-surface-muted); }
+.perde-series-editor-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; }
+.perde-series-editor-heading strong { color: var(--ml-text); font-size: 12px; }
+.perde-series-editor-heading strong i { margin-right: 5px; color: var(--ml-accent); }
+.perde-series-editor-heading small { color: var(--ml-muted); font-size: 10px; }
+.perde-series-editor-grid { display: grid; grid-template-columns: 90px 90px minmax(150px, 1fr); gap: 10px; }
+.perde-series-editor-grid label { display: grid; gap: 6px; color: var(--ml-muted); font-size: 10px; font-weight: 750; }
+.perde-series-editor-grid input { width: 100%; min-width: 0; min-height: 39px; padding: 0 10px; border: 1px solid var(--ml-border); border-radius: 8px; outline: none; color: var(--ml-text); background: var(--ml-surface); font-size: 11px; }
+.perde-series-editor-grid input:focus { border-color: var(--ml-accent); }
+.perde-series-title-field { grid-column: 1 / 3; }
+.perde-series-url-field { grid-column: 3 / 4; grid-row: 1 / 3; }
+.perde-series-editor > button, .perde-series-open-source { display: inline-flex; align-items: center; justify-content: center; gap: 7px; width: fit-content; min-height: 39px; padding: 0 14px; border: 1px solid var(--ml-accent); border-radius: 8px; color: #fff; background: var(--ml-accent); font-size: 11px; font-weight: 800; text-decoration: none; cursor: pointer; }
+.perde-series-open-source { margin-top: 4px; }
+@media (max-width: 640px) {
+  .perde-series-episode-list { grid-template-columns: 1fr; }
+  .perde-series-editor-grid { grid-template-columns: 1fr 1fr; }
+  .perde-series-title-field, .perde-series-url-field { grid-column: 1 / -1; grid-row: auto; }
+  .perde-series-editor > button { width: 100%; }
+}
+
 @media (max-width: 640px) {
   .perde-watch-player-section { margin: 16px 0; padding: 13px; border-radius: 13px; }
   .perde-watch-player-heading h3 { font-size: 17px; }
