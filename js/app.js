@@ -1610,6 +1610,38 @@
             openDetailModal(movie.id);
         }
 
+        const PERDE_REVIEW_STORAGE_KEY = 'perde_personal_reviews_v1';
+        function getPerdeReview(id) {
+            try {
+                const all = JSON.parse(localStorage.getItem(PERDE_REVIEW_STORAGE_KEY) || '{}');
+                return all && typeof all === 'object' ? (all[String(id)] || {}) : {};
+            } catch (error) { return {}; }
+        }
+        function savePerdeReview(id) {
+            const rating = Math.min(10, Math.max(1, Number(document.getElementById('perde-personal-rating')?.value) || 0));
+            const note = (document.getElementById('perde-personal-note')?.value || '').trim().slice(0, 1200);
+            try {
+                const all = JSON.parse(localStorage.getItem(PERDE_REVIEW_STORAGE_KEY) || '{}');
+                all[String(id)] = { rating, note, updatedAt: new Date().toISOString() };
+                localStorage.setItem(PERDE_REVIEW_STORAGE_KEY, JSON.stringify(all));
+                showToast('Kişisel değerlendirmen kaydedildi.');
+            } catch (error) { showToast('Not kaydedilemedi. Tarayıcı depolama alanını kontrol edin.'); }
+        }
+        function sharePerdeDetail(id) {
+            const item = getComparisonMovie(id);
+            if (!item) return;
+            const url = new URL(window.location.href);
+            url.hash = 'yapim-' + encodeURIComponent(id);
+            const shareData = { title: item.title + ' · Perde', text: (item.year || '') + ' · ' + (item.overview || 'Perde film ve dizi arşivi'), url: url.href };
+            if (navigator.share) navigator.share(shareData).catch(() => {});
+            else if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url.href).then(() => showToast('Yapım bağlantısı kopyalandı.')).catch(() => showToast('Bağlantı kopyalanamadı.'));
+            else showToast('Bu tarayıcı paylaşımı desteklemiyor.');
+        }
+        function scrollPerdeDetailSection(id) {
+            const target = document.getElementById(id);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         function openDetailModal(id, trailerMode = null, popupOnly = false) {
             const m = movies.find(x => String(x.id) === String(id)) || onlineCatalog.find(x => String(x.id) === String(id)) || fetchedOnlineResults.find(x => String(x.id) === String(id));
             if (!m) return;
@@ -1680,8 +1712,15 @@
                             <div class="perde-imdb-hero-shade"></div>
                             <div class="perde-imdb-hero-top"><span class="perde-imdb-brand">My Library<span>ARŞİV</span></span><span class="perde-imdb-type">${m.type === 'tv' ? 'DİZİ' : m.type === 'doc' ? 'BELGESEL' : 'FİLM'}</span></div>
                             <div class="perde-imdb-feature-art"><img id="perde-detail-hero-poster" src="${m.poster || m.backdrop || ''}" alt="${m.title} afişi" onerror="this.src='${m.backdrop || ''}'"><button onclick="openDetailModal('${m.id}', 'tr_sub')" class="perde-imdb-play" aria-label="${m.title} fragmanını oynat"><i class="fa-solid fa-play"></i><span>FRAGMANI İZLE</span></button></div>
-                            <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker"><span id="perde-detail-year">${m.year || 'Yıl bilinmiyor'}</span> <span>•</span> <span id="perde-detail-runtime">${m.runtime || 'Süre bilgisi yok'}</span></div><h2 id="perde-detail-title">${m.title}</h2><div class="perde-imdb-genres" id="perde-detail-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div><div class="perde-imdb-rating-row perde-imdb-hero-rating"><div class="perde-imdb-score imdb-brand-badge" aria-label="IMDb puanı"><span class="imdb-brand-word">IMDb</span><strong>${m.imdb || '—'}</strong></div><button onclick="toggleFavorite('${m.id}')" class="perde-imdb-fav ${m.favorite ? 'is-favorite' : ''}"><i class="fa-solid fa-heart"></i> ${m.favorite ? 'Favorilerde' : 'Favorilere Ekle'}</button></div></div>
+                            <div class="perde-imdb-hero-copy"><div class="perde-imdb-kicker"><span id="perde-detail-year">${m.year || 'Yıl bilinmiyor'}</span> <span>•</span> <span id="perde-detail-runtime">${m.runtime || 'Süre bilgisi yok'}</span></div><h2 id="perde-detail-title">${m.title}</h2><div class="perde-imdb-genres" id="perde-detail-genres">${m.genres && m.genres.length ? m.genres.map(g => `<span>${g}</span>`).join('') : '<span>Sinema</span>'}</div><div class="perde-imdb-rating-row perde-imdb-hero-rating"><div class="perde-imdb-score imdb-brand-badge" aria-label="IMDb puanı"><span class="imdb-brand-word">IMDb</span><strong>${m.imdb || '—'}</strong></div><button onclick="toggleFavorite('${m.id}')" class="perde-imdb-fav ${m.favorite ? 'is-favorite' : ''}"><i class="fa-solid fa-heart"></i> ${m.favorite ? 'Favorilerde' : 'Favorilere Ekle'}</button></div><div class="perde-detail-quick-actions"><button type="button" onclick="openDetailModal('${m.id}', 'tr_sub')"><i class="fa-solid fa-play"></i> Fragmanı izle</button><button type="button" onclick="addSimilarProduction('${m.id}', this)"><i class="fa-solid fa-bookmark"></i> Listeme ekle</button><button type="button" onclick="sharePerdeDetail('${String(m.id).replace(/'/g, '')}')"><i class="fa-solid fa-share-nodes"></i> Paylaş</button></div></div>
                         </section>
+                        <nav class="perde-detail-nav" aria-label="Detay sayfası bölümleri">
+                            <button type="button" onclick="scrollPerdeDetailSection('perde-detail-overview-section')">Detaylar</button>
+                            <button type="button" onclick="scrollPerdeDetailSection('perde-detail-gallery')">Galerİ</button>
+                            <button type="button" onclick="scrollPerdeDetailSection('perde-detail-cast-section')">Oyuncular</button>
+                            <button type="button" onclick="scrollPerdeDetailSection('perde-personal-review')">Notlarım</button>
+                            <button type="button" onclick="scrollPerdeDetailSection('perde-similar-grid')">Benzer yapımlar</button>
+                        </nav>
                         <section class="perde-imdb-content">
                             <aside class="perde-imdb-poster-wrap">
                                 <img id="perde-detail-poster" class="perde-imdb-poster" src="${m.poster || ''}" alt="${m.title} afişi" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80'">
@@ -1697,10 +1736,19 @@
                                 </section>
                             </aside>
                             <div class="perde-imdb-main">
-                                <section class="perde-story-panel" aria-labelledby="perde-story-title"><div class="perde-story-heading"><span class="perde-story-kicker"><i class="fa-solid fa-book-open"></i> HİKÂYESİ</span><span class="perde-story-rule" aria-hidden="true"></span></div><h3 id="perde-story-title">Bir hikâyeye davet</h3><p class="perde-imdb-overview" id="perde-detail-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p><div class="perde-story-foot"><span><i class="fa-solid fa-clapperboard"></i> PERDE</span><span>HİKÂYE &amp; ÖZET</span></div></section><div id="perde-detail-series-meta" class="perde-detail-series-meta" hidden></div>
+                                <section id="perde-detail-overview-section" class="perde-story-panel" aria-labelledby="perde-story-title"><div class="perde-story-heading"><span class="perde-story-kicker"><i class="fa-solid fa-book-open"></i> HİKÂYESİ</span><span class="perde-story-rule" aria-hidden="true"></span></div><h3 id="perde-story-title">Bir hikâyeye davet</h3><p class="perde-imdb-overview" id="perde-detail-overview">${m.overview || 'Bu yapım için henüz bir konu özeti eklenmemiş.'}</p><div class="perde-story-foot"><span><i class="fa-solid fa-clapperboard"></i> PERDE</span><span>HİKÂYE &amp; ÖZET</span></div></section><div id="perde-detail-series-meta" class="perde-detail-series-meta" hidden></div>
+                                <section id="perde-detail-gallery" class="perde-detail-gallery"><div class="perde-detail-section-heading"><div><span>GÖRSEL ARŞİV</span><h3>Filmden Kareler</h3></div><span>Görsel materyal</span></div><div class="perde-detail-gallery-grid"><figure><img src="${m.backdrop || m.poster || ''}" alt="${m.title} sahne görseli" loading="lazy" onerror="this.closest('figure').hidden=true"><figcaption>Atmosfer görseli</figcaption></figure><figure><img src="${m.poster || m.backdrop || ''}" alt="${m.title} afişi" loading="lazy" onerror="this.closest('figure').hidden=true"><figcaption>Resmî afiş</figcaption></figure></div></section>
                                 ${m.type === 'tv' ? renderPerdeSeriesSection(m, detailIsInArchive) : renderPerdeWatchPlayer(m, detailIsInArchive)}<section class="perde-watch-providers" id="perde-watch-providers" aria-live="polite"><div class="perde-watch-heading"><div><span>NEREDEN İZLENİR?</span><h3>Yayın Platformları</h3></div><span class="perde-watch-region"><i class="fa-solid fa-location-dot"></i> Türkiye</span></div><div class="perde-watch-loading"><i class="fa-solid fa-spinner fa-spin"></i> Platform bilgileri yükleniyor…</div></section>
                                 <div class="perde-detail-actions-panel"><div class="perde-detail-actions-main"><button type="button" onclick="addToComparison('${m.id}')" class="perde-imdb-action-btn"><i class="fa-solid fa-scale-balanced"></i><span>Karşılaştırmaya ekle</span></button>${detailIsInArchive ? `<label class="perde-imdb-watch-label"><span class="perde-watch-label-copy"><i class="fa-solid fa-bookmark"></i><span>İzleme durumum</span></span><select onchange="updateMovieStatus('${m.id}', this.value)" class="input-field"><option value="watched" ${m.status === 'watched' ? 'selected' : ''}>İzledim</option><option value="watch_later" ${m.status === 'watch_later' ? 'selected' : ''}>İzleyeceğim</option></select></label>` : `<button type="button" class="perde-detail-add-to-list" onclick="addSimilarProduction('${m.id}', this)"><i class="fa-solid fa-plus"></i><span>Listeme Ekle</span><small>İzleme listene kaydet</small></button>`}</div>${detailIsInArchive ? `<div class="perde-detail-actions-danger"><button type="button" onclick="deleteMovie('${m.id}')" class="perde-imdb-delete"><i class="fa-regular fa-trash-can"></i><span>Arşivden sil</span></button></div>` : ''}</div>
-                                <div class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-cast-carousel"><button type="button" class="perde-cast-arrow perde-cast-prev" onclick="scrollDetailCast(-1)" aria-label="Önceki oyuncular" hidden><i class="fa-solid fa-chevron-left"></i></button><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div><button type="button" class="perde-cast-arrow perde-cast-next" onclick="scrollDetailCast(1)" aria-label="Sonraki oyuncular" hidden><i class="fa-solid fa-chevron-right"></i></button></div></div>
+                                <div id="perde-detail-cast-section" class="perde-imdb-cast"><h3>Oyuncular ve ekip</h3><div class="perde-cast-carousel"><button type="button" class="perde-cast-arrow perde-cast-prev" onclick="scrollDetailCast(-1)" aria-label="Önceki oyuncular" hidden><i class="fa-solid fa-chevron-left"></i></button><div class="perde-imdb-cast-grid" id="perde-detail-cast-grid">${(m.cast && m.cast.length > 0) ? m.cast.map((c, idx) => { const imgId = `actor-img-${m.id}-${idx}`; const safeActorName = (c.name || 'Oyuncu').replace(/'/g, "\\'"); return `<button onclick="openActorBio('${safeActorName}')" class="perde-imdb-cast-card"><img id="${imgId}" src="${getAvatarUrl(c.name)}" alt="${c.name || 'Oyuncu'}"><span><b>${c.name || 'Bilinmiyor'}</b><small>${c.role || 'Karakter bilgisi yok'}</small></span></button>`; }).join('') : '<p class="perde-imdb-no-cast">Oyuncu bilgisi bulunmuyor.</p>'}</div><button type="button" class="perde-cast-arrow perde-cast-next" onclick="scrollDetailCast(1)" aria-label="Sonraki oyuncular" hidden><i class="fa-solid fa-chevron-right"></i></button></div></div>
+                            </div>
+                        </section>
+                        <section id="perde-personal-review" class="perde-personal-review">
+                            <div class="perde-detail-section-heading"><div><span>KİŞİSEL KOLEKSİYON</span><h3>Notlarım &amp; Değerlendirmem</h3></div><span>Yalnızca bu tarayıcıda saklanır</span></div>
+                            <div class="perde-personal-review-form">
+                                <label>Benim puanım<select id="perde-personal-rating" class="input-field"><option value="10" ${getPerdeReview(m.id).rating === 10 ? 'selected' : ''}>10 · Başyapıt</option><option value="9" ${getPerdeReview(m.id).rating === 9 ? 'selected' : ''}>9 · Harika</option><option value="8" ${getPerdeReview(m.id).rating === 8 ? 'selected' : ''}>8 · Çok iyi</option><option value="7" ${getPerdeReview(m.id).rating === 7 ? 'selected' : ''}>7 · İyi</option><option value="6" ${getPerdeReview(m.id).rating === 6 ? 'selected' : ''}>6 · Ortalama üstü</option><option value="5" ${getPerdeReview(m.id).rating === 5 ? 'selected' : ''}>5 · Ortalama</option><option value="4" ${getPerdeReview(m.id).rating === 4 ? 'selected' : ''}>4 · Zayıf</option><option value="3" ${getPerdeReview(m.id).rating === 3 ? 'selected' : ''}>3 · Kötü</option><option value="2" ${getPerdeReview(m.id).rating === 2 ? 'selected' : ''}>2 · Çok kötü</option><option value="1" ${getPerdeReview(m.id).rating === 1 ? 'selected' : ''}>1 · Berbat</option></select></label>
+                                <label class="perde-personal-note-label">Kişisel notum<textarea id="perde-personal-note" maxlength="1200" placeholder="Bu yapım hakkında düşüncelerini, sevdiğin sahneleri veya tekrar izleme notunu yaz...">${escapeProviderText(getPerdeReview(m.id).note || '')}</textarea></label>
+                                <div class="perde-personal-review-actions"><small>Notların ve puanın hesabına yüklenmez; bu tarayıcıda saklanır.</small><button type="button" onclick="savePerdeReview('${String(m.id).replace(/'/g, '')}')"><i class="fa-solid fa-floppy-disk"></i> Notumu Kaydet</button></div>
                             </div>
                         </section>
                         <section class="perde-similar" aria-label="Benzer yapımlar"><h3>Benzer Yapımlar</h3><div id="perde-similar-grid" class="perde-similar-grid"><p class="perde-similar-loading">Benzer yapımlar yükleniyor…</p></div></section>
