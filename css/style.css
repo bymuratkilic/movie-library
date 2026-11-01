@@ -3386,3 +3386,169 @@ html.light #perde-detail-series-meta>span:last-child{background:#edf2ff;border-c
     border-radius: 15px !important;
   }
 }
+
+
+/* PERDE film izleme oynatıcısı */
+.perde-watch-player-section {
+  min-width: 0;
+  margin: 22px 0;
+  padding: 20px;
+  border: 1px solid var(--ml-border);
+  border-radius: 16px;
+  background: var(--ml-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .055);
+}
+.perde-watch-player-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+.perde-watch-player-heading > div > span {
+  color: var(--ml-accent);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .16em;
+}
+.perde-watch-player-heading h3 {
+  margin: 5px 0 0;
+  color: var(--ml-text);
+  font-size: 19px;
+  font-weight: 850;
+  letter-spacing: -.035em;
+}
+.perde-watch-player-status {
+  padding: 6px 10px;
+  border: 1px solid var(--ml-border);
+  border-radius: 999px;
+  color: var(--ml-muted);
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+.perde-watch-player-frame,
+.perde-watch-player-empty {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--ml-border);
+  border-radius: 12px;
+  background: #080b10;
+}
+.perde-watch-player-frame iframe,
+.perde-watch-player-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #080b10;
+  object-fit: contain;
+}
+.perde-watch-player-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+  color: #f4f6fb;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 100%, rgba(62, 91, 133, .24), transparent 58%), #080b10;
+}
+.perde-watch-player-empty > span {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(255,255,255,.09);
+  font-size: 18px;
+}
+.perde-watch-player-empty strong {
+  max-width: 560px;
+  font-size: 13px;
+  font-weight: 750;
+}
+.perde-watch-player-empty small {
+  max-width: 560px;
+  color: rgba(235,240,248,.65);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.perde-watch-link-editor {
+  margin-top: 16px;
+}
+.perde-watch-link-editor label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--ml-text);
+  font-size: 11px;
+  font-weight: 750;
+}
+.perde-watch-link-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+.perde-watch-link-row input {
+  flex: 1;
+  min-width: 0;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--ml-border);
+  border-radius: 9px;
+  outline: none;
+  color: var(--ml-text);
+  background: var(--ml-surface-muted);
+  font-size: 11px;
+}
+.perde-watch-link-row input:focus {
+  border-color: var(--ml-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ml-accent) 15%, transparent);
+}
+.perde-watch-link-row button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid var(--ml-accent);
+  border-radius: 9px;
+  color: #fff;
+  background: var(--ml-accent);
+  font-size: 11px;
+  font-weight: 800;
+}
+.perde-watch-link-editor > small {
+  display: block;
+  margin-top: 7px;
+  color: var(--ml-muted);
+  font-size: 10px;
+  line-height: 1.55;
+}
+.perde-watch-archive-note,
+.perde-watch-player-disclaimer {
+  margin: 12px 0 0;
+  color: var(--ml-muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.perde-watch-archive-note i { margin-right: 5px; color: var(--ml-accent); }
+.perde-watch-player-disclaimer {
+  padding-top: 11px;
+  border-top: 1px solid var(--ml-border);
+}
+@media (max-width: 640px) {
+  .perde-watch-player-section { margin: 16px 0; padding: 13px; border-radius: 13px; }
+  .perde-watch-player-heading h3 { font-size: 17px; }
+  .perde-watch-player-empty { padding: 14px; }
+  .perde-watch-player-empty strong { font-size: 11px; }
+  .perde-watch-link-row { flex-direction: column; }
+  .perde-watch-link-row button { width: 100%; }
+}
