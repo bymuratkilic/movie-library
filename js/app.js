@@ -1488,19 +1488,23 @@
             const safeId = String(movie.id).replace(/[^a-zA-Z0-9_-]/g, '');
             const rawUrl = String(movie.watchUrl || '').trim();
             const source = rawUrl ? getPerdeWatchSource(rawUrl) : null;
+            let externalUrl = '';
+            try {
+                const parsed = new URL(rawUrl);
+                if (parsed.protocol === 'https:' && !parsed.username && !parsed.password) externalUrl = parsed.href;
+            } catch (error) {}
             let player = '';
             if (source && source.type === 'iframe') {
                 player = '<div class="perde-watch-player-frame"><iframe title="' + safeTitle + ' izleme oynatıcısı" src="' + escapeTrailerField(source.embedUrl) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
             } else if (source && source.type === 'video') {
                 player = '<div class="perde-watch-player-frame"><video controls playsinline preload="metadata" src="' + escapeTrailerField(source.videoUrl) + '">Tarayıcınız video oynatmayı desteklemiyor.</video></div>';
+            } else if (externalUrl) {
+                player = '<div class="perde-watch-player-empty"><span><i class="fa-solid fa-arrow-up-right-from-square"></i></span><strong>Bu kaynak Perde içine gömülemiyor.</strong><small>Filmi izlemek için kaynak sayfasını yeni sekmede açabilirsiniz.</small><a class="perde-series-open-source" href="' + escapeTrailerField(externalUrl) + '" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-play"></i> Kaynak sayfasını aç</a></div>';
             } else {
-                const message = rawUrl ? 'Kayıtlı bağlantı desteklenmiyor. YouTube, Vimeo, Dailymotion veya doğrudan MP4/WebM/OGG bağlantısı kullanın.' : 'İzlemek için yetkili video bağlantısını ekleyin.';
-                player = '<div class="perde-watch-player-empty"><span><i class="fa-solid fa-play"></i></span><strong>' + message + '</strong><small>Oynatma yalnızca kaynak tarafından gömülmesine izin verilen içeriklerde çalışır.</small></div>';
+                player = '<div class="perde-watch-player-empty"><span><i class="fa-solid fa-play"></i></span><strong>İzlemek için yetkili video veya kaynak sayfası bağlantısını ekleyin.</strong><small>Kaynak gömülmeye izin verirse Perde içinde oynatılır.</small></div>';
             }
-            const editor = isInArchive
-                ? '<div class="perde-watch-link-editor"><label for="perde-watch-url-input">Yetkili video bağlantısı</label><div class="perde-watch-link-row"><input id="perde-watch-url-input" type="url" inputmode="url" autocomplete="url" value="' + escapeTrailerField(rawUrl) + '" placeholder="YouTube, Vimeo, Dailymotion veya MP4 bağlantısı"><button type="button" onclick="savePerdeWatchUrl(\'' + safeId + '\')"><i class="fa-solid fa-link"></i> Kaydet</button></div><small>Bağlantı bu yapımın arşiv kaydına kaydedilir. Boş bırakarak kaydederseniz bağlantı kaldırılır.</small></div>'
-                : '<p class="perde-watch-archive-note"><i class="fa-solid fa-circle-info"></i> Kendi izleme bağlantınızı eklemek için önce bu yapımı arşivinize kaydedin.</p>';
-            return '<section class="perde-watch-player-section" aria-label="Film izleme bölümü"><div class="perde-watch-player-heading"><div><span>PERDE · OYNATICI</span><h3>Filmi İzle</h3></div><span class="perde-watch-player-status">' + (source ? 'Kaynak hazır' : 'Bağlantı bekleniyor') + '</span></div>' + player + editor + '<p class="perde-watch-player-disclaimer">Not: Netflix, Prime Video gibi DRM korumalı platformların içerikleri, platform izin vermediği sürece harici oynatıcıya gömülemez.</p></section>';
+            const editor = '<div class="perde-watch-link-editor"><label for="perde-watch-url-input">Video veya kaynak sayfası bağlantısı</label><div class="perde-watch-link-row"><input id="perde-watch-url-input" type="url" inputmode="url" autocomplete="url" value="' + escapeTrailerField(rawUrl) + '" placeholder="HTTPS video veya film sayfası bağlantısı"><button type="button" data-id="' + safeId + '" onclick="savePerdeWatchUrl(this.dataset.id)"><i class="fa-solid fa-link"></i> Kaydet</button></div><small>Bağlantı kaydedildiğinde yapım arşivine eklenir. Boş bırakarak mevcut bağlantıyı kaldırabilirsiniz.</small></div>';
+            return '<section class="perde-watch-player-section" aria-label="Film izleme bölümü"><div class="perde-watch-player-heading"><div><span>PERDE · OYNATICI</span><h3>Filmi İzle</h3></div><span class="perde-watch-player-status">' + (source || externalUrl ? 'Kaynak hazır' : 'Bağlantı bekleniyor') + '</span></div>' + player + editor + '<p class="perde-watch-player-disclaimer">Video yalnızca kaynak tarafından gömülmesine izin verildiğinde Perde içinde oynatılır. Diğer HTTPS sayfaları harici açılır.</p></section>';
         }
 
         function renderPerdeSeriesSection(movie, isInArchive) {
@@ -1580,13 +1584,30 @@
         function savePerdeWatchUrl(id) {
             const input = document.getElementById('perde-watch-url-input');
             const entered = (input?.value || '').trim();
-            const movie = movies.find(item => String(item.id) === String(id));
-            if (!movie) { showToast('İzleme bağlantısı yalnızca arşive eklenmiş yapımlara kaydedilebilir.'); return; }
-            if (entered && !getPerdeWatchSource(entered)) { showToast('Desteklenmeyen bağlantı. HTTPS YouTube, Vimeo, Dailymotion veya MP4/WebM/OGG bağlantısı girin.'); return; }
-            movie.watchUrl = entered ? getPerdeWatchSource(entered).normalizedUrl : '';
+            let movie = movies.find(item => String(item.id) === String(id));
+            if (!movie) {
+                const sourceItem = onlineCatalog.find(item => String(item.id) === String(id)) ||
+                    fetchedOnlineResults.find(item => String(item.id) === String(id));
+                if (!sourceItem) { showToast('Yapım kaydı bulunamadı. Sayfayı yenileyip tekrar deneyin.'); return; }
+                movie = { ...sourceItem, id: 'movie-' + Date.now(), source: 'local', status: 'watch_later', favorite: false };
+                delete movie.inList;
+                movies.unshift(movie);
+            }
+            let normalizedUrl = '';
+            if (entered) {
+                try {
+                    const parsed = new URL(entered);
+                    if (parsed.protocol !== 'https:' || parsed.username || parsed.password) throw new Error('invalid url');
+                    const supported = getPerdeWatchSource(parsed.href);
+                    normalizedUrl = supported ? supported.normalizedUrl : parsed.href;
+                } catch (error) {
+                    showToast('Lütfen geçerli ve güvenli bir HTTPS bağlantısı girin.'); return;
+                }
+            }
+            movie.watchUrl = normalizedUrl;
             saveToLocalStorage();
-            showToast(entered ? 'Film izleme bağlantısı kaydedildi.' : 'Film izleme bağlantısı kaldırıldı.');
-            openDetailModal(id);
+            showToast(entered ? 'Film bağlantısı kaydedildi ve yapım arşive eklendi.' : 'Film izleme bağlantısı kaldırıldı.');
+            openDetailModal(movie.id);
         }
 
         function openDetailModal(id, trailerMode = null, popupOnly = false) {
