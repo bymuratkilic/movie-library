@@ -1530,15 +1530,20 @@
                 }).join('');
                 return '<div class="perde-series-season"><h4>' + Number(season.seasonNumber) + '. Sezon</h4><div class="perde-series-episode-list">' + rows + '</div></div>';
             }).join('');
-            const editor = isInArchive
-                ? '<form class="perde-series-editor" onsubmit="event.preventDefault(); savePerdeEpisode(\'' + safeId + '\')"><div class="perde-series-editor-heading"><strong><i class="fa-solid fa-plus"></i> Bölüm ekle</strong><small>Her bölümün bağlantısı ayrı kaydedilir.</small></div><div class="perde-series-editor-grid"><label>Sezon<input id="perde-series-season" type="number" min="1" max="99" value="' + (seasons.length ? Math.max(...seasons.map(x=>Number(x.seasonNumber)||1)) : 1) + '" required></label><label>Bölüm<input id="perde-series-episode" type="number" min="1" max="999" value="' + (active ? Number(active.episodeNumber)+1 : 1) + '" required></label><label class="perde-series-title-field">Bölüm adı<input id="perde-series-title" type="text" maxlength="120" placeholder="Örn. Pilot"></label><label class="perde-series-url-field">Bölüm bağlantısı<input id="perde-series-url" type="url" placeholder="HTTPS bölüm sayfası veya video bağlantısı" required></label></div><button type="submit"><i class="fa-solid fa-floppy-disk"></i> Bölümü kaydet</button></form>'
-                : '<p class="perde-watch-archive-note"><i class="fa-solid fa-circle-info"></i> Sezon ve bölüm eklemek için önce diziyi arşivinize kaydedin.</p>';
+            const editor = '<form class="perde-series-editor" data-id="' + safeId + '" onsubmit="event.preventDefault(); savePerdeEpisode(this.dataset.id)"><div class="perde-series-editor-heading"><strong><i class="fa-solid fa-plus"></i> Bölüm ekle</strong><small>Her bölümün bağlantısı ayrı kaydedilir.</small></div><div class="perde-series-editor-grid"><label>Sezon<input id="perde-series-season" type="number" min="1" max="99" value="' + (seasons.length ? Math.max(...seasons.map(x=>Number(x.seasonNumber)||1)) : 1) + '" required></label><label>Bölüm<input id="perde-series-episode" type="number" min="1" max="999" value="' + (active ? Number(active.episodeNumber)+1 : 1) + '" required></label><label class="perde-series-title-field">Bölüm adı<input id="perde-series-title" type="text" maxlength="120" placeholder="Örn. Pilot"></label><label class="perde-series-url-field">Bölüm bağlantısı<input id="perde-series-url" type="url" placeholder="HTTPS bölüm sayfası veya video bağlantısı" required></label></div><button type="submit"><i class="fa-solid fa-floppy-disk"></i> Bölümü kaydet</button></form>';
             return '<section class="perde-watch-player-section perde-series-section" aria-label="Dizi bölümleri"><div class="perde-watch-player-heading"><div><span>PERDE · DİZİ OYNATICISI</span><h3>Bölümleri İzle</h3></div><span class="perde-watch-player-status">' + episodes.length + ' bölüm</span></div>' + player + '<div class="perde-series-library">' + (seasonMarkup || '<p class="perde-series-empty-list">Sezon ve bölüm listeniz burada görünecek.</p>') + '</div>' + editor + '<p class="perde-watch-player-disclaimer">Video kaynağı gömülmeye izin veriyorsa Perde içinde oynatılır; diğer HTTPS bölüm sayfaları yeni sekmede açılır.</p></section>';
         }
 
         function savePerdeEpisode(id) {
-            const movie = movies.find(item => String(item.id) === String(id));
-            if (!movie) { showToast('Bölüm eklemek için diziyi önce arşivinize kaydedin.'); return; }
+            let movie = movies.find(item => String(item.id) === String(id));
+            if (!movie) {
+                const source = onlineCatalog.find(item => String(item.id) === String(id)) ||
+                    fetchedOnlineResults.find(item => String(item.id) === String(id));
+                if (!source) { showToast('Dizi kaydı bulunamadı. Sayfayı yenileyip tekrar deneyin.'); return; }
+                movie = { ...source, id: 'movie-' + Date.now(), source: 'local', status: 'watch_later', favorite: false, seriesSeasons: [] };
+                delete movie.inList;
+                movies.unshift(movie);
+            }
             const seasonNumber = Number(document.getElementById('perde-series-season')?.value);
             const episodeNumber = Number(document.getElementById('perde-series-episode')?.value);
             const title = (document.getElementById('perde-series-title')?.value || '').trim();
@@ -1561,7 +1566,7 @@
             movie.seriesSeasons.sort((a,b) => Number(a.seasonNumber)-Number(b.seasonNumber));
             saveToLocalStorage();
             showToast('Bölüm bağlantısı kaydedildi.');
-            openDetailModal(id);
+            openDetailModal(movie.id);
         }
 
         function playPerdeEpisode(id, seasonNumber, episodeNumber) {
