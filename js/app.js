@@ -1716,7 +1716,7 @@
                         </section>
                         <nav class="perde-detail-nav" aria-label="Detay sayfası bölümleri">
                             <button type="button" onclick="scrollPerdeDetailSection('perde-detail-overview-section')">Detaylar</button>
-                            <button type="button" onclick="scrollPerdeDetailSection('perde-detail-gallery')">Galerİ</button>
+                            <button type="button" onclick="scrollPerdeDetailSection('perde-detail-gallery')">Galeri</button>
                             <button type="button" onclick="scrollPerdeDetailSection('perde-detail-cast-section')">Oyuncular</button>
                             <button type="button" onclick="scrollPerdeDetailSection('perde-personal-review')">Notlarım</button>
                             <button type="button" onclick="scrollPerdeDetailSection('perde-similar-grid')">Benzer yapımlar</button>
